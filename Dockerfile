@@ -1,5 +1,5 @@
 # Gradle과 JDK 17을 포함한 이미지를 빌드 환경으로 사용
-FROM gradle:jdk17-focal AS builder
+FROM gradle:jdk21-focal AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /build
