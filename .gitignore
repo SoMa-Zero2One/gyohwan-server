@@ -1,0 +1,51 @@
+# # Gradle
+# 빌드 캐시 및 로그
+.gradle
+.gradletasknamecache
+
+# 빌드 결과물
+build/
+
+
+# # IDE (IntelliJ, VSCode, Eclipse)
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+
+
+# # 운영체제 (OS) 생성 파일
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+
+
+# # 로그 및 임시 파일
+# 로그 파일
+*.log
+# 임시 파일
+*.tmp
+
+
+# # 애플리케이션 실행 결과물
+# 컴파일된 자바 클래스 파일
+*.class
+# 패키징된 실행 파일 (CI/CD 서버에서 생성하므로 로컬 파일은 제외)
+*.jar
+*.war
+
+
+# # 로컬 환경 설정 파일 (선택 사항이지만 강력 추천)
+# 민감한 정보(DB 비밀번호 등)가 포함될 수 있는 로컬 전용 설정 파일은 제외
+application-local.properties
+application-local.yml
