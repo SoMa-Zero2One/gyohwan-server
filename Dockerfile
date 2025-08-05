@@ -11,8 +11,8 @@ COPY src ./src
 # Gradle을 이용해 프로젝트 빌드(테스트 스킵) -> 이 명령이 성공하면 build/libs/ 폴더에 .jar 파일이 생성됨
 RUN gradle build --no-daemon -x test
 
-# 실제 애플리케이션을 실행할 환경 (JRE만 포함하여 용량 최소화)
-FROM openjdk:17-jre-slim
+# 실제 애플리케이션을 실행할 환경
+FROM openjdk:21
 
 # 작업 디렉토리 설정
 WORKDIR /app
