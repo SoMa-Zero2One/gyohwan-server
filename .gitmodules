@@ -1,0 +1,3 @@
+[submodule "src/main/resources/secret"]
+	path = src/main/resources/secret
+	url = https://github.com/Soma-Zero2One/gyohwan-server-secret.git
