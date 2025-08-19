@@ -1,0 +1,27 @@
+spring:
+  config:
+    import: "optional:classpath:secret/application-secret.yml"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: false
+    show-sql: false
+    database: mysql
+    defer-datasource-initialization: false
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/gyohwan?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: gyohwan_dev_username
+    password: gyohwan_dev_password
+
+jwt:
+  secret-key:
+    9b79e3dc-19ec-46a6-be07-06de9dc33c86

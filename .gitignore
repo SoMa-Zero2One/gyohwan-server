@@ -49,3 +49,5 @@ Thumbs.db
 # 민감한 정보(DB 비밀번호 등)가 포함될 수 있는 로컬 전용 설정 파일은 제외
 application-local.properties
 application-local.yml
+
+/mysql_data_local

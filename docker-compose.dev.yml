@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gyohwan-dev-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: gyohwan_dev_root_password
+      MYSQL_DATABASE: gyohwan
+      MYSQL_USER: gyohwan_dev_username
+      MYSQL_PASSWORD: gyohwan_dev_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data_local:/var/lib/mysql
