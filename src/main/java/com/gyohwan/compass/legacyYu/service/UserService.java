@@ -1,4 +1,4 @@
-    package com.gyohwan.compass.legacyYu.service;
+package com.gyohwan.compass.legacyYu.service;
 
 import com.gyohwan.compass.domain.Application;
 import com.gyohwan.compass.domain.Choice;
