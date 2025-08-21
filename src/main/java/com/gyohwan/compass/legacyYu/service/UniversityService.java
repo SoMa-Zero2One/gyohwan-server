@@ -1,8 +1,6 @@
 package com.gyohwan.compass.legacyYu.service;
 
-import com.gyohwan.compass.domain.Application;
-import com.gyohwan.compass.domain.Choice;
-import com.gyohwan.compass.domain.Slot;
+import com.gyohwan.compass.domain.*;
 import com.gyohwan.compass.legacyYu.dto.ApplicantDetail;
 import com.gyohwan.compass.legacyYu.dto.PartnerUniversityInfo;
 import com.gyohwan.compass.legacyYu.dto.UniversityDetailResponse;
@@ -53,8 +51,11 @@ public class UniversityService {
         List<ApplicantDetail> applicantDetails = applicantsChoices.stream()
                 .map(choice -> {
                     Application application = choice.getApplication();
-                    String gradeInfo = "4.1/4.5"; // 예시
-                    String langInfo = "TOEFL 100"; // 예시
+                    User user = application.getUser();
+                    Double gradeInfo = user.getGpas().getFirst().getScore();
+
+                    Language language = user.getLanguages().getFirst();
+                    String langInfo = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
 
                     return ApplicantDetail.builder()
                             .id(application.getId())
