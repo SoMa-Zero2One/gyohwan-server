@@ -10,7 +10,7 @@ public class UserResponse {
     private Long id;
     private String email;
     private String nickname;
-    private String grade; // 학점
+    private Double grade; // 학점
     private String lang; // 어학
     private Integer modifyCount;
     private List<ApplicationDetail> applications;

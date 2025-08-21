@@ -1,10 +1,6 @@
-    package com.gyohwan.compass.legacyYu.service;
+package com.gyohwan.compass.legacyYu.service;
 
-import com.gyohwan.compass.domain.Application;
-import com.gyohwan.compass.domain.Choice;
-import com.gyohwan.compass.domain.Season;
-import com.gyohwan.compass.domain.Slot;
-import com.gyohwan.compass.domain.User;
+import com.gyohwan.compass.domain.*;
 import com.gyohwan.compass.legacyYu.dto.ApplicationDetail;
 import com.gyohwan.compass.legacyYu.dto.PublicUserResponse;
 import com.gyohwan.compass.legacyYu.dto.UpdateApplicationsRequest;
@@ -45,15 +41,25 @@ public class UserService {
                                 .choice(choice.getChoice())
                                 .universityId(choice.getSlot().getOutgoingUniv().getId())
                                 .universityName(choice.getSlot().getOutgoingUniv().getNameKo())
+                                .country(choice.getSlot().getOutgoingUniv().getCountry())
+                                .slot(choice.getSlot().getSlotCount())
+                                .totalApplicants(choice.getSlot().getChoices().size())
                                 .build()))
                 .collect(Collectors.toList());
 
         // 최종 UserResponse DTO를 만들어서 반환
+        Gpa gpa = user.getGpas().getFirst();
+        Language language = user.getLanguages().getFirst();
+
         return UserResponse.builder()
                 .id(user.getId())
+                .email(user.getEmail())
+                .modifyCount(500)
                 .nickname(user.getNickname())
+                .grade(gpa.getScore())
+                .lang(language.getTestType() + " " + language.getGrade() + " " + language.getScore())
                 .applications(applicationDetails)
-                // ... 등등 DTO 필드 채우기
+
                 .build();
     }
 
@@ -63,19 +69,17 @@ public class UserService {
         User user = userRepository.findByIdWithApplications(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
-        // GPA 평균 계산 (승인된 것만)
-        Double averageGrade = user.getGpas().stream()
-                .filter(gpa -> gpa.getVerifyStatus() == com.gyohwan.compass.domain.Gpa.VerifyStatus.APPROVED)
-                .mapToDouble(gpa -> gpa.getScore())
-                .average()
-                .orElse(0.0);
+        Gpa gpa = user.getGpas().getFirst();
+        Double gpaReturn = null;
+        if (gpa != null) {
+            gpaReturn = gpa.getScore();
+        }
 
-        // 언어 정보 (승인된 것 중 가장 높은 점수 또는 첫 번째)
-        String languageInfo = user.getLanguages().stream()
-                .filter(lang -> lang.getVerifyStatus() == com.gyohwan.compass.domain.Gpa.VerifyStatus.APPROVED)
-                .map(lang -> lang.getTestType().name() + ": " + lang.getScore())
-                .findFirst()
-                .orElse("N/A");
+        Language language = user.getLanguages().getFirst();
+        String languageReturn = "";
+        if (language != null) {
+            languageReturn = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
+        }
 
         // 지원 정보를 ApplicationDetail로 변환
         List<ApplicationDetail> applicationDetails = user.getApplications().stream()
@@ -84,14 +88,17 @@ public class UserService {
                                 .choice(choice.getChoice())
                                 .universityId(choice.getSlot().getOutgoingUniv().getId())
                                 .universityName(choice.getSlot().getOutgoingUniv().getNameKo())
+                                .country(choice.getSlot().getOutgoingUniv().getCountry())
+                                .slot(choice.getSlot().getSlotCount())
+                                .totalApplicants(choice.getSlot().getChoices().size())
                                 .build()))
                 .collect(Collectors.toList());
 
         return PublicUserResponse.builder()
                 .id(user.getId())
                 .nickname(user.getNickname())
-                .grade(averageGrade)
-                .lang(languageInfo)
+                .grade(gpaReturn)
+                .lang(languageReturn)
                 .applications(applicationDetails)
                 .build();
     }

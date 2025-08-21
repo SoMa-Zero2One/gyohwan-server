@@ -11,6 +11,6 @@ public class ApplicantDetail {
     private Integer rank;
     private Integer choice;
     private String nickname;
-    private String grade;
+    private Double grade;
     private String lang;
 }
