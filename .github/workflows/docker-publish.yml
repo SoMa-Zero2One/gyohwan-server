@@ -1,4 +1,4 @@
-name: CI/CD - Build and Push Docker Image
+name: CI/CD - Build and Push Docker Image & Deploy to EC2
 
 on:
   push:
@@ -37,3 +37,21 @@ jobs:
           context: .       # Dockerfile이 있는 경로
           push: true       # 푸시 실행
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
+            sudo docker stop gyohwan-compass-container || true
+            sudo docker rm gyohwan-compass-container || true
+            sudo docker run -d -p 8080:8080 --name gyohwan-compass-container ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
