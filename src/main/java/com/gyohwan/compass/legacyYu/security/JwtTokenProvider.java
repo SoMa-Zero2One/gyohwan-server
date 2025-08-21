@@ -28,11 +28,11 @@ public class JwtTokenProvider {
     public JwtTokenProvider(
             @Value("${jwt.secret-key}") String secretKey,
             @Value("${jwt.expiration-time-ms}") long expirationTimeMs,
-            UserDetailsServiceImpl userDetailsService) { // 생성자에 추가
+            UserDetailsServiceImpl userDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.expirationTimeMs = expirationTimeMs;
-        this.userDetailsService = userDetailsService; // 주입받은 서비스 할당
+        this.userDetailsService = userDetailsService;
     }
 
     /**
