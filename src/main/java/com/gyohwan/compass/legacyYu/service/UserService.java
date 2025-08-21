@@ -1,10 +1,6 @@
 package com.gyohwan.compass.legacyYu.service;
 
-import com.gyohwan.compass.domain.Application;
-import com.gyohwan.compass.domain.Choice;
-import com.gyohwan.compass.domain.Season;
-import com.gyohwan.compass.domain.Slot;
-import com.gyohwan.compass.domain.User;
+import com.gyohwan.compass.domain.*;
 import com.gyohwan.compass.legacyYu.dto.ApplicationDetail;
 import com.gyohwan.compass.legacyYu.dto.PublicUserResponse;
 import com.gyohwan.compass.legacyYu.dto.UpdateApplicationsRequest;
@@ -45,15 +41,25 @@ public class UserService {
                                 .choice(choice.getChoice())
                                 .universityId(choice.getSlot().getOutgoingUniv().getId())
                                 .universityName(choice.getSlot().getOutgoingUniv().getNameKo())
+                                .country(choice.getSlot().getOutgoingUniv().getCountry())
+                                .slot(choice.getSlot().getSlotCount())
+                                .totalApplicants(choice.getSlot().getChoices().size())
                                 .build()))
                 .collect(Collectors.toList());
 
         // 최종 UserResponse DTO를 만들어서 반환
+        Gpa gpa = user.getGpas().getFirst();
+        Language language = user.getLanguages().getFirst();
+
         return UserResponse.builder()
                 .id(user.getId())
+                .email(user.getEmail())
+                .modifyCount(500)
                 .nickname(user.getNickname())
+                .grade(gpa.getScore())
+                .lang(language.getTestType() + " " + language.getGrade() + " " + language.getScore())
                 .applications(applicationDetails)
-                // ... 등등 DTO 필드 채우기
+
                 .build();
     }
 
