@@ -16,9 +16,9 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
     
     List<Language> findByUser(User user);
     
-    List<Language> findByUserOrderByModifiedDateDesc(User user);
+    List<Language> findByUserOrderByUpdatedAtDesc(User user);
     
-    List<Language> findByUserIdOrderByModifiedDateDesc(Long userId);
+    List<Language> findByUserIdOrderByUpdatedAtDesc(Long userId);
     
     List<Language> findByTestType(Language.TestType testType);
     
@@ -26,11 +26,12 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
     
     Optional<Language> findByUserAndTestType(User user, Language.TestType testType);
     
-    @Query("SELECT l FROM Language l WHERE l.user = :user AND l.verifyStatus = 'APPROVED' ORDER BY l.modifiedDate DESC")
+    @Query("SELECT l FROM Language l WHERE l.user = :user AND l.verifyStatus = 'APPROVED' ORDER BY l.updatedAt DESC")
     List<Language> findApprovedLanguagesByUser(@Param("user") User user);
     
-    @Query("SELECT l FROM Language l WHERE l.verifyStatus = 'PENDING' ORDER BY l.createdDate ASC")
-    List<Language> findPendingLanguagesOrderByCreatedDate();
+    @Query("SELECT l FROM Language l WHERE l.verifyStatus = 'PENDING' ORDER BY l.createdAt ASC")
+    List<Language> findPendingLanguagesOrderByCreatedAt();
     
-    List<Language> findByUserAndTestTypeOrderByModifiedDateDesc(User user, Language.TestType testType);
+    List<Language> findByUserAndTestTypeOrderByUpdatedAtDesc(User user, Language.TestType testType);
 }
+

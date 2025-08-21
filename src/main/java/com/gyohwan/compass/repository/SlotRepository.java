@@ -3,6 +3,7 @@ package com.gyohwan.compass.repository;
 import com.gyohwan.compass.domain.OutgoingUniv;
 import com.gyohwan.compass.domain.Season;
 import com.gyohwan.compass.domain.Slot;
+import com.gyohwan.compass.repository.dto.SlotWithApplicantCountDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,8 +30,26 @@ public interface SlotRepository extends JpaRepository<Slot, Long> {
     @Query("SELECT s FROM Slot s WHERE s.season = :season AND s.outgoingUniv.country = :country ORDER BY s.outgoingUniv.nameEn ASC, s.name ASC")
     List<Slot> findBySeasonAndCountryOrderByUnivAndName(@Param("season") Season season, @Param("country") String country);
     
-    @Query("SELECT s FROM Slot s WHERE s.season = :season AND s.outgoingUniv.nameEn LIKE %:keyword% OR s.outgoingUniv.nameKo LIKE %:keyword% OR s.name LIKE %:keyword%")
+    @Query("SELECT s FROM Slot s WHERE s.season = :season AND (s.outgoingUniv.nameEn LIKE %:keyword% OR s.outgoingUniv.nameKo LIKE %:keyword% OR s.name LIKE %:keyword%)")
     List<Slot> findBySeasonAndKeyword(@Param("season") Season season, @Param("keyword") String keyword);
     
     List<Slot> findBySeasonIdOrderByNameAsc(Long seasonId);
+
+    @Query("SELECT new com.gyohwan.compass.repository.dto.SlotWithApplicantCountDto(s, COUNT(c.id)) " +
+            "FROM Slot s LEFT JOIN Choice c ON c.slot = s " +
+            "GROUP BY s.id")
+    List<SlotWithApplicantCountDto> findAllWithApplicantCounts();
+
+    @Query("SELECT s FROM Slot s JOIN FETCH s.outgoingUniv WHERE s.id = :id")
+    Optional<Slot> findByIdWithOutgoingUniv(@Param("id") Long id);
+
+    @Query("SELECT new com.gyohwan.compass.repository.dto.SlotWithApplicantCountDto(s, COUNT(c.id)) " +
+            "FROM Slot s LEFT JOIN Choice c ON c.slot = s " +
+            "WHERE s.season.id = :seasonId " +
+            "GROUP BY s.id")
+    List<SlotWithApplicantCountDto> findBySeasonWithApplicantCounts(@Param("seasonId") Long seasonId);
+
+    @Query("SELECT s FROM Slot s JOIN FETCH s.outgoingUniv WHERE s.id = :id AND s.season.id = :seasonId")
+    Optional<Slot> findByIdAndSeasonWithOutgoingUniv(@Param("id") Long id, @Param("seasonId") Long seasonId);
 }
+

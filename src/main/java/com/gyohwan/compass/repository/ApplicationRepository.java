@@ -18,7 +18,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     
     Optional<Application> findByUserAndSeason(User user, Season season);
     
-    List<Application> findByUserIdOrderByModifiedDateDesc(Long userId);
+    List<Application> findByUserIdOrderByUpdatedAtDesc(Long userId);
     
-    List<Application> findBySeasonIdOrderByModifiedDateDesc(Long seasonId);
+    List<Application> findBySeasonIdOrderByUpdatedAtDesc(Long seasonId);
 }
+

@@ -27,4 +27,8 @@ public interface ChoiceRepository extends JpaRepository<Choice, Long> {
     List<Choice> findBySlotOrderByScoreDesc(@Param("slot") Slot slot);
     
     List<Choice> findByApplicationIdOrderByChoiceAsc(Long applicationId);
+
+    @Query("SELECT c FROM Choice c JOIN FETCH c.application a JOIN FETCH a.user WHERE c.slot = :slot ORDER BY c.choice ASC")
+    List<Choice> findBySlotWithApplicationAndUserOrderByChoiceAsc(@Param("slot") Slot slot);
 }
+

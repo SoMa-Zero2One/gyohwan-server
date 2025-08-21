@@ -17,3 +17,4 @@ public interface DomesticUnivRepository extends JpaRepository<DomesticUniv, Long
     
     boolean existsByName(String name);
 }
+

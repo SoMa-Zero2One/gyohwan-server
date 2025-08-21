@@ -15,9 +15,9 @@ public interface GpaRepository extends JpaRepository<Gpa, Long> {
     
     List<Gpa> findByUser(User user);
     
-    List<Gpa> findByUserOrderByModifiedDateDesc(User user);
+    List<Gpa> findByUserOrderByUpdatedAtDesc(User user);
     
-    List<Gpa> findByUserIdOrderByModifiedDateDesc(Long userId);
+    List<Gpa> findByUserIdOrderByUpdatedAtDesc(Long userId);
     
     List<Gpa> findByCriteria(Gpa.Criteria criteria);
     
@@ -25,9 +25,10 @@ public interface GpaRepository extends JpaRepository<Gpa, Long> {
     
     Optional<Gpa> findByUserAndCriteria(User user, Gpa.Criteria criteria);
     
-    @Query("SELECT g FROM Gpa g WHERE g.user = :user AND g.verifyStatus = 'APPROVED' ORDER BY g.modifiedDate DESC")
+    @Query("SELECT g FROM Gpa g WHERE g.user = :user AND g.verifyStatus = 'APPROVED' ORDER BY g.updatedAt DESC")
     List<Gpa> findApprovedGpasByUser(@Param("user") User user);
     
-    @Query("SELECT g FROM Gpa g WHERE g.verifyStatus = 'PENDING' ORDER BY g.createdDate ASC")
-    List<Gpa> findPendingGpasOrderByCreatedDate();
+    @Query("SELECT g FROM Gpa g WHERE g.verifyStatus = 'PENDING' ORDER BY g.createdAt ASC")
+    List<Gpa> findPendingGpasOrderByCreatedAt();
 }
+

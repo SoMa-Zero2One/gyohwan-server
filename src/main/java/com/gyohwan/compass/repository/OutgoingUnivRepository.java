@@ -23,3 +23,4 @@ public interface OutgoingUnivRepository extends JpaRepository<OutgoingUniv, Long
     
     List<OutgoingUniv> findByCountryOrderByNameEnAsc(String country);
 }
+

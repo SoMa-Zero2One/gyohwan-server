@@ -38,4 +38,11 @@ public class Choice extends BaseEntity {
     private Language.TestType languageTest;
 
     private Double score;
+
+    // 생성자
+    public Choice(Application application, Slot slot, Integer choice) {
+        this.application = application;
+        this.slot = slot;
+        this.choice = choice;
+    }
 }

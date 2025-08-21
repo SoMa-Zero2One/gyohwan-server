@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,20 @@ public class Application extends BaseEntity {
     private String nickname;
 
     @OneToMany(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("rank asc")
+    @OrderBy("choice asc")
+    @BatchSize(size = 10)
     private List<Choice> choices = new ArrayList<>();
+
+    // 생성자
+    public Application(User user, Season season, String nickname) {
+        this.user = user;
+        this.season = season;
+        this.nickname = nickname;
+        this.modifyCount = 0;
+    }
+
+    // 수정 횟수 증가
+    public void incrementModifyCount() {
+        this.modifyCount = (this.modifyCount == null ? 0 : this.modifyCount) + 1;
+    }
 }
