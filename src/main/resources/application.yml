@@ -2,6 +2,9 @@ spring:
   config:
     import: "optional:classpath:secret/application-secret.yml"
 
+jwt:
+  expiration-time-ms: 86400000 # 24 hours
+
 ---
 spring:
   config:
@@ -24,4 +27,4 @@ spring:
 
 jwt:
   secret-key:
-    9b79e3dc-19ec-46a6-be07-06de9dc33c86
+    OWI3OWUzZGMtMTllYy00NmE2LWJlMDctMDZkZTlkYzMzYzg2
