@@ -39,4 +39,12 @@ public class Gpa extends BaseEntity {
     public enum VerifyStatus {
         PENDING, APPROVED, REJECTED
     }
+
+    // 생성자
+    public Gpa(User user, Double score, Criteria criteria) {
+        this.user = user;
+        this.score = score;
+        this.criteria = criteria;
+        this.verifyStatus = VerifyStatus.PENDING;
+    }
 }

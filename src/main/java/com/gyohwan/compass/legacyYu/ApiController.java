@@ -29,6 +29,12 @@ public class ApiController {
     }
 
     // === Universities ===============================================
+    @GetMapping("/public-universities")
+    public ResponseEntity<List<PartnerUniversityInfo>> readPublicUniversities() {
+        List<PartnerUniversityInfo> universities = universityService.getUniversities();
+        return ResponseEntity.ok(universities);
+    }
+
     @GetMapping("/universities")
     public ResponseEntity<List<PartnerUniversityInfo>> readUniversities(
             @AuthenticationPrincipal UserDetailsImpl currentUser) {
@@ -65,6 +71,14 @@ public class ApiController {
             @AuthenticationPrincipal UserDetailsImpl currentUser) {
         userService.updateUserApplications(currentUser.getUser(), request.getApplications());
         return ResponseEntity.ok(new BaseResponse(true, "성공적으로 수정되었습니다."));
+    }
+
+    // === User Registration ===========================================
+    @PostMapping("/users/register")
+    public ResponseEntity<UserRegistrationResponse> registerNewUser(
+            @RequestBody UserRegistrationRequest request) {
+        UserRegistrationResponse response = userService.registerNewUser(request);
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -21,6 +21,21 @@ public class UniversityService {
 
     private final SlotRepository slotRepository;
     private final ChoiceRepository choiceRepository;
+    
+    @Transactional(readOnly = true)
+    public List<PartnerUniversityInfo> getUniversities() {
+        List<SlotWithApplicantCountDto> results = slotRepository.findBySeasonWithApplicantCounts(1L);
+
+        return results.stream()
+                .map(result -> PartnerUniversityInfo.builder()
+                        .id(result.getSlot().getId()) // 슬롯 ID로 변경
+                        .name(result.getSlot().getOutgoingUniv().getNameKo())
+                        .country(result.getSlot().getOutgoingUniv().getCountry())
+                        .slot(result.getSlot().getSlotCount())
+                        .applicantCount(null)
+                        .build())
+                .collect(Collectors.toList());
+    }
 
     @Transactional(readOnly = true)
     public List<PartnerUniversityInfo> getUniversitiesWithApplicantCount() {
