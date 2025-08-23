@@ -29,6 +29,12 @@ public class ApiController {
     }
 
     // === Universities ===============================================
+    @GetMapping("/public-universities")
+    public ResponseEntity<List<PartnerUniversityInfo>> readPublicUniversities() {
+        List<PartnerUniversityInfo> universities = universityService.getUniversitiesWithApplicantCount();
+        return ResponseEntity.ok(universities);
+    }
+
     @GetMapping("/universities")
     public ResponseEntity<List<PartnerUniversityInfo>> readUniversities(
             @AuthenticationPrincipal UserDetailsImpl currentUser) {
