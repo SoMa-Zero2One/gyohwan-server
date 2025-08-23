@@ -14,3 +14,4 @@ public class PublicUserResponse {
     private String lang;
     private List<ApplicationDetail> applications;
 }
+

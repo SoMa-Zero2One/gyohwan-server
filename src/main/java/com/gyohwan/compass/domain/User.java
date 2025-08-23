@@ -37,4 +37,17 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 10)
     private List<Application> applications = new ArrayList<>();
+
+    // 생성자
+    public User(String uuid, String email, String nickname, DomesticUniv domesticUniv) {
+        this.uuid = uuid;
+        this.email = email;
+        this.nickname = nickname;
+        this.domesticUniv = domesticUniv;
+    }
+
+    // 닉네임 업데이트 메서드
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

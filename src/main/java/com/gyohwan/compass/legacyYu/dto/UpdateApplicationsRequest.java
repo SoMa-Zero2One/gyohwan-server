@@ -24,3 +24,4 @@ public class UpdateApplicationsRequest {
         private Integer choice; // 1지망, 2지망, 3지망 등
     }
 }
+

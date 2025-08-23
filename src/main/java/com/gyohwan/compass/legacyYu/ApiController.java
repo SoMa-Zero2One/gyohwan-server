@@ -73,4 +73,12 @@ public class ApiController {
         return ResponseEntity.ok(new BaseResponse(true, "성공적으로 수정되었습니다."));
     }
 
+    // === User Registration ===========================================
+    @PostMapping("/users/register")
+    public ResponseEntity<UserRegistrationResponse> registerNewUser(
+            @RequestBody UserRegistrationRequest request) {
+        UserRegistrationResponse response = userService.registerNewUser(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
