@@ -43,6 +43,6 @@ public class Language extends BaseEntity {
         this.user = user;
         this.score = languageInfo; // 전체 언어 정보를 score 필드에 임시 저장
         this.testType = TestType.TOEIC; // 임시값
-        this.verifyStatus = VerifyStatus.PENDING;
+        this.verifyStatus = Gpa.VerifyStatus.PENDING;
     }
 }
