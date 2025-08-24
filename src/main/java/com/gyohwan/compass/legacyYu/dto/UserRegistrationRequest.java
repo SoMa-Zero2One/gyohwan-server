@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserRegistrationRequest {
     
-    private String email; // 이메일 주소
+    private String email;
     private Double gpa;
     private String language;
     private List<Long> slotIds; // 최대 5개 슬롯 ID (지원할 교환대학 슬롯들)
