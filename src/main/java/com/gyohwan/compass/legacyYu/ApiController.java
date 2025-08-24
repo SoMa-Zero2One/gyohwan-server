@@ -5,6 +5,7 @@ import com.gyohwan.compass.legacyYu.security.UserDetailsImpl;
 import com.gyohwan.compass.legacyYu.service.AuthService;
 import com.gyohwan.compass.legacyYu.service.UniversityService;
 import com.gyohwan.compass.legacyYu.service.UserService;
+import com.gyohwan.compass.repository.ApplicationRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class ApiController {
     private final AuthService authService;
     private final UniversityService universityService;
     private final UserService userService;
+    private final ApplicationRepository applicationRepository;
 
     // === Authentication =============================================
     @PostMapping("/auth/token")
@@ -78,6 +80,17 @@ public class ApiController {
     public ResponseEntity<UserRegistrationResponse> registerNewUser(
             @RequestBody UserRegistrationRequest request) {
         UserRegistrationResponse response = userService.registerNewUser(request);
+        return ResponseEntity.ok(response);
+    }
+
+    // === Applications ==============================================
+    @GetMapping("/application-count")
+    public ResponseEntity<ApplicationCountResponse> getApplicationCount(
+            @AuthenticationPrincipal UserDetailsImpl currentUser) {
+        long count = applicationRepository.countBySeasonId(1L);
+        ApplicationCountResponse response = new ApplicationCountResponse(
+                count
+        );
         return ResponseEntity.ok(response);
     }
 
