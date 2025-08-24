@@ -174,45 +174,46 @@ public class UserService {
         DomesticUniv domesticUniv = domesticUnivRepository.findById(1L)
                 .orElseThrow(() -> new IllegalArgumentException("국내 대학 ID=1을 찾을 수 없습니다."));
 
-        // 4. 시즌 조회 (ID=1 고정)
-        Season season = seasonRepository.findById(1L)
-                .orElseThrow(() -> new IllegalArgumentException("시즌 ID=1을 찾을 수 없습니다."));
-
-        // 5. 임시 닉네임으로 User 생성 후 저장 (ID 생성을 위해)
+        // 4. 임시 닉네임으로 User 생성 후 저장 (ID 생성을 위해)
         String tempNickname = "임시닉네임";
         User user = new User(uuid, request.getEmail(), tempNickname, domesticUniv);
         user = userRepository.save(user);
 
-        // 6. User ID를 기반으로 실제 닉네임 생성 및 업데이트
+        // 5. User ID를 기반으로 실제 닉네임 생성 및 업데이트
         String nickname = NicknameGenerator.generateNickname(user.getId());
         user.updateNickname(nickname);
         user = userRepository.save(user);
 
-        // 7. GPA 정보 생성 (4.3 기준으로 가정)
+        // 6. GPA 정보 생성 (4.3 기준으로 가정)
         Gpa gpa = new Gpa(user, request.getGpa(), Gpa.Criteria._4_5);
         gpaRepository.save(gpa);
 
-        // 8. Language 정보 생성 (나중에 수동 분류용으로 임시 저장)
+        // 7. Language 정보 생성 (나중에 수동 분류용으로 임시 저장)
         Language language = new Language(user, request.getLanguage());
         languageRepository.save(language);
 
-        // 9. Application 생성
-        Application application = new Application(user, season, nickname);
-        application = applicationRepository.save(application);
+        // 8. 각 application에 대해 처리
+        for (UserRegistrationRequest.ApplicationRegistrationDto appDto : request.getApplications()) {
+            // Season 조회
+            Season season = seasonRepository.findById(appDto.getSeasonId())
+                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 시즌입니다: " + appDto.getSeasonId()));
 
-        // 10. 각 슬롯에 대해 Choice 생성 (최대 5개)
-        for (int i = 0; i < request.getSlotIds().size(); i++) {
-            Long slotId = request.getSlotIds().get(i);
-            
-            // 슬롯 조회
-            Slot slot = slotRepository.findById(slotId)
-                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 슬롯 ID입니다: " + slotId));
-            
-            Choice choice = new Choice(application, slot, i + 1); // 1순위부터 시작
-            choiceRepository.save(choice);
+            // Application 생성
+            Application application = new Application(user, season, nickname);
+            application = applicationRepository.save(application);
+
+            // 각 choice에 대해 처리
+            for (UserRegistrationRequest.ChoiceRegistrationDto choiceDto : appDto.getChoices()) {
+                // 슬롯 조회
+                Slot slot = slotRepository.findById(choiceDto.getSlotId())
+                        .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 슬롯 ID입니다: " + choiceDto.getSlotId()));
+                
+                Choice choice = new Choice(application, slot, choiceDto.getChoice());
+                choiceRepository.save(choice);
+            }
         }
 
-        // 11. 이메일 알람 트리거 (비동기적으로 실행, 실패해도 등록 프로세스에 영향 없음)
+        // 9. 이메일 알람 트리거 (비동기적으로 실행, 실패해도 등록 프로세스에 영향 없음)
         emailTriggerService.triggerNewUserRegistrationEmail(
                 request.getEmail(), 
                 uuid, 
