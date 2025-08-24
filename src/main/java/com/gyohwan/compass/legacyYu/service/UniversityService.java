@@ -70,7 +70,10 @@ public class UniversityService {
                     Double gradeInfo = user.getGpas().getFirst().getScore();
 
                     Language language = user.getLanguages().getFirst();
-                    String langInfo = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
+                    String langInfo = language.getTestType() + " " + language.getScore();
+                    if (language.getGrade() != null && language.getGrade() != "") {
+                        langInfo = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
+                    }
 
                     return ApplicantDetail.builder()
                             .id(application.getId())

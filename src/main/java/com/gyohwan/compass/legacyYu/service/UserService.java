@@ -62,13 +62,18 @@ public class UserService {
         Gpa gpa = user.getGpas().getFirst();
         Language language = user.getLanguages().getFirst();
 
+        String langInfo = language.getTestType() + " " + language.getScore();
+        if (language.getGrade() != null && language.getGrade() != "") {
+            langInfo = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
+        }
+
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .modifyCount(500)
                 .nickname(user.getNickname())
                 .grade(gpa.getScore())
-                .lang(language.getTestType() + " " + language.getGrade() + " " + language.getScore())
+                .lang(langInfo)
                 .applications(applicationDetails)
 
                 .build();
@@ -87,9 +92,9 @@ public class UserService {
         }
 
         Language language = user.getLanguages().getFirst();
-        String languageReturn = "";
-        if (language != null) {
-            languageReturn = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
+        String langInfo = language.getTestType() + " " + language.getScore();
+        if (language.getGrade() != null && language.getGrade() != "") {
+            langInfo = language.getTestType() + " " + language.getGrade() + " " + language.getScore();
         }
 
         // 지원 정보를 ApplicationDetail로 변환
@@ -109,7 +114,7 @@ public class UserService {
                 .id(user.getId())
                 .nickname(user.getNickname())
                 .grade(gpaReturn)
-                .lang(languageReturn)
+                .lang(langInfo)
                 .applications(applicationDetails)
                 .build();
     }
