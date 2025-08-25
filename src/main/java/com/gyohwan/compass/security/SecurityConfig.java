@@ -40,6 +40,9 @@ public class SecurityConfig {
                                 .requestMatchers("/yu-legacy/auth/token").permitAll()
                                 .requestMatchers("/yu-legacy/public-universities").permitAll()
                                 .requestMatchers("/yu-legacy/users/register").permitAll()
+                                .requestMatchers("/inu-legacy/auth/token").permitAll()
+                                .requestMatchers("/inu-legacy/public-universities").permitAll()
+                                .requestMatchers("/inu-legacy/users/register").permitAll()
                                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
 //                        .anyRequest().permitAll()
