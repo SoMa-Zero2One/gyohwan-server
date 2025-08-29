@@ -57,4 +57,7 @@ jobs:
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
             sudo docker stop gyohwan-compass-container || true
             sudo docker rm gyohwan-compass-container || true
-            sudo docker run -d -p 8080:8080 --name gyohwan-compass-container ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
+            sudo docker run -d -p 8080:8080 \
+              -v /home/ubuntu/logs/gyohwan:/app/logs \
+              --name gyohwan-compass-container \
+              ${{ secrets.DOCKERHUB_USERNAME }}/gyohwan-compass:latest
