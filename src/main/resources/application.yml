@@ -5,6 +5,10 @@ spring:
 jwt:
   expiration-time-ms: 8640000000 # 24 hours * 100
 
+logging:
+  level:
+    root: info
+
 ---
 spring:
   config:

@@ -33,6 +33,7 @@ Thumbs.db
 # # 로그 및 임시 파일
 # 로그 파일
 *.log
+logs/
 # 임시 파일
 *.tmp
 

@@ -20,11 +20,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service("inuUserService")
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -149,6 +152,17 @@ public class UserService {
                 choiceRepository.save(choice);
             }
 
+            // 초이스 정보 로그용 문자열 생성
+            String choicesInfo = appUpdate.getChoices().stream()
+                    .map(choice -> String.format("순위%d: 슬롯ID %d", choice.getChoice(), choice.getSlotId()))
+                    .collect(Collectors.joining(", "));
+
+            log.info("사용자 지원 정보 업데이트 완료 - userId: {}, modifyCount: {}, choiceCount: {}, choices: [{}]", 
+                     user.getId(), 
+                     application.getModifyCount(), 
+                     appUpdate.getChoices().size(),
+                     choicesInfo);
+
             // 수정 횟수 증가
             application.incrementModifyCount();
             applicationRepository.save(application);
@@ -223,6 +237,11 @@ public class UserService {
                 choiceRepository.save(choice);
             }
         }
+
+        log.info("인천대 사용자 가입 완료 - userId: {}, email: {}, nickname: {}", 
+                user.getId(), 
+                request.getEmail(), 
+                nickname);
 
         // 9. 이메일 알람 트리거 (비동기적으로 실행, 실패해도 등록 프로세스에 영향 없음)
         emailTriggerService.triggerNewUserRegistrationEmail(
