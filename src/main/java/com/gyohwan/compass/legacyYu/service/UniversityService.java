@@ -21,7 +21,7 @@ public class UniversityService {
 
     private final SlotRepository slotRepository;
     private final ChoiceRepository choiceRepository;
-    
+
     @Transactional(readOnly = true)
     public List<PartnerUniversityInfo> getUniversities() {
         List<SlotWithApplicantCountDto> results = slotRepository.findBySeasonWithApplicantCounts(1L);
@@ -76,7 +76,7 @@ public class UniversityService {
                     }
 
                     return ApplicantDetail.builder()
-                            .id(application.getId())
+                            .id(application.getUser().getId())
                             .rank(rank.getAndIncrement())
                             .choice(choice.getChoice())
                             .nickname(application.getNickname())

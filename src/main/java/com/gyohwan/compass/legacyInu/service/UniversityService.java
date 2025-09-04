@@ -1,6 +1,9 @@
 package com.gyohwan.compass.legacyInu.service;
 
-import com.gyohwan.compass.domain.*;
+import com.gyohwan.compass.domain.Application;
+import com.gyohwan.compass.domain.Choice;
+import com.gyohwan.compass.domain.Slot;
+import com.gyohwan.compass.domain.User;
 import com.gyohwan.compass.legacyInu.dto.ApplicantDetail;
 import com.gyohwan.compass.legacyInu.dto.PartnerUniversityInfo;
 import com.gyohwan.compass.legacyInu.dto.UniversityDetailResponse;
@@ -73,7 +76,7 @@ public class UniversityService {
 
                     // 인천대는 어학 정보를 표시하지 않음
                     return ApplicantDetail.builder()
-                            .userId(application.getUser().getId())
+                            .userId(user.getId())
                             .nickname(application.getNickname())
                             .choice(choice.getChoice())
                             .grade(gradeInfo)
