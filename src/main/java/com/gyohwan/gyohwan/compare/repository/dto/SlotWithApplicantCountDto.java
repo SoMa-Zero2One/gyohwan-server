@@ -1,6 +1,6 @@
-package com.gyohwan.gyohwan.repository.dto;
+package com.gyohwan.gyohwan.compare.repository.dto;
 
-import com.gyohwan.gyohwan.domain.Slot;
+import com.gyohwan.gyohwan.compare.domain.Slot;
 import lombok.Getter;
 
 @Getter

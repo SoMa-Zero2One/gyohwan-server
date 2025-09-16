@@ -1,6 +1,6 @@
-package com.gyohwan.gyohwan.repository;
+package com.gyohwan.gyohwan.common.repository;
 
-import com.gyohwan.gyohwan.domain.DomesticUniv;
+import com.gyohwan.gyohwan.common.domain.DomesticUniv;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

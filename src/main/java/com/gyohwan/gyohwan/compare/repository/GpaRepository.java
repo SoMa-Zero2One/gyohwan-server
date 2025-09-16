@@ -1,7 +1,7 @@
-package com.gyohwan.gyohwan.repository;
+package com.gyohwan.gyohwan.compare.repository;
 
-import com.gyohwan.gyohwan.domain.Gpa;
-import com.gyohwan.gyohwan.domain.User;
+import com.gyohwan.gyohwan.compare.domain.Gpa;
+import com.gyohwan.gyohwan.common.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

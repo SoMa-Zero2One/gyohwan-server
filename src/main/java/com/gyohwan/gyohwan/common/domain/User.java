@@ -1,5 +1,8 @@
-package com.gyohwan.gyohwan.domain;
+package com.gyohwan.gyohwan.common.domain;
 
+import com.gyohwan.gyohwan.compare.domain.Application;
+import com.gyohwan.gyohwan.compare.domain.Gpa;
+import com.gyohwan.gyohwan.compare.domain.Language;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

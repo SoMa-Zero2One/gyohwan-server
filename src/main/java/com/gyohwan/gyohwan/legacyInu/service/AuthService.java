@@ -1,10 +1,10 @@
 package com.gyohwan.gyohwan.legacyInu.service;
 
-import com.gyohwan.gyohwan.domain.User;
+import com.gyohwan.gyohwan.common.domain.User;
+import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.legacyInu.dto.LoginResponse;
 import com.gyohwan.gyohwan.legacyInu.dto.UUIDLoginRequest;
 import com.gyohwan.gyohwan.legacyYu.security.JwtTokenProvider;
-import com.gyohwan.gyohwan.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,6 @@
 package com.gyohwan.gyohwan.legacyYu.security;
 
-import com.gyohwan.gyohwan.domain.User;
+import com.gyohwan.gyohwan.common.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,5 +1,7 @@
-package com.gyohwan.gyohwan.domain;
+package com.gyohwan.gyohwan.compare.domain;
 
+import com.gyohwan.gyohwan.common.domain.BaseEntity;
+import com.gyohwan.gyohwan.common.domain.DomesticUniv;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

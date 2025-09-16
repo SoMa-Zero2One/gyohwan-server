@@ -1,9 +1,9 @@
-package com.gyohwan.gyohwan.repository;
+package com.gyohwan.gyohwan.compare.repository;
 
-import com.gyohwan.gyohwan.domain.OutgoingUniv;
-import com.gyohwan.gyohwan.domain.Season;
-import com.gyohwan.gyohwan.domain.Slot;
-import com.gyohwan.gyohwan.repository.dto.SlotWithApplicantCountDto;
+import com.gyohwan.gyohwan.compare.domain.OutgoingUniv;
+import com.gyohwan.gyohwan.compare.domain.Season;
+import com.gyohwan.gyohwan.compare.domain.Slot;
+import com.gyohwan.gyohwan.compare.repository.dto.SlotWithApplicantCountDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

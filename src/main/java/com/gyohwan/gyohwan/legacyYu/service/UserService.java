@@ -1,9 +1,13 @@
 package com.gyohwan.gyohwan.legacyYu.service;
 
-import com.gyohwan.gyohwan.domain.*;
+import com.gyohwan.gyohwan.common.domain.DomesticUniv;
+import com.gyohwan.gyohwan.common.domain.User;
+import com.gyohwan.gyohwan.common.repository.DomesticUnivRepository;
+import com.gyohwan.gyohwan.common.repository.UserRepository;
+import com.gyohwan.gyohwan.compare.domain.*;
+import com.gyohwan.gyohwan.compare.repository.*;
 import com.gyohwan.gyohwan.legacyYu.dto.*;
 import com.gyohwan.gyohwan.legacyYu.util.NicknameGenerator;
-import com.gyohwan.gyohwan.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.gyohwan.gyohwan.domain;
+package com.gyohwan.gyohwan.common.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

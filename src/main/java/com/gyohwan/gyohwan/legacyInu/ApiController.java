@@ -5,7 +5,7 @@ import com.gyohwan.gyohwan.legacyInu.service.AuthService;
 import com.gyohwan.gyohwan.legacyInu.service.UniversityService;
 import com.gyohwan.gyohwan.legacyInu.service.UserService;
 import com.gyohwan.gyohwan.legacyYu.security.UserDetailsImpl;
-import com.gyohwan.gyohwan.repository.ApplicationRepository;
+import com.gyohwan.gyohwan.compare.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

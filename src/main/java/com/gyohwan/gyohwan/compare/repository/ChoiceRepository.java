@@ -1,8 +1,8 @@
-package com.gyohwan.gyohwan.repository;
+package com.gyohwan.gyohwan.compare.repository;
 
-import com.gyohwan.gyohwan.domain.Application;
-import com.gyohwan.gyohwan.domain.Choice;
-import com.gyohwan.gyohwan.domain.Slot;
+import com.gyohwan.gyohwan.compare.domain.Application;
+import com.gyohwan.gyohwan.compare.domain.Choice;
+import com.gyohwan.gyohwan.compare.domain.Slot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

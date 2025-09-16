@@ -5,7 +5,7 @@ import com.gyohwan.gyohwan.legacyYu.security.UserDetailsImpl;
 import com.gyohwan.gyohwan.legacyYu.service.AuthService;
 import com.gyohwan.gyohwan.legacyYu.service.UniversityService;
 import com.gyohwan.gyohwan.legacyYu.service.UserService;
-import com.gyohwan.gyohwan.repository.ApplicationRepository;
+import com.gyohwan.gyohwan.compare.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

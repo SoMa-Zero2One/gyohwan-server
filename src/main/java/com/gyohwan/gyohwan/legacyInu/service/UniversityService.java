@@ -1,15 +1,15 @@
 package com.gyohwan.gyohwan.legacyInu.service;
 
-import com.gyohwan.gyohwan.domain.Application;
-import com.gyohwan.gyohwan.domain.Choice;
-import com.gyohwan.gyohwan.domain.Slot;
-import com.gyohwan.gyohwan.domain.User;
+import com.gyohwan.gyohwan.compare.domain.Application;
+import com.gyohwan.gyohwan.compare.domain.Choice;
+import com.gyohwan.gyohwan.compare.domain.Slot;
+import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.legacyInu.dto.ApplicantDetail;
 import com.gyohwan.gyohwan.legacyInu.dto.PartnerUniversityInfo;
 import com.gyohwan.gyohwan.legacyInu.dto.UniversityDetailResponse;
-import com.gyohwan.gyohwan.repository.ChoiceRepository;
-import com.gyohwan.gyohwan.repository.SlotRepository;
-import com.gyohwan.gyohwan.repository.dto.SlotWithApplicantCountDto;
+import com.gyohwan.gyohwan.compare.repository.ChoiceRepository;
+import com.gyohwan.gyohwan.compare.repository.SlotRepository;
+import com.gyohwan.gyohwan.compare.repository.dto.SlotWithApplicantCountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

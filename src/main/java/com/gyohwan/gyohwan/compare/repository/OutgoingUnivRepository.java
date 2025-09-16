@@ -1,6 +1,6 @@
-package com.gyohwan.gyohwan.repository;
+package com.gyohwan.gyohwan.compare.repository;
 
-import com.gyohwan.gyohwan.domain.OutgoingUniv;
+import com.gyohwan.gyohwan.compare.domain.OutgoingUniv;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
