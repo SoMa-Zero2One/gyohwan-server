@@ -17,7 +17,7 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 36, nullable = false)
+    @Column(length = 36, nullable = false, unique = true)
     private String uuid;
 
     private String title;
