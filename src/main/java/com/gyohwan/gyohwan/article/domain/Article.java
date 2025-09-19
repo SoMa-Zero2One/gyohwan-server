@@ -22,7 +22,7 @@ public class Article {
 
     private String title;
 
-    @Lob
+    @Column(length = 2048)
     private String coverImageUrl;
 
     @Lob
