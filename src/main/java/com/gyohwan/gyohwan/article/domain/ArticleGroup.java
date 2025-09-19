@@ -17,6 +17,8 @@ public class ArticleGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    String name;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ArticleScopeType scopeType;
