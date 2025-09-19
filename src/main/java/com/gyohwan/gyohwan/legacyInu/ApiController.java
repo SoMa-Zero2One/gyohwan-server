@@ -1,17 +1,15 @@
 package com.gyohwan.gyohwan.legacyInu;
 
+import com.gyohwan.gyohwan.compare.repository.ApplicationRepository;
 import com.gyohwan.gyohwan.legacyInu.dto.*;
 import com.gyohwan.gyohwan.legacyInu.service.AuthService;
 import com.gyohwan.gyohwan.legacyInu.service.UniversityService;
 import com.gyohwan.gyohwan.legacyInu.service.UserService;
 import com.gyohwan.gyohwan.legacyYu.security.UserDetailsImpl;
-import com.gyohwan.gyohwan.compare.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController("inuApiController")
 @RequestMapping("/inu-legacy")
@@ -41,26 +39,26 @@ public class ApiController {
     }
 
     // === Universities ===============================================
-    @GetMapping("/public-universities")
-    public ResponseEntity<List<PartnerUniversityInfo>> readPublicUniversities() {
-        List<PartnerUniversityInfo> universities = universityService.getUniversities();
-        return ResponseEntity.ok(universities);
-    }
+//    @GetMapping("/public-universities")
+//    public ResponseEntity<List<PartnerUniversityInfo>> readPublicUniversities() {
+//        List<PartnerUniversityInfo> universities = universityService.getUniversities();
+//        return ResponseEntity.ok(universities);
+//    }
 
-    @GetMapping("/universities")
-    public ResponseEntity<List<PartnerUniversityInfo>> readUniversities(
-            @AuthenticationPrincipal UserDetailsImpl currentUser) {
-        List<PartnerUniversityInfo> universities = universityService.getUniversitiesWithApplicantCount();
-        return ResponseEntity.ok(universities);
-    }
+//    @GetMapping("/universities")
+//    public ResponseEntity<List<PartnerUniversityInfo>> readUniversities(
+//            @AuthenticationPrincipal UserDetailsImpl currentUser) {
+//        List<PartnerUniversityInfo> universities = universityService.getUniversitiesWithApplicantCount();
+//        return ResponseEntity.ok(universities);
+//    }
 
-    @GetMapping("/universities/{universityId}")
-    public ResponseEntity<UniversityDetailResponse> readUniversityDetails(
-            @PathVariable Long universityId,
-            @AuthenticationPrincipal UserDetailsImpl currentUser) {
-        UniversityDetailResponse universityDetails = universityService.getUniversityDetails(universityId);
-        return ResponseEntity.ok(universityDetails);
-    }
+//    @GetMapping("/universities/{universityId}")
+//    public ResponseEntity<UniversityDetailResponse> readUniversityDetails(
+//            @PathVariable Long universityId,
+//            @AuthenticationPrincipal UserDetailsImpl currentUser) {
+//        UniversityDetailResponse universityDetails = universityService.getUniversityDetails(universityId);
+//        return ResponseEntity.ok(universityDetails);
+//    }
 
     // === Users ======================================================
     @GetMapping("/users/me")
