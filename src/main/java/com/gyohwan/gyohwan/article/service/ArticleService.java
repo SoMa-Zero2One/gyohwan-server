@@ -6,11 +6,14 @@ import com.gyohwan.gyohwan.article.domain.ArticleScopeType;
 import com.gyohwan.gyohwan.article.dto.ArticleDetailResponse;
 import com.gyohwan.gyohwan.article.dto.ArticleGroupDetailResponse;
 import com.gyohwan.gyohwan.article.dto.ArticleGroupsResponse;
+import com.gyohwan.gyohwan.article.dto.ArticleSummary;
 import com.gyohwan.gyohwan.article.repository.ArticleGroupRepository;
 import com.gyohwan.gyohwan.article.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +28,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     public ArticleGroupsResponse findAllArticleGroups() {
-        // TODO: Spring Security 등 인증 정보를 통해 실제 사용자 정보 조회
-        // 예시: User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var userStatus = new ArticleGroupsResponse.UserStatusDto("JP", "KHU");
+        var userStatus = new ArticleGroupsResponse.UserStatusDto(null, null);
 
         ArticleGroupsResponse.GroupInfoDto defaultGroup = null;
         List<ArticleGroupsResponse.GroupInfoDto> countries = new ArrayList<>();
@@ -60,12 +61,12 @@ public class ArticleService {
 
     public ArticleGroupDetailResponse findArticlesByGroup(ArticleScopeType scopeType, String targetCode) {
         ArticleGroup group = articleGroupRepository.findByScopeTypeAndTargetCode(scopeType, targetCode)
-                .orElseThrow(() -> new ResourceNotFoundException("요청한 아티클 그룹을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "요청한 아티클 그룹을 찾을 수 없습니다."));
 
-        List<ArticleSummaryResponse> articles = group.getArticleConnects().stream()
+        List<ArticleSummary> articles = group.getArticleConnects().stream()
                 .map(connection -> {
                     Article article = connection.getArticle();
-                    return new ArticleSummaryResponse(
+                    return new ArticleSummary(
                             article.getUuid(),
                             article.getTitle(),
                             article.getCoverImageUrl()
@@ -78,7 +79,7 @@ public class ArticleService {
 
     public ArticleDetailResponse findArticleByUuid(String articleUuid) {
         Article article = articleRepository.findByUuid(articleUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("아티클을 찾을 수 없습니다: " + articleUuid));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "아티클을 찾을 수 없습니다: " + articleUuid));
         return ArticleDetailResponse.from(article);
     }
 }
