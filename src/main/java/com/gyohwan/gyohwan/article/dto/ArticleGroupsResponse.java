@@ -16,7 +16,7 @@ public record ArticleGroupsResponse(
 
     public record GroupInfoDto(
             String name,
-            String code, // 'default' 그룹은 code가 없을 수 있으므로 nullable
+            String code,
             String path
     ) {
     }
