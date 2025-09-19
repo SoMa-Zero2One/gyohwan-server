@@ -30,7 +30,7 @@ public class ArticleService {
     public ArticleGroupsResponse findAllArticleGroups() {
         var userStatus = new ArticleGroupsResponse.UserStatusDto(null, null);
 
-        ArticleGroupsResponse.GroupInfoDto defaultGroup = null;
+        ArticleGroupsResponse.GroupInfoDto commonGroup = null;
         List<ArticleGroupsResponse.GroupInfoDto> countries = new ArrayList<>();
         List<ArticleGroupsResponse.GroupInfoDto> domesticUnivs = new ArrayList<>();
 
@@ -38,10 +38,10 @@ public class ArticleService {
 
         for (ArticleGroup group : allGroups) {
             switch (group.getScopeType()) {
-                case COMMON -> defaultGroup = new ArticleGroupsResponse.GroupInfoDto(
+                case COMMON -> commonGroup = new ArticleGroupsResponse.GroupInfoDto(
                         group.getName(),
                         null,
-                        "/article-groups/default"
+                        "/article-groups/common"
                 );
                 case COUNTRY -> countries.add(new ArticleGroupsResponse.GroupInfoDto(
                         group.getName(),
@@ -56,7 +56,7 @@ public class ArticleService {
             }
         }
 
-        return new ArticleGroupsResponse(userStatus, defaultGroup, countries, domesticUnivs);
+        return new ArticleGroupsResponse(userStatus, commonGroup, countries, domesticUnivs);
     }
 
     public ArticleGroupDetailResponse findArticlesByGroup(ArticleScopeType scopeType, String targetCode) {

@@ -4,7 +4,7 @@ import java.util.List;
 
 public record ArticleGroupsResponse(
         UserStatusDto userStatus,
-        GroupInfoDto basic,
+        GroupInfoDto common,
         List<GroupInfoDto> countries,
         List<GroupInfoDto> domesticUnivs
 ) {
