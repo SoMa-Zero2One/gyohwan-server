@@ -21,7 +21,7 @@ public class SignUpService {
     public User createNewKakaoUser(String kakaoUserId) {
         UUID uuid = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
-        User user = new User(uuid.toString(), uuid2.toString(), LoginType.KAKAO);
+        User user = new User(uuid.toString(), uuid2.toString(), LoginType.SOCIAL);
         Social newSocial = new Social(user, SocialType.KAKAO, kakaoUserId);
         socialRepository.save(newSocial);
         userRepository.save(user);
