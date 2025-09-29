@@ -1,7 +1,5 @@
 package com.gyohwan.gyohwan.security;
 
-import com.gyohwan.gyohwan.legacyYu.security.JwtAuthenticationFilter;
-import com.gyohwan.gyohwan.legacyYu.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

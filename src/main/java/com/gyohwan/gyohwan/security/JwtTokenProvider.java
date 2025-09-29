@@ -1,6 +1,5 @@
-package com.gyohwan.gyohwan.legacyYu.security;
+package com.gyohwan.gyohwan.security;
 
-import com.gyohwan.gyohwan.legacyYu.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
