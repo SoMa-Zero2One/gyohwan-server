@@ -1,4 +1,4 @@
-package com.gyohwan.gyohwan.legacyYu.security;
+package com.gyohwan.gyohwan.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

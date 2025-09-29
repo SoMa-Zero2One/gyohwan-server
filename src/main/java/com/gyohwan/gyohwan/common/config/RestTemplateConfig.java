@@ -1,4 +1,4 @@
-package com.gyohwan.gyohwan.legacyYu.config;
+package com.gyohwan.gyohwan.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
