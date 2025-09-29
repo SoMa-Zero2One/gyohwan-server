@@ -3,6 +3,8 @@ package com.gyohwan.gyohwan.auth.client;
 
 import com.gyohwan.gyohwan.auth.client.dto.KakaoUserInfoDto;
 import com.gyohwan.gyohwan.auth.client.dto.KakaoUserTokenDto;
+import com.gyohwan.gyohwan.common.exception.CustomException;
+import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -42,13 +44,24 @@ public class KakaoOAuthClient {
     }
 
     public String getAccessTokenFromKakao(String code) {
-        ResponseEntity<KakaoUserTokenDto> response = restTemplate.exchange(
-                buildTokenUri(code),
-                HttpMethod.POST,
-                null,
-                KakaoUserTokenDto.class
-        );
-        return response.getBody().getAccessToken();
+        try {
+
+            ResponseEntity<KakaoUserTokenDto> response = restTemplate.exchange(
+                    buildTokenUri(code),
+                    HttpMethod.POST,
+                    null,
+                    KakaoUserTokenDto.class
+            );
+            return response.getBody().getAccessToken();
+        } catch (Exception e) {
+            if (e.getMessage().contains("KOE303")) {
+                throw new CustomException(ErrorCode.KAKAO_REDIRECT_URI_MISMATCH);
+            }
+            if (e.getMessage().contains("KOE320")) {
+                throw new CustomException(ErrorCode.INVALID_OR_EXPIRED_KAKAO_AUTH_CODE);
+            }
+            throw new CustomException(ErrorCode.INVALID_OR_EXPIRED_KAKAO_AUTH_CODE);
+        }
     }
 
     private String buildTokenUri(String code) {
