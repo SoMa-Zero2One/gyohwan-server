@@ -26,11 +26,23 @@ public class User extends BaseEntity {
 
     private String email;
 
+    @Column(nullable = true)
+    private String password;
+
+    @Column(nullable = false)
     private String nickname;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "domestic_univ_id", nullable = false)
     private DomesticUniv domesticUniv;
+
+    @Column(nullable = false)
+    private Boolean schoolVerified;
+
+    private String schoolEmail;
+
+    @Column(nullable = false)
+    private LoginType loginType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gpa> gpas = new ArrayList<>();
@@ -42,7 +54,6 @@ public class User extends BaseEntity {
     @BatchSize(size = 10)
     private List<Application> applications = new ArrayList<>();
 
-    // 생성자
     public User(String uuid, String email, String nickname, DomesticUniv domesticUniv) {
         this.uuid = uuid;
         this.email = email;
@@ -50,7 +61,6 @@ public class User extends BaseEntity {
         this.domesticUniv = domesticUniv;
     }
 
-    // 닉네임 업데이트 메서드
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }

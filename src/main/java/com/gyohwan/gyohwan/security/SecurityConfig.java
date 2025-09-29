@@ -71,7 +71,8 @@ public class SecurityConfig {
                 "http://localhost:3000",
                 "http://localhost:8080",
                 "https://yu.gyohwan.com",
-                "https://inu.gyohwan.com"));
+                "https://inu.gyohwan.com",
+                "https://gyohwan.com"));
 
         // 허용할 HTTP 메서드 설정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
