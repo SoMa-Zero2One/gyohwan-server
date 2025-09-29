@@ -33,7 +33,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "domestic_univ_id", nullable = false)
+    @JoinColumn(name = "domestic_univ_id")
     private DomesticUniv domesticUniv;
 
     @Column(nullable = false)
@@ -60,6 +60,13 @@ public class User extends BaseEntity {
         this.email = email;
         this.nickname = nickname;
         this.domesticUniv = domesticUniv;
+    }
+
+    public User(String uuid, String nickname, LoginType loginType) {
+        this.uuid = uuid;
+        this.nickname = nickname;
+        this.schoolVerified = false;
+        this.loginType = loginType;
     }
 
     public void updateNickname(String nickname) {

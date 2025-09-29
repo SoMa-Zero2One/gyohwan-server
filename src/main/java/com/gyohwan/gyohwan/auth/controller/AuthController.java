@@ -1,6 +1,7 @@
 package com.gyohwan.gyohwan.auth.controller;
 
 import com.gyohwan.gyohwan.auth.dto.OAuthCodeRequest;
+import com.gyohwan.gyohwan.auth.dto.SignInResponse;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,10 @@ public class AuthController {
 //    }
 
     @PostMapping("/kakao")
-    public ResponseEntity<String> processKakaoOAuth(
+    public ResponseEntity<SignInResponse> processKakaoOAuth(
             @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
     ) {
-        String response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
+        SignInResponse response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
         return ResponseEntity.ok(response);
     }
 }
