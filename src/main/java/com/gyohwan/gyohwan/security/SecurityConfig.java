@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/inu-legacy/users/register").permitAll()
                                 .requestMatchers("/v1/article-groups").permitAll()
                                 .requestMatchers("/v1/articles").permitAll()
+                                .requestMatchers("/v1/auth/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
