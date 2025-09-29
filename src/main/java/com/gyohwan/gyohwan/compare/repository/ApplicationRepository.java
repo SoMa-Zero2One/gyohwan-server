@@ -1,8 +1,8 @@
 package com.gyohwan.gyohwan.compare.repository;
 
+import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.compare.domain.Application;
 import com.gyohwan.gyohwan.compare.domain.Season;
-import com.gyohwan.gyohwan.common.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
