@@ -41,6 +41,7 @@ public class User extends BaseEntity {
 
     private String schoolEmail;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoginType loginType;
 
