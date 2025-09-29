@@ -19,16 +19,7 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "비밀번호는 최소 8자 이상이어야 합니다."),
 
     // User
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-
-    // Session
-    SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "세션을 찾을 수 없습니다."),
-    NOT_SESSION_MEMBER(HttpStatus.FORBIDDEN, "해당 세션의 멤버가 아닙니다."),
-
-    SESSION_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "세션 참가 요청을 찾을 수 없습니다."),
-    ALREADY_REQUESTED_TO_JOIN_SESSION(HttpStatus.BAD_REQUEST, "이미 세션 참가 요청을 보냈습니다."),
-    ONLY_OWNER_CAN_APPROVE_JOIN_REQUEST(HttpStatus.FORBIDDEN, "세션 참가 요청을 승인할 수 있는 권한이 없습니다."),
-    ;
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다.");
 
 
     private final HttpStatus httpStatus;

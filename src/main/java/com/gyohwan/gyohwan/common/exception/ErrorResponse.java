@@ -2,12 +2,12 @@ package com.gyohwan.gyohwan.common.exception;
 
 
 public record ErrorResponse(
+        String title,
         int status,
-        String error,
-        String message
+        String detail
 ) {
 
     public ErrorResponse(CustomException e) {
-        this(e.getErrorCode().getHttpStatus().value(), e.getErrorCode().name(), e.getMessage());
+        this(e.getErrorCode().name(), e.getErrorCode().getHttpStatus().value(), e.getMessage());
     }
 }
