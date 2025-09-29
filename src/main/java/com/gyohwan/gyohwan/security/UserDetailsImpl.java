@@ -1,4 +1,4 @@
-package com.gyohwan.gyohwan.legacyYu.security;
+package com.gyohwan.gyohwan.security;
 
 import com.gyohwan.gyohwan.common.domain.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,13 +10,12 @@ import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user; // 실제 우리 시스템의 User 엔티티
+    private final User user;
 
     public UserDetailsImpl(User user) {
         this.user = user;
     }
 
-    // 컨트롤러에서 currentUser.getUser() 로 접근하기 위한 Getter
     public User getUser() {
         return user;
     }

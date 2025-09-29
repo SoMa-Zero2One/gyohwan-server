@@ -1,8 +1,7 @@
-package com.gyohwan.gyohwan.legacyYu.service;
+package com.gyohwan.gyohwan.security;
 
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
-import com.gyohwan.gyohwan.legacyYu.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
