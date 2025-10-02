@@ -35,15 +35,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authz -> authz
                                 // 로그인 API는 누구나 접근 가능하도록 허용
-                                .requestMatchers("/yu-legacy/auth/token").permitAll()
-                                .requestMatchers("/yu-legacy/public-universities").permitAll()
-                                .requestMatchers("/yu-legacy/users/register").permitAll()
-                                .requestMatchers("/inu-legacy/auth/token").permitAll()
-                                .requestMatchers("/inu-legacy/public-universities").permitAll()
-                                .requestMatchers("/inu-legacy/users/register").permitAll()
-                                .requestMatchers("/v1/article-groups").permitAll()
-                                .requestMatchers("/v1/articles").permitAll()
                                 .requestMatchers("/v1/auth/**").permitAll()
+                                .requestMatchers("/v1/article-groups/**").permitAll()
+                                .requestMatchers("/v1/articles/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
