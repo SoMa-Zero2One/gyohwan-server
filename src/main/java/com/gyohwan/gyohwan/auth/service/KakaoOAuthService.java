@@ -2,11 +2,10 @@ package com.gyohwan.gyohwan.auth.service;
 
 import com.gyohwan.gyohwan.auth.client.KakaoOAuthClient;
 import com.gyohwan.gyohwan.auth.client.dto.KakaoUserInfoDto;
-import com.gyohwan.gyohwan.auth.dto.SignInResponse;
+import com.gyohwan.gyohwan.auth.dto.TokenResponse;
 import com.gyohwan.gyohwan.common.domain.Social;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.repository.SocialRepository;
-import com.gyohwan.gyohwan.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +18,11 @@ public class KakaoOAuthService {
 
     private final KakaoOAuthClient kakaoOAuthClient;
     private final SocialRepository socialRepository;
-    private final UserRepository userRepository;
-    private final SignInService signInService;
-    private final SignUpService signUpService;
+    private final LoginService loginService;
+    private final SignupService signupService;
 
     @Transactional
-    public SignInResponse processOAuth(String code) {
+    public TokenResponse processOAuth(String code) {
         String kakaoAccessToken = kakaoOAuthClient.getAccessTokenFromKakao(code);
         KakaoUserInfoDto kakaoUserInfo = kakaoOAuthClient.getUserInfo(kakaoAccessToken);
 
@@ -34,9 +32,9 @@ public class KakaoOAuthService {
         if (social.isPresent()) {
             user = social.get().getUser();
         } else {
-            user = signUpService.createNewKakaoUser(kakaoUserInfo.id());
+            user = signupService.createNewKakaoUser(kakaoUserInfo.id());
         }
 
-        return signInService.signIn(user);
+        return loginService.login(user);
     }
 }

@@ -18,6 +18,10 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "비밀번호는 최소 8자 이상이어야 합니다."),
 
+    EMAIL_CONFIRM_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었거나 요청된 적 없는 이메일입니다."),
+    EMAIL_CONFIRM_CODE_DIFFERENT(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
+
+
     // Kakao
     KAKAO_REDIRECT_URI_MISMATCH(HttpStatus.BAD_REQUEST, "리다이렉트 uri가 잘못되었습니다."),
     INVALID_OR_EXPIRED_KAKAO_AUTH_CODE(HttpStatus.BAD_REQUEST, "사용할 수 없는 카카오 인증 코드입니다. 카카오 인증 코드는 일회용이며, 인증 만료 시간은 10분입니다."),

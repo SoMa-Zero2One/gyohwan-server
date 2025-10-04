@@ -1,6 +1,6 @@
 package com.gyohwan.gyohwan.auth.service;
 
-import com.gyohwan.gyohwan.auth.dto.SignInResponse;
+import com.gyohwan.gyohwan.auth.dto.TokenResponse;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class SignInService {
+public class LoginService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public SignInResponse signIn(User user) {
-        String accessToken = jwtTokenProvider.createToken(user.getUuid());
-        return new SignInResponse(accessToken);
+    public TokenResponse login(User user) {
+        String accessToken = jwtTokenProvider.createToken(user.getId());
+        return new TokenResponse(accessToken);
     }
 
 }

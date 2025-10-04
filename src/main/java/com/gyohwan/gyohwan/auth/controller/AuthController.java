@@ -1,7 +1,7 @@
 package com.gyohwan.gyohwan.auth.controller;
 
-import com.gyohwan.gyohwan.auth.dto.OAuthCodeRequest;
-import com.gyohwan.gyohwan.auth.dto.SignInResponse;
+import com.gyohwan.gyohwan.auth.dto.*;
+import com.gyohwan.gyohwan.auth.service.EmailAuthService;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final KakaoOAuthService kakaoOAuthService;
+    private final EmailAuthService emailAuthService;
 
 //    @PostMapping("/apple")
 //    public ResponseEntity<OAuthResponse> processAppleOAuth(
@@ -26,11 +27,27 @@ public class AuthController {
 //        return ResponseEntity.ok(oAuthResponse);
 //    }
 
-    @PostMapping("/kakao")
-    public ResponseEntity<SignInResponse> processKakaoOAuth(
+    @PostMapping("/login/social/kakao")
+    public ResponseEntity<TokenResponse> processKakaoOAuth(
             @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
     ) {
-        SignInResponse response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
+        TokenResponse response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/signup/email")
+    public ResponseEntity<EmailSignupResponse> processEmailSignup(
+            @Valid @RequestBody EmailSignupRequest request
+    ) {
+        String email = emailAuthService.requestEmailVerification(request.email(), request.password());
+        return ResponseEntity.ok(new EmailSignupResponse(email));
+    }
+
+    @PostMapping("/signup/email/confirm")
+    public ResponseEntity<TokenResponse> processEmailSignupConfirm(
+            @Valid @RequestBody EmailConfirmRequest request
+    ) {
+        String accessToken = emailAuthService.confirmEmail(request.email(), request.code());
+        return ResponseEntity.ok(new TokenResponse(accessToken));
     }
 }

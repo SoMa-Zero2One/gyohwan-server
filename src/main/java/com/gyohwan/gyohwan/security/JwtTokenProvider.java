@@ -34,12 +34,14 @@ public class JwtTokenProvider {
     /**
      * 사용자 정보를 기반으로 Access Token을 생성하는 메서드
      */
-    public String createToken(String uuid) {
+    public String createToken(Long longUserId) {
+        String userId = String.valueOf(longUserId);
+        Claims claims = Jwts.claims().setSubject(userId);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTimeMs);
 
         return Jwts.builder()
-                .setSubject(uuid) // 토큰의 주체로 사용자 UUID를 저장
+                .setClaims(claims)
                 .setIssuedAt(now) // 토큰 발행 시간
                 .setExpiration(expiryDate) // 토큰 만료 시간
                 .signWith(key, SignatureAlgorithm.HS256) // 사용할 암호화 알고리즘과 서명 키
@@ -47,15 +49,16 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 토큰에서 사용자 UUID를 추출하는 메서드
+     * 토큰에서 사용자 ID를 추출하는 메서드
      */
-    public String getUuidFromToken(String token) {
+    public String getIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        String subject = claims.getSubject();
+        return subject;
     }
 
     /**
@@ -82,10 +85,8 @@ public class JwtTokenProvider {
      * 이 메서드는 실제 UserDetailsService와 연동이 필요할 수 있습니다.
      */
     public Authentication getAuthentication(String token) {
-        String uuid = getUuidFromToken(token);
-        // UserDetailsService를 통해 DB에서 유저 정보를 조회하고, 우리가 만든 UserDetailsImpl 객체를 가져옴
-        UserDetails userDetails = userDetailsService.loadUserByUsername(uuid);
-        // Authentication 객체를 생성할 때 principal로 우리가 만든 userDetails 객체를 전달
+        String userId = getIdFromToken(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
