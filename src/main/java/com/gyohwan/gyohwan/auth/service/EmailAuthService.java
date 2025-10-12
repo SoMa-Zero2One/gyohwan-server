@@ -6,6 +6,7 @@ import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
+import com.gyohwan.gyohwan.common.service.EmailService;
 import com.gyohwan.gyohwan.security.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class EmailAuthService {
 
+    private final UserRepository userRepository;
+    private final SignupService signupService;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final SignupService signupService;
-    private final UserRepository userRepository;
 
     private static final long VERIFICATION_CODE_EXPIRATION_SECONDS = 300; // 5분
 
@@ -48,7 +50,7 @@ public class EmailAuthService {
                 TimeUnit.SECONDS
         );
 
-        // emailService.sendVerificationEmail(requestDto.getEmail(), verificationCode);
+        emailService.sendVerificationEmail(email, verificationCode);
         log.info("인증 코드 발송 완료. Email: {}, Code: {}", email, verificationCode);
 
         return email;
