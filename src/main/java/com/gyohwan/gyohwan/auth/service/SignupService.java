@@ -26,6 +26,14 @@ public class SignupService {
         return user;
     }
 
+    public User createNewGoogleUser(String googleUserId) {
+        User user = createNewUser(LoginType.SOCIAL);
+        Social newSocial = new Social(user, SocialType.GOOGLE, googleUserId);
+        socialRepository.save(newSocial);
+        userRepository.save(user);
+        return user;
+    }
+
     public User createNewUser(LoginType loginType) {
         UUID uuid = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();

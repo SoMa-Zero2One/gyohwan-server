@@ -6,6 +6,7 @@ import com.gyohwan.gyohwan.auth.client.dto.KakaoUserTokenDto;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoOAuthClient {
 
     private final RestTemplate restTemplate;

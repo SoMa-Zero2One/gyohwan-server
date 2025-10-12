@@ -26,6 +26,9 @@ public enum ErrorCode {
     KAKAO_REDIRECT_URI_MISMATCH(HttpStatus.BAD_REQUEST, "리다이렉트 uri가 잘못되었습니다."),
     INVALID_OR_EXPIRED_KAKAO_AUTH_CODE(HttpStatus.BAD_REQUEST, "사용할 수 없는 카카오 인증 코드입니다. 카카오 인증 코드는 일회용이며, 인증 만료 시간은 10분입니다."),
 
+    // Google
+    INVALID_OR_EXPIRED_GOOGLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "사용할 수 없는 구글 인증 코드입니다."),
+
     // User
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다.");
 

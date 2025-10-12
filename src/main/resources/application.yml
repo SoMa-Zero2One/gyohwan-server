@@ -39,8 +39,3 @@ spring:
 jwt:
   secret-key:
     OWI3OWUzZGMtMTllYy00NmE2LWJlMDctMDZkZTlkYzMzYzg2
-
-oauth:
-  kakao:
-    redirect-url: "https://localhost:8080/login/kakao/callback"
-    client-id: "123456789abcdef123456789abcdef12"

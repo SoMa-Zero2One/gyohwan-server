@@ -2,6 +2,7 @@ package com.gyohwan.gyohwan.auth.controller;
 
 import com.gyohwan.gyohwan.auth.dto.*;
 import com.gyohwan.gyohwan.auth.service.EmailAuthService;
+import com.gyohwan.gyohwan.auth.service.GoogleOAuthService;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final KakaoOAuthService kakaoOAuthService;
+    private final GoogleOAuthService googleOAuthService;
     private final EmailAuthService emailAuthService;
 
 //    @PostMapping("/apple")
@@ -32,6 +34,14 @@ public class AuthController {
             @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
     ) {
         TokenResponse response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login/social/google")
+    public ResponseEntity<TokenResponse> processGoogleOAuth(
+            @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
+    ) {
+        TokenResponse response = googleOAuthService.processOAuth(oAuthCodeRequest.code());
         return ResponseEntity.ok(response);
     }
 
