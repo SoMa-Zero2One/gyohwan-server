@@ -1,6 +1,12 @@
 spring:
   config:
-    import: "optional:classpath:secret/application-secret.yml"
+    import:
+      - classpath:/secret/application-secret.yml
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 jwt:
   expiration-time-ms: 8640000000 # 24 hours * 100
@@ -8,6 +14,7 @@ jwt:
 logging:
   level:
     root: info
+
 
 ---
 spring:

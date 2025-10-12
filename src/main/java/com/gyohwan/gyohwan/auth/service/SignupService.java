@@ -13,18 +13,27 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class SignUpService {
+public class SignupService {
 
     private final UserRepository userRepository;
     private final SocialRepository socialRepository;
 
     public User createNewKakaoUser(String kakaoUserId) {
-        UUID uuid = UUID.randomUUID();
-        UUID uuid2 = UUID.randomUUID();
-        User user = new User(uuid.toString(), uuid2.toString(), LoginType.SOCIAL);
+        User user = createNewUser(LoginType.SOCIAL);
         Social newSocial = new Social(user, SocialType.KAKAO, kakaoUserId);
         socialRepository.save(newSocial);
         userRepository.save(user);
         return user;
+    }
+
+    public User createNewUser(LoginType loginType) {
+        UUID uuid = UUID.randomUUID();
+        UUID uuid2 = UUID.randomUUID();
+        User user = new User(uuid.toString(), uuid2.toString(), loginType);
+        return user;
+    }
+
+    public boolean isEmailAvailable(String email) {
+        return !userRepository.existsByEmail(email);
     }
 }

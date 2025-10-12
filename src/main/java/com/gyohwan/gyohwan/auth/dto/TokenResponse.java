@@ -1,6 +1,6 @@
 package com.gyohwan.gyohwan.auth.dto;
 
-public record SignInResponse(
+public record TokenResponse(
         String accessToken
 ) {
 }

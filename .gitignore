@@ -52,3 +52,4 @@ application-local.properties
 application-local.yml
 
 /mysql_data_local
+/redis_data_local

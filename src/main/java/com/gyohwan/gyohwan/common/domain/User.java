@@ -69,6 +69,15 @@ public class User extends BaseEntity {
         this.loginType = loginType;
     }
 
+    public void setEmailPassword(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public void setSchoolEmail(String schoolEmail) {
+        this.schoolEmail = schoolEmail;
+    }
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
