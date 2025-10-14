@@ -39,8 +39,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        // Spring Security에서 사용자를 식별하는 주요 ID. UUID를 사용하므로 user.getUuid()를 반환
-        return user.getUuid();
+        // Spring Security에서 사용자를 식별하는 주요 ID.
+        return user.getId().toString();
     }
 
     // 계정 상태 관련 메서드들 (특별한 로직이 없다면 모두 true를 반환)

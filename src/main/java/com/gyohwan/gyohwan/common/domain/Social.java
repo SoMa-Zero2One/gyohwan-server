@@ -28,6 +28,11 @@ public class Social {
         return user;
     }
 
+    public SocialType getSocialCode() {
+        return socialCode;
+    }
+
+
     public Social(User user, SocialType socialCode, String externalId) {
         this.user = user;
         this.socialCode = socialCode;
