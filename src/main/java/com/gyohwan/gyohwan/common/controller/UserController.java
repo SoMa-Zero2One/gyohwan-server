@@ -1,9 +1,6 @@
 package com.gyohwan.gyohwan.common.controller;
 
-import com.gyohwan.gyohwan.common.dto.CreateGpaRequest;
-import com.gyohwan.gyohwan.common.dto.GpaResponse;
-import com.gyohwan.gyohwan.common.dto.MyUserResponse;
-import com.gyohwan.gyohwan.common.dto.UserGpaResponse;
+import com.gyohwan.gyohwan.common.dto.*;
 import com.gyohwan.gyohwan.common.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +35,20 @@ public class UserController {
     ) {
         Long userId = Long.parseLong(userDetails.getUsername());
         return userService.createGpa(userId, request);
+    }
+
+    @GetMapping("/me/languages")
+    public UserLanguageResponse getMyLanguages(@AuthenticationPrincipal UserDetails userDetails) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        return userService.findUserLanguages(userId);
+    }
+
+    @PostMapping("/me/languages")
+    public LanguageResponse createMyLanguage(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid CreateLanguageRequest request
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        return userService.createLanguage(userId, request);
     }
 }

@@ -1,12 +1,12 @@
 package com.gyohwan.gyohwan.common.service;
 
 import com.gyohwan.gyohwan.common.domain.User;
-import com.gyohwan.gyohwan.common.dto.CreateGpaRequest;
-import com.gyohwan.gyohwan.common.dto.GpaResponse;
-import com.gyohwan.gyohwan.common.dto.MyUserResponse;
-import com.gyohwan.gyohwan.common.dto.UserGpaResponse;
+import com.gyohwan.gyohwan.common.dto.*;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.compare.domain.Gpa;
+import com.gyohwan.gyohwan.compare.domain.Language;
+import com.gyohwan.gyohwan.compare.repository.GpaRepository;
+import com.gyohwan.gyohwan.compare.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final GpaRepository gpaRepository;
+    private final LanguageRepository languageRepository;
 
     @Transactional(readOnly = true)
     public MyUserResponse findUser(Long userId) {
@@ -31,6 +33,13 @@ public class UserService {
         return UserGpaResponse.from(user);
     }
 
+    @Transactional(readOnly = true)
+    public UserLanguageResponse findUserLanguages(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        return UserLanguageResponse.from(user);
+    }
+
     @Transactional
     public GpaResponse createGpa(Long userId, CreateGpaRequest request) {
         User user = userRepository.findById(userId)
@@ -40,7 +49,21 @@ public class UserService {
         Gpa gpa = new Gpa(user, request.score(), criteria);
         user.getGpas().add(gpa);
 
-        return GpaResponse.from(gpa);
+        Gpa savedGpa = gpaRepository.save(gpa);
+        return GpaResponse.from(savedGpa);
+    }
+
+    @Transactional
+    public LanguageResponse createLanguage(Long userId, CreateLanguageRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        Language.TestType testType = Language.TestType.valueOf(request.testType());
+        Language language = new Language(user, testType, request.score(), request.grade());
+        user.getLanguages().add(language);
+
+        Language savedLanguage = languageRepository.save(language);
+        return LanguageResponse.from(savedLanguage);
     }
 
     private Gpa.Criteria convertToCriteria(Double criteria) {
