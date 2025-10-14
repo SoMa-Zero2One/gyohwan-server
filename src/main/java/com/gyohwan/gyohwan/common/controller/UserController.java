@@ -1,6 +1,7 @@
 package com.gyohwan.gyohwan.common.controller;
 
 import com.gyohwan.gyohwan.common.dto.MyUserResponse;
+import com.gyohwan.gyohwan.common.dto.UserGpaResponse;
 import com.gyohwan.gyohwan.common.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,5 +21,11 @@ public class UserController {
     public MyUserResponse getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
         Long userId = Long.parseLong(userDetails.getUsername());
         return userService.findUser(userId);
+    }
+
+    @GetMapping("/me/gpas")
+    public UserGpaResponse getMyGpas(@AuthenticationPrincipal UserDetails userDetails) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        return userService.findUserGpas(userId);
     }
 }
