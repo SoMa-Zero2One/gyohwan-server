@@ -21,6 +21,8 @@ public class JwtTokenProvider {
     private final long expirationTimeMs;
     private final UserDetailsServiceImpl userDetailsService;
 
+    private String issuer = "gyohwan.com";
+
     public JwtTokenProvider(
             @Value("${jwt.secret-key}") String secretKey,
             @Value("${jwt.expiration-time-ms}") long expirationTimeMs,
@@ -29,6 +31,20 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.expirationTimeMs = expirationTimeMs;
         this.userDetailsService = userDetailsService;
+    }
+
+    public String generateAccessToken(Authentication authentication) {
+        String userId = authentication.getName();
+        Claims claims = Jwts.claims().setSubject(userId);
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expirationTimeMs);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now) // 토큰 발행 시간
+                .setExpiration(expiryDate) // 토큰 만료 시간
+                .signWith(key, SignatureAlgorithm.HS256) // 사용할 암호화 알고리즘과 서명 키
+                .compact(); // 토큰 생성
     }
 
     /**

@@ -31,7 +31,7 @@ public class EmailAuthService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final long VERIFICATION_CODE_EXPIRATION_SECONDS = 300; // 5분
-
+    
     @Transactional
     public String requestEmailVerification(String email, String password) {
         if (!signupService.isEmailAvailable(email)) {
