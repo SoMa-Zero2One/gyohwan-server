@@ -4,6 +4,7 @@ import com.gyohwan.gyohwan.compare.dto.ApplicationRequest;
 import com.gyohwan.gyohwan.compare.dto.ApplicationResponse;
 import com.gyohwan.gyohwan.compare.dto.SeasonDetailResponse;
 import com.gyohwan.gyohwan.compare.dto.SeasonListResponse;
+import com.gyohwan.gyohwan.compare.dto.SeasonSlotsResponse;
 import com.gyohwan.gyohwan.compare.service.ApplicationService;
 import com.gyohwan.gyohwan.compare.service.SeasonService;
 import jakarta.validation.Valid;
@@ -33,6 +34,14 @@ public class SeasonController {
             @PathVariable Long seasonId
     ) {
         SeasonDetailResponse response = seasonService.findSeason(seasonId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{seasonId}/slots")
+    public ResponseEntity<SeasonSlotsResponse> findSeasonSlots(
+            @PathVariable Long seasonId
+    ) {
+        SeasonSlotsResponse response = seasonService.findSeasonSlots(seasonId);
         return ResponseEntity.ok(response);
     }
 
