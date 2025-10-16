@@ -35,18 +35,40 @@ public class Gpa extends BaseEntity {
     private String statusReason;
 
     public enum Criteria {
-        _4_5, _4_3, _4_0
+        _4_5("4.5"),
+        _4_3("4.3"),
+        _4_0("4.0");
+
+        private final String value;
+
+        Criteria(String value) {
+            this.value = value;
+        }
+
+        @com.fasterxml.jackson.annotation.JsonValue
+        public String getValue() {
+            return value;
+        }
+
+        @com.fasterxml.jackson.annotation.JsonCreator
+        public static Criteria from(String value) {
+            for (Criteria criteria : Criteria.values()) {
+                if (criteria.value.equals(value)) {
+                    return criteria;
+                }
+            }
+            throw new IllegalArgumentException("Unknown enum value: " + value);
+        }
     }
 
     public enum VerifyStatus {
         PENDING, APPROVED, REJECTED
     }
 
-    // 생성자
     public Gpa(User user, Double score, Criteria criteria) {
         this.user = user;
         this.score = score;
         this.criteria = criteria;
-        this.verifyStatus = VerifyStatus.PENDING;
+        this.verifyStatus = VerifyStatus.APPROVED;
     }
 }

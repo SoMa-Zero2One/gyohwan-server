@@ -55,6 +55,9 @@ public class User extends BaseEntity {
     @BatchSize(size = 10)
     private List<Application> applications = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Social social;
+
     public User(String uuid, String email, String nickname, DomesticUniv domesticUniv) {
         this.uuid = uuid;
         this.email = email;

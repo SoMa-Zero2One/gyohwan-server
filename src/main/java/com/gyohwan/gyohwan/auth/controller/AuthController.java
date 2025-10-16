@@ -4,9 +4,17 @@ import com.gyohwan.gyohwan.auth.dto.*;
 import com.gyohwan.gyohwan.auth.service.EmailAuthService;
 import com.gyohwan.gyohwan.auth.service.GoogleOAuthService;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
+import com.gyohwan.gyohwan.common.exception.CustomException;
+import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +28,8 @@ public class AuthController {
     private final KakaoOAuthService kakaoOAuthService;
     private final GoogleOAuthService googleOAuthService;
     private final EmailAuthService emailAuthService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
 //    @PostMapping("/apple")
 //    public ResponseEntity<OAuthResponse> processAppleOAuth(
@@ -43,6 +53,31 @@ public class AuthController {
     ) {
         TokenResponse response = googleOAuthService.processOAuth(oAuthCodeRequest.code());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login/email")
+    public ResponseEntity<TokenResponse> processEmailLogin(
+            @Valid @RequestBody EmailLoginRequest request
+    ) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.email(),
+                            request.password()
+                    )
+            );
+
+            // 인증 성공 시 SecurityContext 에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // JWT 생성
+            String accessToken = jwtTokenProvider.generateAccessToken(authentication);
+            TokenResponse tokenResponse = new TokenResponse(accessToken);
+
+            return ResponseEntity.ok(tokenResponse);
+        } catch (AuthenticationException e) {
+            throw new CustomException(ErrorCode.EMAIL_LOGIN_FAILED);
+        }
     }
 
     @PostMapping("/signup/email")

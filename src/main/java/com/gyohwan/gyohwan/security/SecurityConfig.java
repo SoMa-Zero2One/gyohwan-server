@@ -3,6 +3,8 @@ package com.gyohwan.gyohwan.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,6 +40,8 @@ public class SecurityConfig {
                                 .requestMatchers("/v1/auth/**").permitAll()
                                 .requestMatchers("/v1/article-groups/**").permitAll()
                                 .requestMatchers("/v1/articles/**").permitAll()
+                                .requestMatchers("/v1/seasons/**").permitAll()
+                                .requestMatchers("/v1/slots/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
@@ -56,6 +60,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
@@ -65,7 +74,8 @@ public class SecurityConfig {
                 "http://localhost:8080",
                 "https://yu.gyohwan.com",
                 "https://inu.gyohwan.com",
-                "https://gyohwan.com"));
+                "https://gyohwan.com",
+                "https://www.gyohwan.com"));
 
         // 허용할 HTTP 메서드 설정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));

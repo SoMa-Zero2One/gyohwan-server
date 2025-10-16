@@ -37,7 +37,7 @@ public class Language extends BaseEntity {
     private String statusReason;
 
     public enum TestType {
-        TOEFL, IELTS, TOEIC, HSK, JLPT
+        TOEFL_IBT, TOEFL_ITP, IELTS, TOEIC, HSK, JLPT
     }
 
     // 생성자 (언어 정보를 문자열로 임시 저장)
@@ -45,6 +45,14 @@ public class Language extends BaseEntity {
         this.user = user;
         this.score = languageInfo; // 전체 언어 정보를 score 필드에 임시 저장
         this.testType = TestType.TOEIC; // 임시값
-        this.verifyStatus = Gpa.VerifyStatus.PENDING;
+        this.verifyStatus = Gpa.VerifyStatus.APPROVED;
+    }
+
+    public Language(User user, TestType testType, String score, String grade) {
+        this.user = user;
+        this.testType = testType;
+        this.score = score;
+        this.grade = grade;
+        this.verifyStatus = Gpa.VerifyStatus.APPROVED;
     }
 }
