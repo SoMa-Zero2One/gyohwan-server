@@ -32,7 +32,7 @@ public class Slot extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    private Integer slotCount;
+    private String slotCount;
 
     @Enumerated(EnumType.STRING)
     private Duration duration;

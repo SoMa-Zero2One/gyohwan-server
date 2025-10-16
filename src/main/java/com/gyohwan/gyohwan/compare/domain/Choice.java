@@ -39,11 +39,21 @@ public class Choice extends BaseEntity {
     private Language.TestType languageTest;
 
     private Double score;
-
-    // 생성자
-    public Choice(Application application, Slot slot, Integer choice) {
+    
+    public Choice(Application application, Slot slot, Integer choice, Gpa gpa, Language language) {
         this.application = application;
         this.slot = slot;
         this.choice = choice;
+
+        if (gpa != null) {
+            this.gpaScore = gpa.getScore();
+            this.gpaCriteria = gpa.getCriteria();
+        }
+
+        if (language != null) {
+            this.languageScore = language.getScore();
+            this.languageGrade = language.getGrade();
+            this.languageTest = language.getTestType();
+        }
     }
 }

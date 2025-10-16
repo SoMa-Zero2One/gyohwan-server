@@ -30,7 +30,16 @@ public enum ErrorCode {
     INVALID_OR_EXPIRED_GOOGLE_AUTH_CODE(HttpStatus.BAD_REQUEST, "사용할 수 없는 구글 인증 코드입니다."),
 
     // User
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+
+    // Application
+    SEASON_NOT_FOUND(HttpStatus.NOT_FOUND, "시즌을 찾을 수 없습니다."),
+    ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 해당 시즌에 지원하였습니다."),
+    SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "슬롯을 찾을 수 없습니다."),
+    GPA_NOT_FOUND(HttpStatus.NOT_FOUND, "학점 정보를 찾을 수 없습니다."),
+    LANGUAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "어학 정보를 찾을 수 없습니다."),
+    UNAUTHORIZED_GPA(HttpStatus.FORBIDDEN, "본인의 학점 정보만 사용할 수 있습니다."),
+    UNAUTHORIZED_LANGUAGE(HttpStatus.FORBIDDEN, "본인의 어학 정보만 사용할 수 있습니다.");
 
 
     private final HttpStatus httpStatus;

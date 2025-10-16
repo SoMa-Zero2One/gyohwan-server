@@ -1,5 +1,7 @@
 package com.gyohwan.gyohwan.security;
 
+import com.gyohwan.gyohwan.common.domain.User;
+import com.gyohwan.gyohwan.common.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -8,9 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
 
 @Slf4j
@@ -20,17 +24,20 @@ public class JwtTokenProvider {
     private final Key key;
     private final long expirationTimeMs;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
     private String issuer = "gyohwan.com";
 
     public JwtTokenProvider(
             @Value("${jwt.secret-key}") String secretKey,
             @Value("${jwt.expiration-time-ms}") long expirationTimeMs,
-            UserDetailsServiceImpl userDetailsService) {
+            UserDetailsServiceImpl userDetailsService,
+            UserRepository userRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.expirationTimeMs = expirationTimeMs;
         this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     public String generateAccessToken(Authentication authentication) {
@@ -101,8 +108,16 @@ public class JwtTokenProvider {
      * 이 메서드는 실제 UserDetailsService와 연동이 필요할 수 있습니다.
      */
     public Authentication getAuthentication(String token) {
-        String userId = getIdFromToken(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+        String stringUserId = getIdFromToken(token);
+        Long userId = Long.parseLong(stringUserId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("UserId로 사용자를 찾을 수 없습니다: " + userId));
+
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                String.valueOf(user.getId()),
+                "", // 토큰 기반 인증이므로 비밀번호는 필요 없습니다.
+                Collections.emptyList()
+        );
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
