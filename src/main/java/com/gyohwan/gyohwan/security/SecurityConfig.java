@@ -41,6 +41,7 @@ public class SecurityConfig {
                                 .requestMatchers("/v1/article-groups/**").permitAll()
                                 .requestMatchers("/v1/articles/**").permitAll()
                                 .requestMatchers("/v1/seasons/**").permitAll()
+                                .requestMatchers("/v1/slots/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
