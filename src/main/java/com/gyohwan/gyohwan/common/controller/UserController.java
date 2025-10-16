@@ -51,4 +51,14 @@ public class UserController {
         Long userId = Long.parseLong(userDetails.getUsername());
         return userService.createLanguage(userId, request);
     }
+
+    @PostMapping("/me/password")
+    public ChangePasswordResponse changePassword(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid ChangePasswordRequest request
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        userService.changePassword(userId, request.currentPassword(), request.newPassword());
+        return new ChangePasswordResponse("비밀번호가 성공적으로 변경되었습니다.");
+    }
 }
