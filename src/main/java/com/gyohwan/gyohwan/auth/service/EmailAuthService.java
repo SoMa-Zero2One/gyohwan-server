@@ -79,6 +79,10 @@ public class EmailAuthService {
         return accessToken;
     }
 
+    public boolean checkEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     private String generateVerificationCode() {
         // 6자리 숫자 코드 생성
         return String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
