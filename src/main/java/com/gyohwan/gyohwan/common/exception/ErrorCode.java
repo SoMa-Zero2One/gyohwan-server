@@ -34,6 +34,12 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
+    // School Email
+    SCHOOL_EMAIL_DOMAIN_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "지원하지 않는 학교 이메일 도메인입니다."),
+    SCHOOL_EMAIL_CONFIRM_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었거나 요청된 적 없는 이메일입니다."),
+    SCHOOL_EMAIL_CONFIRM_CODE_DIFFERENT(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
+    SCHOOL_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 학교 인증이 완료된 계정입니다."),
+
     // Application
     SEASON_NOT_FOUND(HttpStatus.NOT_FOUND, "시즌을 찾을 수 없습니다."),
     ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 해당 시즌에 지원하였습니다."),

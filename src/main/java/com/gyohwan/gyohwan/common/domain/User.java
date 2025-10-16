@@ -81,6 +81,12 @@ public class User extends BaseEntity {
         this.schoolEmail = schoolEmail;
     }
 
+    public void verifySchool(String schoolEmail, DomesticUniv domesticUniv) {
+        this.schoolEmail = schoolEmail;
+        this.domesticUniv = domesticUniv;
+        this.schoolVerified = true;
+    }
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }

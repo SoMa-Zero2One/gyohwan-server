@@ -13,6 +13,8 @@ public interface DomesticUnivRepository extends JpaRepository<DomesticUniv, Long
 
     Optional<DomesticUniv> findByName(String name);
 
+    Optional<DomesticUniv> findByEmailDomain(String emailDomain);
+
     boolean existsByCode(String code);
 
     boolean existsByName(String name);
