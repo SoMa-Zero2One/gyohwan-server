@@ -3,24 +3,25 @@ spring:
     import:
       - classpath:/secret/application-secret.yml
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
 jwt:
   expiration-time-ms: 8640000000 # 24 hours * 100
+  cookie:
+    secure: false # development에서는 false, production에서는 true
 
 logging:
   level:
     root: info
-
 
 ---
 spring:
   config:
     activate:
       on-profile: dev
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
   jpa:
     hibernate:
@@ -37,5 +38,4 @@ spring:
     password: gyohwan_dev_password
 
 jwt:
-  secret-key:
-    OWI3OWUzZGMtMTllYy00NmE2LWJlMDctMDZkZTlkYzMzYzg2
+  secret-key: OWI3OWUzZGMtMTllYy00NmE2LWJlMDctMDZkZTlkYzMzYzg2

@@ -1,9 +1,12 @@
 package com.gyohwan.gyohwan.common.controller;
 
 import com.gyohwan.gyohwan.common.dto.*;
+import com.gyohwan.gyohwan.common.service.SchoolEmailService;
 import com.gyohwan.gyohwan.common.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final SchoolEmailService schoolEmailService;
 
     @GetMapping("/me")
     public MyUserResponse getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
@@ -60,5 +64,25 @@ public class UserController {
         Long userId = Long.parseLong(userDetails.getUsername());
         userService.changePassword(userId, request.currentPassword(), request.newPassword());
         return new ChangePasswordResponse("비밀번호가 성공적으로 변경되었습니다.");
+    }
+
+    @PostMapping("/me/school-email")
+    public ResponseEntity<SchoolEmailResponse> requestSchoolEmailVerification(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid SchoolEmailRequest request
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        String schoolEmail = schoolEmailService.requestSchoolEmailVerification(userId, request.schoolEmail());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SchoolEmailResponse(schoolEmail));
+    }
+
+    @PostMapping("/me/school-email/confirm")
+    public ResponseEntity<SchoolEmailResponse> confirmSchoolEmail(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid SchoolEmailConfirmRequest request
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        String schoolEmail = schoolEmailService.confirmSchoolEmail(userId, request.code());
+        return ResponseEntity.ok(new SchoolEmailResponse(schoolEmail));
     }
 }

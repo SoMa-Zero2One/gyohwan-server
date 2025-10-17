@@ -6,7 +6,9 @@ import com.gyohwan.gyohwan.auth.service.GoogleOAuthService;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.security.CookieUtil;
 import com.gyohwan.gyohwan.security.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ public class AuthController {
     private final EmailAuthService emailAuthService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CookieUtil cookieUtil;
 
 //    @PostMapping("/apple")
 //    public ResponseEntity<OAuthResponse> processAppleOAuth(
@@ -38,23 +41,30 @@ public class AuthController {
 
     @PostMapping("/login/social/kakao")
     public ResponseEntity<TokenResponse> processKakaoOAuth(
-            @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
+            @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest,
+            HttpServletResponse response
     ) {
-        TokenResponse response = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
-        return ResponseEntity.ok(response);
+        TokenResponse tokenResponse = kakaoOAuthService.processOAuth(oAuthCodeRequest.code());
+        // 쿠키에 JWT 저장
+        cookieUtil.addAccessTokenCookie(response, tokenResponse.accessToken());
+        return ResponseEntity.ok(tokenResponse);
     }
 
     @PostMapping("/login/social/google")
     public ResponseEntity<TokenResponse> processGoogleOAuth(
-            @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest
+            @Valid @RequestBody OAuthCodeRequest oAuthCodeRequest,
+            HttpServletResponse response
     ) {
-        TokenResponse response = googleOAuthService.processOAuth(oAuthCodeRequest.code());
-        return ResponseEntity.ok(response);
+        TokenResponse tokenResponse = googleOAuthService.processOAuth(oAuthCodeRequest.code());
+        // 쿠키에 JWT 저장
+        cookieUtil.addAccessTokenCookie(response, tokenResponse.accessToken());
+        return ResponseEntity.ok(tokenResponse);
     }
 
     @PostMapping("/login/email")
     public ResponseEntity<TokenResponse> processEmailLogin(
-            @Valid @RequestBody EmailLoginRequest request
+            @Valid @RequestBody EmailLoginRequest request,
+            HttpServletResponse response
     ) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -70,6 +80,9 @@ public class AuthController {
             // JWT 생성
             String accessToken = jwtTokenProvider.generateAccessToken(authentication);
             TokenResponse tokenResponse = new TokenResponse(accessToken);
+
+            // 쿠키에 JWT 저장
+            cookieUtil.addAccessTokenCookie(response, accessToken);
 
             return ResponseEntity.ok(tokenResponse);
         } catch (AuthenticationException e) {
@@ -87,9 +100,12 @@ public class AuthController {
 
     @PostMapping("/signup/email/confirm")
     public ResponseEntity<TokenResponse> processEmailSignupConfirm(
-            @Valid @RequestBody EmailConfirmRequest request
+            @Valid @RequestBody EmailConfirmRequest request,
+            HttpServletResponse response
     ) {
         String accessToken = emailAuthService.confirmEmail(request.email(), request.code());
+        // 쿠키에 JWT 저장
+        cookieUtil.addAccessTokenCookie(response, accessToken);
         return ResponseEntity.ok(new TokenResponse(accessToken));
     }
 
@@ -99,5 +115,14 @@ public class AuthController {
     ) {
         boolean exists = emailAuthService.checkEmailExists(email);
         return ResponseEntity.ok(new EmailCheckResponse(exists));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(HttpServletResponse response) {
+        // 쿠키 삭제
+        cookieUtil.deleteAccessTokenCookie(response);
+        // SecurityContext 클리어
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok(new LogoutResponse("로그아웃되었습니다."));
     }
 }
