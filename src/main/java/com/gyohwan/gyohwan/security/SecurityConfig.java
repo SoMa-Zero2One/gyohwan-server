@@ -75,7 +75,9 @@ public class SecurityConfig {
                 "https://yu.gyohwan.com",
                 "https://inu.gyohwan.com",
                 "https://gyohwan.com",
-                "https://www.gyohwan.com"));
+                "https://www.gyohwan.com",
+                "https://test.gyohwan.com"
+        ));
 
         // 허용할 HTTP 메서드 설정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
