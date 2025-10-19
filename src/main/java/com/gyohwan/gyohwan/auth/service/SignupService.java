@@ -6,6 +6,7 @@ import com.gyohwan.gyohwan.common.domain.SocialType;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.repository.SocialRepository;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
+import com.gyohwan.gyohwan.compare.service.NicknameGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class SignupService {
 
     private final UserRepository userRepository;
     private final SocialRepository socialRepository;
+    private final NicknameGenerator nicknameGenerator;
 
     public User createNewKakaoUser(String kakaoUserId) {
         User user = createNewUser(LoginType.SOCIAL);
@@ -37,7 +39,7 @@ public class SignupService {
     public User createNewUser(LoginType loginType) {
         UUID uuid = UUID.randomUUID();
         UUID uuid2 = UUID.randomUUID();
-        User user = new User(uuid.toString(), uuid2.toString(), loginType);
+        User user = new User(uuid.toString(), nicknameGenerator.generate(), loginType);
         return user;
     }
 
