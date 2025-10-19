@@ -28,7 +28,8 @@ public class NicknameGenerator {
     public String generate() {
         String adjective = ADJECTIVES.get(random.nextInt(ADJECTIVES.size()));
         String noun = NOUNS.get(random.nextInt(NOUNS.size()));
-        return adjective + " " + noun;
+        int number = random.nextInt(1000); // 0-999
+        return adjective + " " + noun + String.format("%03d", number);
     }
 }
 
