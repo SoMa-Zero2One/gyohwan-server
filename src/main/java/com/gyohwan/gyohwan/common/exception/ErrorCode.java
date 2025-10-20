@@ -20,6 +20,7 @@ public enum ErrorCode {
 
     PASSWORD_CHANGE_FAILED(HttpStatus.BAD_REQUEST, "비밀번호 변경에 실패하였습니다. 현재 비밀번호를 확인해주세요."),
 
+    PASSWORD_TOO_SHORT(HttpStatus.BAD_REQUEST, "비밀번호는 최소 12자 이상이어야 합니다."),
     EMAIL_CONFIRM_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었거나 요청된 적 없는 이메일입니다."),
     EMAIL_CONFIRM_CODE_DIFFERENT(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
 

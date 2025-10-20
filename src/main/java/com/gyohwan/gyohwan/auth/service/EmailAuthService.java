@@ -31,12 +31,13 @@ public class EmailAuthService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     private static final long VERIFICATION_CODE_EXPIRATION_SECONDS = 300; // 5분
-    
+
     @Transactional
     public String requestEmailVerification(String email, String password) {
         if (!signupService.isEmailAvailable(email)) {
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
+        validatePassword(password);
 
         String verificationCode = generateVerificationCode();
         String hashedPassword = passwordEncoder.encode(password);
@@ -86,5 +87,11 @@ public class EmailAuthService {
     private String generateVerificationCode() {
         // 6자리 숫자 코드 생성
         return String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
+    }
+
+    private void validatePassword(String password) {
+        if (password.length() < 12) {
+            throw new CustomException(ErrorCode.PASSWORD_TOO_SHORT);
+        }
     }
 }
