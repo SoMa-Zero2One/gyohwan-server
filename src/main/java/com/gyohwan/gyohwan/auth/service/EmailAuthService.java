@@ -1,10 +1,12 @@
 package com.gyohwan.gyohwan.auth.service;
 
 import com.gyohwan.gyohwan.auth.dto.VerificationInfo;
+import com.gyohwan.gyohwan.common.domain.DomesticUniv;
 import com.gyohwan.gyohwan.common.domain.LoginType;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.common.repository.DomesticUnivRepository;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.common.service.EmailService;
 import com.gyohwan.gyohwan.security.JwtTokenProvider;
@@ -29,6 +31,7 @@ public class EmailAuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final DomesticUnivRepository domesticUnivRepository;
 
     private static final long VERIFICATION_CODE_EXPIRATION_SECONDS = 300; // 5분
 
@@ -71,6 +74,10 @@ public class EmailAuthService {
 
         User user = signupService.createNewUser(LoginType.BASIC);
         user.setEmailPassword(email, storedInfo.hashedPassword());
+        
+        // 학교 이메일인지 확인하고 자동 인증 처리
+        autoVerifySchoolEmailIfApplicable(user, email);
+        
         userRepository.save(user);
 
         redisTemplate.delete(email);
@@ -93,5 +100,33 @@ public class EmailAuthService {
         if (password.length() < 12) {
             throw new CustomException(ErrorCode.PASSWORD_TOO_SHORT);
         }
+    }
+
+    /**
+     * 이메일이 학교 이메일인 경우 자동으로 학교 인증 처리
+     */
+    private void autoVerifySchoolEmailIfApplicable(User user, String email) {
+        try {
+            String emailDomain = extractEmailDomain(email);
+            domesticUnivRepository.findByEmailDomain(emailDomain)
+                    .ifPresent(domesticUniv -> {
+                        user.verifySchool(email, domesticUniv);
+                        log.info("학교 이메일 자동 인증 완료. Email: {}, University: {}", email, domesticUniv.getName());
+                    });
+        } catch (Exception e) {
+            // 학교 이메일이 아니거나 오류가 발생한 경우 무시 (일반 이메일로 처리)
+            log.debug("학교 이메일 자동 인증 불가. Email: {}", email);
+        }
+    }
+
+    /**
+     * 이메일 도메인 추출 (@포함)
+     */
+    private String extractEmailDomain(String email) {
+        int atIndex = email.indexOf('@');
+        if (atIndex == -1) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+        return email.substring(atIndex); // @cau.ac.kr 형태로 반환
     }
 }
