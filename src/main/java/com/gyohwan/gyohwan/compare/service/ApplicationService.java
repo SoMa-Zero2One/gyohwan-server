@@ -5,6 +5,7 @@ import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.compare.domain.*;
+import com.gyohwan.gyohwan.compare.dto.ApplicationDetailResponse;
 import com.gyohwan.gyohwan.compare.dto.ApplicationRequest;
 import com.gyohwan.gyohwan.compare.dto.ApplicationResponse;
 import com.gyohwan.gyohwan.compare.repository.*;
@@ -58,12 +59,20 @@ public class ApplicationService {
             if (!language.getUser().getId().equals(user.getId())) {
                 throw new CustomException(ErrorCode.UNAUTHORIZED_LANGUAGE);
             }
-            
+
             Choice choice = new Choice(application, slot, choiceRequest.getChoice(), gpa, language);
             application.addChoice(choice);
         }
 
         return ApplicationResponse.from(application);
+    }
+
+    public ApplicationDetailResponse getApplication(Long applicationId) {
+        // 해당 유저의 최신 지원 정보 조회
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
+
+        return ApplicationDetailResponse.from(application);
     }
 }
 

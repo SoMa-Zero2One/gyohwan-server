@@ -35,6 +35,7 @@ public record SlotDetailResponse(
     }
 
     public record ChoiceInfo(
+            Long applicationId,
             String nickname,
             Integer choice,
             Double gpaScore,
@@ -49,6 +50,7 @@ public record SlotDetailResponse(
         public static ChoiceInfo from(Choice choice, boolean hasApplied) {
             if (hasApplied) {
                 return new ChoiceInfo(
+                        choice.getApplication().getId(),
                         choice.getApplication().getNickname(),
                         choice.getChoice(),
                         choice.getGpaScore(),
@@ -63,6 +65,7 @@ public record SlotDetailResponse(
             } else {
                 // 미참여 또는 미인증 시 민감한 정보는 null로 반환
                 return new ChoiceInfo(
+                        choice.getApplication().getId(),
                         choice.getApplication().getNickname(),
                         choice.getChoice(),
                         null,
