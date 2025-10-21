@@ -1,7 +1,6 @@
 package com.gyohwan.gyohwan.auth.service;
 
 import com.gyohwan.gyohwan.auth.dto.VerificationInfo;
-import com.gyohwan.gyohwan.common.domain.DomesticUniv;
 import com.gyohwan.gyohwan.common.domain.LoginType;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
@@ -74,10 +73,10 @@ public class EmailAuthService {
 
         User user = signupService.createNewUser(LoginType.BASIC);
         user.setEmailPassword(email, storedInfo.hashedPassword());
-        
+
         // 학교 이메일인지 확인하고 자동 인증 처리
         autoVerifySchoolEmailIfApplicable(user, email);
-        
+
         userRepository.save(user);
 
         redisTemplate.delete(email);
@@ -127,6 +126,6 @@ public class EmailAuthService {
         if (atIndex == -1) {
             throw new IllegalArgumentException("Invalid email format");
         }
-        return email.substring(atIndex); // @cau.ac.kr 형태로 반환
+        return email.substring(atIndex + 1); // cau.ac.kr 형태로 반환
     }
 }
