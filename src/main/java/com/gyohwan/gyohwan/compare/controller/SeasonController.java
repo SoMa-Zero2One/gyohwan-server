@@ -1,5 +1,6 @@
 package com.gyohwan.gyohwan.compare.controller;
 
+import com.gyohwan.gyohwan.compare.dto.ApplicationDetailResponse;
 import com.gyohwan.gyohwan.compare.dto.ApplicationRequest;
 import com.gyohwan.gyohwan.compare.dto.ApplicationResponse;
 import com.gyohwan.gyohwan.compare.dto.SeasonDetailResponse;
@@ -54,5 +55,15 @@ public class SeasonController {
         Long userId = Long.parseLong(userDetails.getUsername());
         ApplicationResponse response = applicationService.applyToSeason(seasonId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{seasonId}/my-application")
+    public ResponseEntity<ApplicationDetailResponse> getMyApplicationForSeason(
+            @PathVariable Long seasonId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        ApplicationDetailResponse response = applicationService.getMyApplicationForSeason(seasonId, userId);
+        return ResponseEntity.ok(response);
     }
 }

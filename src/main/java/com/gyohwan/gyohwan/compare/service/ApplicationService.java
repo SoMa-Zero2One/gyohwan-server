@@ -74,5 +74,21 @@ public class ApplicationService {
 
         return ApplicationDetailResponse.from(application);
     }
+
+    public ApplicationDetailResponse getMyApplicationForSeason(Long seasonId, Long userId) {
+        // 유저 존재 확인
+        userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 시즌 존재 확인
+        seasonRepository.findById(seasonId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SEASON_NOT_FOUND));
+
+        // 해당 유저의 해당 시즌 지원 정보 조회
+        Application application = applicationRepository.findByUserIdAndSeasonIdWithDetails(userId, seasonId)
+                .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
+
+        return ApplicationDetailResponse.from(application);
+    }
 }
 

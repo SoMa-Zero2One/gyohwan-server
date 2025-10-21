@@ -30,4 +30,12 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "LEFT JOIN FETCH s.outgoingUniv " +
             "WHERE a.id = :applicationId")
     Optional<Application> findByIdWithDetails(@Param("applicationId") Long applicationId);
+
+    @Query("SELECT a FROM Application a " +
+            "LEFT JOIN FETCH a.season " +
+            "LEFT JOIN FETCH a.choices c " +
+            "LEFT JOIN FETCH c.slot s " +
+            "LEFT JOIN FETCH s.outgoingUniv " +
+            "WHERE a.user.id = :userId AND a.season.id = :seasonId")
+    Optional<Application> findByUserIdAndSeasonIdWithDetails(@Param("userId") Long userId, @Param("seasonId") Long seasonId);
 }
