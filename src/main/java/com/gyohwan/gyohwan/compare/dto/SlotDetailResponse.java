@@ -11,6 +11,7 @@ public record SlotDetailResponse(
         Long slotId,
         Long seasonId,
         String name,
+        String country,
         Long choiceCount,
         String slotCount,
         String duration,
@@ -22,6 +23,7 @@ public record SlotDetailResponse(
                 slot.getId(),
                 slot.getSeason().getId(),
                 slot.getName(),
+                slot.getOutgoingUniv().getCountry(),
                 (long) slot.getChoices().size(),
                 slot.getSlotCount(),
                 slot.getDuration() != null
