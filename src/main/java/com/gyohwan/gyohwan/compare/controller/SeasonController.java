@@ -30,6 +30,10 @@ public class SeasonController {
             @PathVariable Long seasonId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
+        if (userDetails == null) {
+            SeasonDetailResponse response = seasonService.findSeason(seasonId, null);
+            return ResponseEntity.ok(response);
+        }
         Long userId = Long.parseLong(userDetails.getUsername());
         SeasonDetailResponse response = seasonService.findSeason(seasonId, userId);
         return ResponseEntity.ok(response);
@@ -40,6 +44,10 @@ public class SeasonController {
             @PathVariable Long seasonId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
+        if (userDetails == null) {
+            SeasonSlotsResponse response = seasonService.findSeasonSlots(seasonId, null);
+            return ResponseEntity.ok(response);
+        }
         Long userId = Long.parseLong(userDetails.getUsername());
         SeasonSlotsResponse response = seasonService.findSeasonSlots(seasonId, userId);
         return ResponseEntity.ok(response);
