@@ -112,7 +112,7 @@ public class SchoolEmailService {
         if (atIndex == -1) {
             throw new CustomException(ErrorCode.SCHOOL_EMAIL_DOMAIN_NOT_SUPPORTED);
         }
-        return email.substring(atIndex); // @cau.ac.kr 형태로 반환
+        return email.substring(atIndex + 1); // cau.ac.kr 형태로 반환
     }
 
     private String generateVerificationCode() {
