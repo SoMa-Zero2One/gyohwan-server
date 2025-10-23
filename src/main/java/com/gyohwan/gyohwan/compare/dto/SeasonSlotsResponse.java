@@ -9,12 +9,14 @@ import java.util.stream.Collectors;
 public record SeasonSlotsResponse(
         Long seasonId,
         String seasonName,
+        boolean hasApplied,
         List<SlotInfo> slots
 ) {
-    public static SeasonSlotsResponse from(Season season, List<Slot> slots) {
+    public static SeasonSlotsResponse from(Season season, List<Slot> slots, boolean hasApplied) {
         return new SeasonSlotsResponse(
                 season.getId(),
                 season.getName(),
+                hasApplied,
                 slots.stream()
                         .map(SlotInfo::from)
                         .collect(Collectors.toList())

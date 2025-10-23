@@ -11,6 +11,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     boolean existsByUserIdAndSeasonId(Long userId, Long seasonId);
 
+    Optional<Application> findByUserIdAndSeasonId(Long userId, Long seasonId);
+    
+
     @Query("SELECT COUNT(a) FROM Application a WHERE a.season.id = :seasonId")
     long countBySeasonId(@Param("seasonId") Long seasonId);
 

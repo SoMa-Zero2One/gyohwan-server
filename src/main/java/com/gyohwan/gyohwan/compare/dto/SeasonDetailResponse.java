@@ -9,7 +9,7 @@ public record SeasonDetailResponse(
         String name,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        boolean isApplied,
-        int applicantCount
+        boolean hasApplied,
+        long applicantCount
 ) {
 }

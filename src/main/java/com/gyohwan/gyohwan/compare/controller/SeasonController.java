@@ -1,11 +1,6 @@
 package com.gyohwan.gyohwan.compare.controller;
 
-import com.gyohwan.gyohwan.compare.dto.ApplicationDetailResponse;
-import com.gyohwan.gyohwan.compare.dto.ApplicationRequest;
-import com.gyohwan.gyohwan.compare.dto.ApplicationResponse;
-import com.gyohwan.gyohwan.compare.dto.SeasonDetailResponse;
-import com.gyohwan.gyohwan.compare.dto.SeasonListResponse;
-import com.gyohwan.gyohwan.compare.dto.SeasonSlotsResponse;
+import com.gyohwan.gyohwan.compare.dto.*;
 import com.gyohwan.gyohwan.compare.service.ApplicationService;
 import com.gyohwan.gyohwan.compare.service.SeasonService;
 import jakarta.validation.Valid;
@@ -32,17 +27,21 @@ public class SeasonController {
 
     @GetMapping("/{seasonId}")
     public ResponseEntity<SeasonDetailResponse> findSeason(
-            @PathVariable Long seasonId
+            @PathVariable Long seasonId,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        SeasonDetailResponse response = seasonService.findSeason(seasonId);
+        Long userId = Long.parseLong(userDetails.getUsername());
+        SeasonDetailResponse response = seasonService.findSeason(seasonId, userId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{seasonId}/slots")
     public ResponseEntity<SeasonSlotsResponse> findSeasonSlots(
-            @PathVariable Long seasonId
+            @PathVariable Long seasonId,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        SeasonSlotsResponse response = seasonService.findSeasonSlots(seasonId);
+        Long userId = Long.parseLong(userDetails.getUsername());
+        SeasonSlotsResponse response = seasonService.findSeasonSlots(seasonId, userId);
         return ResponseEntity.ok(response);
     }
 
