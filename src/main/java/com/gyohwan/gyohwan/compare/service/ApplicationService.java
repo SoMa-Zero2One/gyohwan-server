@@ -42,23 +42,23 @@ public class ApplicationService {
         Application application = new Application(user, season, nickname, request.getExtraScore(), season.getDefaultModifyCount());
         applicationRepository.save(application);
 
+        Gpa gpa = gpaRepository.findById(request.getGpaId())
+                .orElseThrow(() -> new CustomException(ErrorCode.GPA_NOT_FOUND));
+
+        if (!gpa.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_GPA);
+        }
+
+        Language language = languageRepository.findById(request.getLanguageId())
+                .orElseThrow(() -> new CustomException(ErrorCode.LANGUAGE_NOT_FOUND));
+
+        if (!language.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_LANGUAGE);
+        }
+
         for (ApplicationRequest.ChoiceRequest choiceRequest : request.getChoices()) {
             Slot slot = slotRepository.findById(choiceRequest.getSlotId())
                     .orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
-
-            Gpa gpa = gpaRepository.findById(choiceRequest.getGpaId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.GPA_NOT_FOUND));
-
-            if (!gpa.getUser().getId().equals(user.getId())) {
-                throw new CustomException(ErrorCode.UNAUTHORIZED_GPA);
-            }
-
-            Language language = languageRepository.findById(choiceRequest.getLanguageId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.LANGUAGE_NOT_FOUND));
-
-            if (!language.getUser().getId().equals(user.getId())) {
-                throw new CustomException(ErrorCode.UNAUTHORIZED_LANGUAGE);
-            }
 
             Choice choice = new Choice(application, slot, choiceRequest.getChoice(), gpa, language);
             application.addChoice(choice);
