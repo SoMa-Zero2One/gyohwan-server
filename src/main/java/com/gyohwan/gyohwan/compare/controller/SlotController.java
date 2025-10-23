@@ -23,14 +23,18 @@ public class SlotController {
             @PathVariable Long slotId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        SlotDetailResponse response;
+        // 인증된 유저이고 해당 season에 application이 있는 경우에만 전체 정보 제공
         if (userDetails != null) {
             Long userId = Long.parseLong(userDetails.getUsername());
-            response = slotService.findSlot(slotId, userId);
-        } else {
-            response = slotService.publicFindSlot(slotId);
+            boolean hasApplication = slotService.hasApplicationForSlot(slotId, userId);
+            
+            if (hasApplication) {
+                return ResponseEntity.ok(slotService.findSlot(slotId, userId));
+            }
         }
-        return ResponseEntity.ok(response);
+        
+        // 미인증 또는 해당 season에 application이 없는 경우 제한된 정보 제공
+        return ResponseEntity.ok(slotService.publicFindSlot(slotId));
     }
 }
 

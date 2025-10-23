@@ -16,6 +16,7 @@ public record SlotDetailResponse(
         String slotCount,
         String duration,
         String etc,
+        boolean hasAppied,
         List<ChoiceInfo> choices
 ) {
     public static SlotDetailResponse from(Slot slot, boolean hasApplied) {
@@ -30,6 +31,7 @@ public record SlotDetailResponse(
                         ? (slot.getDuration() == Slot.Duration.SEMESTER ? "1학기" : "1년")
                         : "미정",
                 slot.getEtc(),
+                hasApplied,
                 slot.getChoices().stream()
                         .map(choice -> ChoiceInfo.from(choice, hasApplied))
                         .collect(Collectors.toList())

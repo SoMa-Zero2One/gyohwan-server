@@ -36,5 +36,13 @@ public class SlotService {
 
         return SlotDetailResponse.from(slot, false);
     }
+
+    // 해당 슬롯의 시즌에 사용자의 지원서가 있는지 확인
+    public boolean hasApplicationForSlot(Long slotId, Long userId) {
+        Slot slot = slotRepository.findById(slotId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
+        
+        return applicationRepository.existsByUserIdAndSeasonId(userId, slot.getSeason().getId());
+    }
 }
 
