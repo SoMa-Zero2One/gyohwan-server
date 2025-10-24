@@ -40,6 +40,7 @@ public enum ErrorCode {
     SCHOOL_EMAIL_CONFIRM_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었거나 요청된 적 없는 이메일입니다."),
     SCHOOL_EMAIL_CONFIRM_CODE_DIFFERENT(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
     SCHOOL_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 학교 인증이 완료된 계정입니다."),
+    SCHOOL_EMAIL_CONFIRM_DATA_CORRUPTED(HttpStatus.BAD_REQUEST, "인증 데이터가 손상되었습니다. 다시 인증을 요청해주세요."),
 
     // Application
     SEASON_NOT_FOUND(HttpStatus.NOT_FOUND, "시즌을 찾을 수 없습니다."),
@@ -49,7 +50,11 @@ public enum ErrorCode {
     GPA_NOT_FOUND(HttpStatus.NOT_FOUND, "학점 정보를 찾을 수 없습니다."),
     LANGUAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "어학 정보를 찾을 수 없습니다."),
     UNAUTHORIZED_GPA(HttpStatus.FORBIDDEN, "본인의 학점 정보만 사용할 수 있습니다."),
-    UNAUTHORIZED_LANGUAGE(HttpStatus.FORBIDDEN, "본인의 어학 정보만 사용할 수 있습니다.");
+    UNAUTHORIZED_LANGUAGE(HttpStatus.FORBIDDEN, "본인의 어학 정보만 사용할 수 있습니다."),
+    INVALID_GPA_CRITERIA(HttpStatus.BAD_REQUEST, "유효하지 않은 학점 기준입니다. 4.0, 4.3, 4.5 중 하나여야 합니다."),
+    INVALID_LANGUAGE_TEST_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 어학 시험 유형입니다."),
+    CHOICES_REQUIRED(HttpStatus.BAD_REQUEST, "지원 선택 항목은 필수입니다."),
+    SEASON_DATA_INCOMPLETE(HttpStatus.BAD_REQUEST, "시즌의 학교 정보가 누락되었습니다.");
 
 
     private final HttpStatus httpStatus;

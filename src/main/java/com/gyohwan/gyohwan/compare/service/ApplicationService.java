@@ -56,6 +56,10 @@ public class ApplicationService {
             throw new CustomException(ErrorCode.UNAUTHORIZED_LANGUAGE);
         }
 
+        if (request.getChoices() == null || request.getChoices().isEmpty()) {
+            throw new CustomException(ErrorCode.CHOICES_REQUIRED);
+        }
+
         for (ApplicationRequest.ChoiceRequest choiceRequest : request.getChoices()) {
             Slot slot = slotRepository.findById(choiceRequest.getSlotId())
                     .orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));

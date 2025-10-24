@@ -83,7 +83,12 @@ public class SchoolEmailService {
         }
 
         String schoolEmail = parts[0];
-        Long univId = Long.parseLong(parts[1]);
+        Long univId;
+        try {
+            univId = Long.parseLong(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new CustomException(ErrorCode.SCHOOL_EMAIL_CONFIRM_DATA_CORRUPTED);
+        }
         String storedCode = parts[2];
 
         // 인증 코드 확인

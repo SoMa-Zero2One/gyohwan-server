@@ -26,28 +26,28 @@ public class UserService {
     @Transactional(readOnly = true)
     public MyUserResponse findUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return MyUserResponse.from(user);
     }
 
     @Transactional(readOnly = true)
     public UserGpaResponse findUserGpas(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserGpaResponse.from(user);
     }
 
     @Transactional(readOnly = true)
     public UserLanguageResponse findUserLanguages(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return UserLanguageResponse.from(user);
     }
 
     @Transactional
     public GpaResponse createGpa(Long userId, CreateGpaRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Gpa.Criteria criteria = convertToCriteria(request.criteria());
         Gpa gpa = new Gpa(user, request.score(), criteria);
@@ -60,9 +60,15 @@ public class UserService {
     @Transactional
     public LanguageResponse createLanguage(Long userId, CreateLanguageRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Language.TestType testType = Language.TestType.valueOf(request.testType());
+        Language.TestType testType;
+        try {
+            testType = Language.TestType.valueOf(request.testType());
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(ErrorCode.INVALID_LANGUAGE_TEST_TYPE);
+        }
+        
         Language language = new Language(user, testType, request.score(), request.grade());
         user.getLanguages().add(language);
 
@@ -95,6 +101,6 @@ public class UserService {
         if (Math.abs(criteria - 4.5) < 0.01) return Gpa.Criteria._4_5;
         if (Math.abs(criteria - 4.3) < 0.01) return Gpa.Criteria._4_3;
         if (Math.abs(criteria - 4.0) < 0.01) return Gpa.Criteria._4_0;
-        throw new IllegalArgumentException("Invalid GPA criteria. Supported values are: 4.0, 4.3, 4.5");
+        throw new CustomException(ErrorCode.INVALID_GPA_CRITERIA);
     }
 }

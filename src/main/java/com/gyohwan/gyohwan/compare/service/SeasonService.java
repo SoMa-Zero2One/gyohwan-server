@@ -33,7 +33,11 @@ public class SeasonService {
     @Transactional(readOnly = true)
     public SeasonDetailResponse findSeason(Long seasonId, Long userId) {
         Season season = seasonRepository.findById(seasonId)
-                .orElseThrow(() -> new IllegalArgumentException("Season not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.SEASON_NOT_FOUND));
+
+        if (season.getDomesticUniv() == null) {
+            throw new CustomException(ErrorCode.SEASON_DATA_INCOMPLETE);
+        }
 
         Application application = applicationRepository.findByUserIdAndSeasonId(userId, seasonId)
                 .orElse(null);
