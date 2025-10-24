@@ -16,7 +16,7 @@ public record SlotDetailResponse(
         String slotCount,
         String duration,
         String etc,
-        boolean hasAppied,
+        boolean hasApplied,
         List<ChoiceInfo> choices
 ) {
     public static SlotDetailResponse from(Slot slot, boolean hasApplied) {
