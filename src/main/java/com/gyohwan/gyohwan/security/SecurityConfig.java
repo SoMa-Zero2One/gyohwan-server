@@ -3,6 +3,7 @@ package com.gyohwan.gyohwan.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,14 +37,21 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authz -> authz
-                                // 로그인 API는 누구나 접근 가능하도록 허용
+                                // auth
                                 .requestMatchers("/v1/auth/**").permitAll()
+                                // article
                                 .requestMatchers("/v1/article-groups/**").permitAll()
                                 .requestMatchers("/v1/articles/**").permitAll()
+                                // compare
+                                .requestMatchers("/v1/seasons/*/my-application").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/v1/seasons/*").authenticated()
                                 .requestMatchers("/v1/seasons/**").permitAll()
                                 .requestMatchers("/v1/slots/**").permitAll()
+                                .requestMatchers("/v1/applications/**").authenticated()
+                                // user
+                                .requestMatchers("/v1/users/me/**").authenticated()
+                                // 그 외
                                 .requestMatchers("/error").permitAll()
-                                // 그 외 모든 요청은 인증된 사용자만 접근 가능
                                 .anyRequest().authenticated()
 //                                .anyRequest().permitAll()
                 )
