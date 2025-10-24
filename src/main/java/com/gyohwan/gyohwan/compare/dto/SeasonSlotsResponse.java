@@ -10,13 +10,15 @@ public record SeasonSlotsResponse(
         Long seasonId,
         String seasonName,
         boolean hasApplied,
+        long applicantCount,
         List<SlotInfo> slots
 ) {
-    public static SeasonSlotsResponse from(Season season, List<Slot> slots, boolean hasApplied) {
+    public static SeasonSlotsResponse from(Season season, List<Slot> slots, boolean hasApplied, long applicantCount) {
         return new SeasonSlotsResponse(
                 season.getId(),
                 season.getName(),
                 hasApplied,
+                applicantCount,
                 slots.stream()
                         .map(SlotInfo::from)
                         .collect(Collectors.toList())

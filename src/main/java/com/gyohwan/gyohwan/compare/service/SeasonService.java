@@ -69,6 +69,8 @@ public class SeasonService {
 
         List<Slot> slots = slotRepository.findBySeasonIdWithOutgoingUnivAndChoices(seasonId);
 
-        return SeasonSlotsResponse.from(season, slots, hasApplied);
+        long applicantCount = applicationRepository.countBySeasonId(seasonId);
+
+        return SeasonSlotsResponse.from(season, slots, hasApplied, applicantCount);
     }
 }
