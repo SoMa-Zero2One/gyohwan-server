@@ -54,6 +54,23 @@ public class Application extends BaseEntity {
         this.choices.add(choice);
     }
 
+    // Choices 전체 교체
+    public void clearChoices() {
+        this.choices.clear();
+    }
+
+    // ExtraScore 업데이트
+    public void updateExtraScore(Double extraScore) {
+        this.extraScore = extraScore;
+    }
+
+    // 수정 횟수 감소 (수정할 때마다 감소)
+    public void decrementModifyCount() {
+        if (this.modifyCount != null && this.modifyCount > 0) {
+            this.modifyCount--;
+        }
+    }
+
     // 수정 횟수 증가
     public void incrementModifyCount() {
         this.modifyCount = (this.modifyCount == null ? 0 : this.modifyCount) + 1;

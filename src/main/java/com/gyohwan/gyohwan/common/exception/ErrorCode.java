@@ -54,7 +54,9 @@ public enum ErrorCode {
     INVALID_GPA_CRITERIA(HttpStatus.BAD_REQUEST, "유효하지 않은 학점 기준입니다. 4.0, 4.3, 4.5 중 하나여야 합니다."),
     INVALID_LANGUAGE_TEST_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 어학 시험 유형입니다."),
     CHOICES_REQUIRED(HttpStatus.BAD_REQUEST, "지원 선택 항목은 필수입니다."),
-    SEASON_DATA_INCOMPLETE(HttpStatus.BAD_REQUEST, "시즌의 학교 정보가 누락되었습니다.");
+    SEASON_DATA_INCOMPLETE(HttpStatus.BAD_REQUEST, "시즌의 학교 정보가 누락되었습니다."),
+    MODIFY_COUNT_EXCEEDED(HttpStatus.BAD_REQUEST, "지원서 수정 가능 횟수를 초과했습니다."),
+    UNAUTHORIZED_APPLICATION(HttpStatus.FORBIDDEN, "본인의 지원서만 수정할 수 있습니다.");
 
 
     private final HttpStatus httpStatus;

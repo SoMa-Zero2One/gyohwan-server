@@ -64,6 +64,17 @@ public class SeasonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PutMapping("/{seasonId}")
+    public ResponseEntity<ApplicationResponse> updateApplication(
+            @PathVariable Long seasonId,
+            @Valid @RequestBody ApplicationRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        ApplicationResponse response = applicationService.updateApplication(seasonId, request, userId);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{seasonId}/my-application")
     public ResponseEntity<ApplicationDetailResponse> getMyApplicationForSeason(
             @PathVariable Long seasonId,

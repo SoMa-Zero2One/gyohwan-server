@@ -94,5 +94,68 @@ public class ApplicationService {
 
         return ApplicationDetailResponse.from(application);
     }
+
+    @Transactional
+    public ApplicationResponse updateApplication(Long seasonId, ApplicationRequest request, Long userId) {
+        // 유저 확인
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 시즌 확인
+        seasonRepository.findById(seasonId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SEASON_NOT_FOUND));
+
+        // 기존 지원서 조회
+        Application application = applicationRepository.findByUserIdAndSeasonId(userId, seasonId)
+                .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
+
+        // 수정 가능 횟수 확인
+        if (application.getModifyCount() <= 0) {
+            throw new CustomException(ErrorCode.MODIFY_COUNT_EXCEEDED);
+        }
+
+        // GPA 확인 및 권한 체크
+        Gpa gpa = gpaRepository.findById(request.getGpaId())
+                .orElseThrow(() -> new CustomException(ErrorCode.GPA_NOT_FOUND));
+
+        if (!gpa.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_GPA);
+        }
+
+        // Language 확인 및 권한 체크
+        Language language = languageRepository.findById(request.getLanguageId())
+                .orElseThrow(() -> new CustomException(ErrorCode.LANGUAGE_NOT_FOUND));
+
+        if (!language.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_LANGUAGE);
+        }
+
+        // Choices 확인
+        if (request.getChoices() == null || request.getChoices().isEmpty()) {
+            throw new CustomException(ErrorCode.CHOICES_REQUIRED);
+        }
+
+        // 기존 choices 삭제
+        application.clearChoices();
+
+        // 새로운 choices 추가
+        for (ApplicationRequest.ChoiceRequest choiceRequest : request.getChoices()) {
+            Slot slot = slotRepository.findById(choiceRequest.getSlotId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.SLOT_NOT_FOUND));
+
+            Choice choice = new Choice(application, slot, choiceRequest.getChoice(), gpa, language);
+            application.addChoice(choice);
+        }
+
+        // ExtraScore 업데이트
+        application.updateExtraScore(request.getExtraScore());
+
+        // 수정 횟수 감소
+        application.decrementModifyCount();
+
+        applicationRepository.save(application);
+
+        return ApplicationResponse.from(application);
+    }
 }
 
