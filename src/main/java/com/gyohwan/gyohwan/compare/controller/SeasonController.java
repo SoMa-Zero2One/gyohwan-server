@@ -64,7 +64,7 @@ public class SeasonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{seasonId}")
+    @PutMapping("/{seasonId}/my-application")
     public ResponseEntity<ApplicationResponse> updateApplication(
             @PathVariable Long seasonId,
             @Valid @RequestBody ApplicationModifyRequest request,
