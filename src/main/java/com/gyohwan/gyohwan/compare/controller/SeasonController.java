@@ -67,7 +67,7 @@ public class SeasonController {
     @PutMapping("/{seasonId}")
     public ResponseEntity<ApplicationResponse> updateApplication(
             @PathVariable Long seasonId,
-            @Valid @RequestBody ApplicationRequest request,
+            @Valid @RequestBody ApplicationModifyRequest request,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = Long.parseLong(userDetails.getUsername());
