@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,6 +24,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final SeasonRepository seasonRepository;
     private final SlotRepository slotRepository;
+    private final ChoiceRepository choiceRepository;
     private final GpaRepository gpaRepository;
     private final LanguageRepository languageRepository;
     private final UserRepository userRepository;
@@ -142,7 +145,14 @@ public class ApplicationService {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.LANGUAGE_NOT_FOUND));
 
-        // 기존 choices 삭제
+        // 기존 choices를 명시적으로 삭제
+        List<Choice> oldChoices = choiceRepository.findByApplicationIdOrderByChoiceAsc(application.getId());
+        if (!oldChoices.isEmpty()) {
+            choiceRepository.deleteAll(oldChoices);
+            choiceRepository.flush(); // 즉시 DB에 반영
+        }
+        
+        // 기존 choices 리스트 clear
         application.clearChoices();
 
         // 새로운 choices 추가
@@ -158,6 +168,7 @@ public class ApplicationService {
         application.decrementModifyCount();
 
         applicationRepository.save(application);
+        applicationRepository.flush(); // 변경사항 즉시 DB에 반영
 
         return ApplicationResponse.from(application);
     }
