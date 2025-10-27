@@ -37,6 +37,16 @@ public class ApplicationService {
         Season season = seasonRepository.findById(seasonId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEASON_NOT_FOUND));
 
+        // 학교 인증 확인
+        if (!user.getSchoolVerified() || user.getDomesticUniv() == null) {
+            throw new CustomException(ErrorCode.SCHOOL_NOT_VERIFIED);
+        }
+
+        // 사용자의 학교와 시즌의 학교가 일치하는지 확인
+        if (!user.getDomesticUniv().getId().equals(season.getDomesticUniv().getId())) {
+            throw new CustomException(ErrorCode.UNIV_MISMATCH);
+        }
+
         if (applicationRepository.existsByUserIdAndSeasonId(user.getId(), seasonId)) {
             throw new CustomException(ErrorCode.ALREADY_APPLIED);
         }

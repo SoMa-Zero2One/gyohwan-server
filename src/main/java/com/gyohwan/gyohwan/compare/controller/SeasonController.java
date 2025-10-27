@@ -84,4 +84,14 @@ public class SeasonController {
         ApplicationDetailResponse response = applicationService.getMyApplicationForSeason(seasonId, userId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{seasonId}/eligibility")
+    public ResponseEntity<SeasonEligibilityResponse> checkEligibility(
+            @PathVariable Long seasonId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        SeasonEligibilityResponse response = seasonService.checkEligibility(seasonId, userId);
+        return ResponseEntity.ok(response);
+    }
 }

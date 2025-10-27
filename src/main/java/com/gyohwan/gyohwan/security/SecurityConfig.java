@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/v1/articles/**").permitAll()
                                 // compare
                                 .requestMatchers("/v1/seasons/*/my-application").authenticated()
+                                .requestMatchers("/v1/seasons/*/eligibility").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/v1/seasons/*").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/v1/seasons/*").authenticated()
                                 .requestMatchers("/v1/seasons/**").permitAll()

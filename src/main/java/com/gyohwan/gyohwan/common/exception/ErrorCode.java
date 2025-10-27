@@ -34,6 +34,8 @@ public enum ErrorCode {
 
     // User
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+    SCHOOL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "학교 인증이 완료되지 않았습니다."),
+    UNIV_MISMATCH(HttpStatus.FORBIDDEN, "해당 시즌은 귀하의 학교에서 지원할 수 없습니다."),
 
     // School Email
     SCHOOL_EMAIL_DOMAIN_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "지원하지 않는 학교 이메일 도메인입니다."),
@@ -49,14 +51,17 @@ public enum ErrorCode {
     SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "슬롯을 찾을 수 없습니다."),
     GPA_NOT_FOUND(HttpStatus.NOT_FOUND, "학점 정보를 찾을 수 없습니다."),
     LANGUAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "어학 정보를 찾을 수 없습니다."),
+
     UNAUTHORIZED_GPA(HttpStatus.FORBIDDEN, "본인의 학점 정보만 사용할 수 있습니다."),
     UNAUTHORIZED_LANGUAGE(HttpStatus.FORBIDDEN, "본인의 어학 정보만 사용할 수 있습니다."),
+    UNAUTHORIZED_APPLICATION(HttpStatus.FORBIDDEN, "본인의 지원서만 수정할 수 있습니다."),
+
     INVALID_GPA_CRITERIA(HttpStatus.BAD_REQUEST, "유효하지 않은 학점 기준입니다. 4.0, 4.3, 4.5 중 하나여야 합니다."),
     INVALID_LANGUAGE_TEST_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 어학 시험 유형입니다."),
     CHOICES_REQUIRED(HttpStatus.BAD_REQUEST, "지원 선택 항목은 필수입니다."),
     SEASON_DATA_INCOMPLETE(HttpStatus.BAD_REQUEST, "시즌의 학교 정보가 누락되었습니다."),
     MODIFY_COUNT_EXCEEDED(HttpStatus.BAD_REQUEST, "지원서 수정 가능 횟수를 초과했습니다."),
-    UNAUTHORIZED_APPLICATION(HttpStatus.FORBIDDEN, "본인의 지원서만 수정할 수 있습니다.");
+    SEASON_SCHOOL_MISMATCH(HttpStatus.FORBIDDEN, "해당 시즌은 귀하의 학교에서 지원할 수 없습니다.");
 
 
     private final HttpStatus httpStatus;
