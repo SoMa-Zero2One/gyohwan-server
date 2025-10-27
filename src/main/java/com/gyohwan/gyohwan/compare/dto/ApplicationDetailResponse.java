@@ -1,10 +1,6 @@
 package com.gyohwan.gyohwan.compare.dto;
 
-import com.gyohwan.gyohwan.compare.domain.Application;
-import com.gyohwan.gyohwan.compare.domain.Choice;
-import com.gyohwan.gyohwan.compare.domain.Gpa;
-import com.gyohwan.gyohwan.compare.domain.Language;
-import com.gyohwan.gyohwan.compare.domain.Slot;
+import com.gyohwan.gyohwan.compare.domain.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,13 +47,15 @@ public record ApplicationDetailResponse(
     public record GpaInfo(
             Double score,
             Gpa.Criteria criteria
-    ) {}
+    ) {
+    }
 
     public record LanguageInfo(
             Language.TestType testType,
             String score,
             String grade
-    ) {}
+    ) {
+    }
 
     public record ChoiceDetailResponse(
             Integer choice,
@@ -75,6 +73,7 @@ public record ApplicationDetailResponse(
             Long slotId,
             String name,
             String country,
+            String logoUrl,
             Long choiceCount,
             String slotCount,
             String duration
@@ -84,6 +83,7 @@ public record ApplicationDetailResponse(
                     slot.getId(),
                     slot.getName(),
                     slot.getOutgoingUniv().getCountry(),
+                    slot.getOutgoingUniv().getLogoUrl(),
                     (long) slot.getChoices().size(),
                     slot.getSlotCount(),
                     slot.getDuration() != null

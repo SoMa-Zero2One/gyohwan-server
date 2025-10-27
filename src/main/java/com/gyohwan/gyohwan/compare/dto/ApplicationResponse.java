@@ -40,6 +40,7 @@ public record ApplicationResponse(
             Long slotId,
             String name,
             String country,
+            String logoUrl,
             Long choiceCount,
             String slotCount,
             String duration
@@ -49,6 +50,7 @@ public record ApplicationResponse(
                     slot.getId(),
                     slot.getName(),
                     slot.getOutgoingUniv().getCountry(),
+                    slot.getOutgoingUniv().getLogoUrl(),
                     (long) slot.getChoices().size(),
                     slot.getSlotCount(),
                     slot.getDuration() != null
