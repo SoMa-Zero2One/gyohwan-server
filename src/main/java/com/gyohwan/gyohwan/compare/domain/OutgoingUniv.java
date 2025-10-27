@@ -21,4 +21,6 @@ public class OutgoingUniv extends BaseEntity {
     private String nameKo;
 
     private String country;
+
+    private String logoUrl;
 }
