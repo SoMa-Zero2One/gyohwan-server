@@ -97,6 +97,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        
+        // User 엔티티의 연관관계에 cascade = ALL, orphanRemoval = true가 설정되어 있어
+        // 연관된 모든 데이터(Gpa, Language, Application, Social)가 자동으로 삭제됩니다.
+        userRepository.delete(user);
+    }
+
     private Gpa.Criteria convertToCriteria(Double criteria) {
         if (Math.abs(criteria - 4.5) < 0.01) return Gpa.Criteria._4_5;
         if (Math.abs(criteria - 4.3) < 0.01) return Gpa.Criteria._4_3;

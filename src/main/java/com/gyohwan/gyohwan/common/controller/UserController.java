@@ -3,11 +3,14 @@ package com.gyohwan.gyohwan.common.controller;
 import com.gyohwan.gyohwan.common.dto.*;
 import com.gyohwan.gyohwan.common.service.SchoolEmailService;
 import com.gyohwan.gyohwan.common.service.UserService;
+import com.gyohwan.gyohwan.security.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final SchoolEmailService schoolEmailService;
+    private final CookieUtil cookieUtil;
 
     @GetMapping("/me")
     public MyUserResponse getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
@@ -84,5 +88,23 @@ public class UserController {
         Long userId = Long.parseLong(userDetails.getUsername());
         String schoolEmail = schoolEmailService.confirmSchoolEmail(userId, request.code());
         return ResponseEntity.ok(new SchoolEmailResponse(schoolEmail));
+    }
+
+    @DeleteMapping("/me/withdraw")
+    public ResponseEntity<WithdrawResponse> withdraw(
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletResponse response
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+
+        // 회원 탈퇴 처리
+        userService.deleteUser(userId);
+
+        // 쿠키 삭제
+        cookieUtil.deleteAccessTokenCookie(response);
+        // SecurityContext 클리어
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok(new WithdrawResponse("회원탈퇴가 완료되었습니다."));
     }
 }
