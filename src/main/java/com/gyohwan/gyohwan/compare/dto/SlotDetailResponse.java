@@ -13,7 +13,7 @@ public record SlotDetailResponse(
         String name,
         String country,
         String logoUrl,
-        String hompageUrl,
+        String homepageUrl,
         Long choiceCount,
         String slotCount,
         String duration,
