@@ -13,6 +13,7 @@ public record SlotDetailResponse(
         String name,
         String country,
         String logoUrl,
+        String hompageUrl,
         Long choiceCount,
         String slotCount,
         String duration,
@@ -27,6 +28,7 @@ public record SlotDetailResponse(
                 slot.getName(),
                 slot.getOutgoingUniv().getCountry(),
                 slot.getOutgoingUniv().getLogoUrl(),
+                slot.getOutgoingUniv().getHomepageUrl(),
                 (long) slot.getChoices().size(),
                 slot.getSlotCount(),
                 slot.getDuration() != null
