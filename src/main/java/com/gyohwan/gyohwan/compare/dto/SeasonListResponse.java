@@ -22,7 +22,7 @@ public record SeasonListResponse(
             return new SeasonDto(
                     season.getId(),
                     season.getDomesticUniv().getName(),
-                    "",
+                    season.getDomesticUniv().getLogoUrl(),
                     season.getName(),
                     season.getStartDate(),
                     season.getEndDate(),

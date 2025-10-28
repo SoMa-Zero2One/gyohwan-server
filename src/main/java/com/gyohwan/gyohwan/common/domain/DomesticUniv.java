@@ -23,4 +23,7 @@ public class DomesticUniv extends BaseEntity {
     @Column(unique = true, length = 50)
     private String emailDomain;
 
+    @Column(length = 2048)
+    private String logoUrl;
+
 }
