@@ -2,6 +2,7 @@ package com.gyohwan.gyohwan.common.service;
 
 import com.gyohwan.gyohwan.common.domain.DomesticUniv;
 import com.gyohwan.gyohwan.common.domain.User;
+import com.gyohwan.gyohwan.common.dto.SchoolVerificationInfo;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.common.repository.DomesticUnivRepository;
@@ -48,11 +49,18 @@ public class SchoolEmailService {
         // 인증 코드 생성
         String verificationCode = generateVerificationCode();
 
-        // Redis에 저장 (key: school:{userId}, value: {email}:{univId}:{code})
-        String redisValue = schoolEmail + ":" + domesticUniv.getId() + ":" + verificationCode;
+        // ⭐️ 수정: DTO 객체 생성
+        SchoolVerificationInfo verificationInfo = new SchoolVerificationInfo(
+                schoolEmail,
+                domesticUniv.getId(),
+                verificationCode
+        );
+
+        // ⭐️ 수정: 문자열 대신 DTO 객체를 Redis에 저장
+        // RedisConfig 설정에 따라 이 객체는 JSON으로 직렬화되어 저장됩니다.
         redisTemplate.opsForValue().set(
                 SCHOOL_EMAIL_PREFIX + userId,
-                redisValue,
+                verificationInfo, // ⭐️ 객체를 직접 전달
                 VERIFICATION_CODE_EXPIRATION_SECONDS,
                 TimeUnit.SECONDS
         );
@@ -69,27 +77,38 @@ public class SchoolEmailService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // Redis에서 인증 정보 조회
-        String storedValue = (String) redisTemplate.opsForValue().get(SCHOOL_EMAIL_PREFIX + userId);
+        // ⭐️ 수정: Redis에서 DTO 객체로 조회
+        // RedisConfig에 <String, Object>로 설정했으므로 Object로 받습니다.
+        Object storedObject = redisTemplate.opsForValue().get(SCHOOL_EMAIL_PREFIX + userId);
 
-        if (storedValue == null) {
+        if (storedObject == null) {
             throw new CustomException(ErrorCode.SCHOOL_EMAIL_CONFIRM_REQUEST_NOT_FOUND);
         }
 
-        // 저장된 정보 파싱 (email:univId:code)
-        String[] parts = storedValue.split(":");
-        if (parts.length != 3) {
-            throw new CustomException(ErrorCode.SCHOOL_EMAIL_CONFIRM_REQUEST_NOT_FOUND);
-        }
-
-        String schoolEmail = parts[0];
-        Long univId;
+        // ⭐️ 수정: DTO 객체로 캐스팅
+        // RedisConfig 설정에 따라 Jackson이 이미 VerificationInfo 객체로 역직렬화해줍니다.
+        SchoolVerificationInfo storedInfo;
         try {
-            univId = Long.parseLong(parts[1]);
-        } catch (NumberFormatException e) {
+            storedInfo = (SchoolVerificationInfo) storedObject;
+        } catch (ClassCastException e) {
+            // 이전에 저장된 String 데이터가 있거나, 다른 타입이 저장된 경우
+            log.warn("Redis data for key {} is corrupted. Expected VerificationInfo.", SCHOOL_EMAIL_PREFIX + userId, e);
+            // delete(key)를 호출해서 잘못된 데이터를 지워주는 것도 좋습니다.
+            redisTemplate.delete(SCHOOL_EMAIL_PREFIX + userId);
             throw new CustomException(ErrorCode.SCHOOL_EMAIL_CONFIRM_DATA_CORRUPTED);
         }
-        String storedCode = parts[2];
+
+
+        // ⭐️ 수정: 파싱 대신 DTO의 Getter 사용
+        String schoolEmail = storedInfo.getSchoolEmail();
+        Long univId = storedInfo.getUnivId();
+        String storedCode = storedInfo.getCode();
+
+        // ⭐️ (선택) Null 체크 - 데이터 안정성 강화
+        if (schoolEmail == null || univId == null || storedCode == null) {
+            log.warn("Redis data for key {} has null fields.", SCHOOL_EMAIL_PREFIX + userId);
+            throw new CustomException(ErrorCode.SCHOOL_EMAIL_CONFIRM_DATA_CORRUPTED);
+        }
 
         // 인증 코드 확인
         if (!storedCode.equals(code)) {
@@ -125,4 +144,3 @@ public class SchoolEmailService {
         return String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
     }
 }
-
