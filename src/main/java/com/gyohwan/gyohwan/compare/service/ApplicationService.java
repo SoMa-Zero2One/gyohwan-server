@@ -11,6 +11,7 @@ import com.gyohwan.gyohwan.compare.dto.ApplicationRequest;
 import com.gyohwan.gyohwan.compare.dto.ApplicationResponse;
 import com.gyohwan.gyohwan.compare.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
@@ -82,6 +84,8 @@ public class ApplicationService {
             application.addChoice(choice);
         }
 
+        log.info("유저 {}가 시즌 {}에 지원함. application id: {}", user.getId(), seasonId, application.getId());
+
         return ApplicationResponse.from(application);
     }
 
@@ -90,6 +94,7 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
 
+        log.info("application id {} 지원 정보 조회", applicationId);
         return ApplicationDetailResponse.from(application);
     }
 
@@ -106,6 +111,7 @@ public class ApplicationService {
         Application application = applicationRepository.findByUserIdAndSeasonIdWithDetails(userId, seasonId)
                 .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
 
+        log.info("유저 {}의 시즌 {} 지원 정보 조회", userId, seasonId);
         return ApplicationDetailResponse.from(application);
     }
 
@@ -139,18 +145,18 @@ public class ApplicationService {
         }
 
         Choice firstChoice = application.getChoices().get(0);
-        
+
         // 기존 application의 첫 번째 choice에서 GPA와 Language 정보 가져오기
         // 사용자의 GPA 목록에서 일치하는 것 찾기
         Gpa gpa = user.getGpas().stream()
-                .filter(g -> g.getScore().equals(firstChoice.getGpaScore()) 
+                .filter(g -> g.getScore().equals(firstChoice.getGpaScore())
                         && g.getCriteria().equals(firstChoice.getGpaCriteria()))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.GPA_NOT_FOUND));
 
         // 사용자의 Language 목록에서 일치하는 것 찾기
         Language language = user.getLanguages().stream()
-                .filter(l -> l.getTestType().equals(firstChoice.getLanguageTest()) 
+                .filter(l -> l.getTestType().equals(firstChoice.getLanguageTest())
                         && l.getScore().equals(firstChoice.getLanguageScore()))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.LANGUAGE_NOT_FOUND));
@@ -161,7 +167,7 @@ public class ApplicationService {
             choiceRepository.deleteAll(oldChoices);
             choiceRepository.flush(); // 즉시 DB에 반영
         }
-        
+
         // 기존 choices 리스트 clear
         application.clearChoices();
 
@@ -180,6 +186,7 @@ public class ApplicationService {
         applicationRepository.save(application);
         applicationRepository.flush(); // 변경사항 즉시 DB에 반영
 
+        log.info("유저 {}가 시즌 {} 지원서 수정함. application id: {}", userId, seasonId, application.getId());
         return ApplicationResponse.from(application);
     }
 }

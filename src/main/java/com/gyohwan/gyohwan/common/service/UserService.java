@@ -10,12 +10,14 @@ import com.gyohwan.gyohwan.compare.domain.Language;
 import com.gyohwan.gyohwan.compare.repository.GpaRepository;
 import com.gyohwan.gyohwan.compare.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -27,6 +29,7 @@ public class UserService {
     public MyUserResponse findUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("유저 {}가 본인 정보를 조회", user.getId());
         return MyUserResponse.from(user);
     }
 
@@ -68,7 +71,7 @@ public class UserService {
         } catch (IllegalArgumentException e) {
             throw new CustomException(ErrorCode.INVALID_LANGUAGE_TEST_TYPE);
         }
-        
+
         Language language = new Language(user, testType, request.score(), request.grade());
         user.getLanguages().add(language);
 
@@ -101,9 +104,8 @@ public class UserService {
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        
-        // User 엔티티의 연관관계에 cascade = ALL, orphanRemoval = true가 설정되어 있어
-        // 연관된 모든 데이터(Gpa, Language, Application, Social)가 자동으로 삭제됩니다.
+
+        log.info("유저 {}가 탈퇴를 진행", user.getId());
         userRepository.delete(user);
     }
 

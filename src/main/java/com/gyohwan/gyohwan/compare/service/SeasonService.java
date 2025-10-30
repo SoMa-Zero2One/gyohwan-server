@@ -15,6 +15,7 @@ import com.gyohwan.gyohwan.compare.repository.ApplicationRepository;
 import com.gyohwan.gyohwan.compare.repository.SeasonRepository;
 import com.gyohwan.gyohwan.compare.repository.SlotRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class SeasonService {
 
     private final SeasonRepository seasonRepository;
@@ -50,6 +52,7 @@ public class SeasonService {
 
         long applicationCount = applicationRepository.countBySeasonId(seasonId);
 
+        log.info("유저 {}가 시즌 {}에 지원했는지 체크", userId, seasonId);
         return new SeasonDetailResponse(
                 season.getId(),
                 season.getDomesticUniv().getName(),
@@ -75,6 +78,7 @@ public class SeasonService {
 
         long applicantCount = applicationRepository.countBySeasonId(seasonId);
 
+        log.info("유저 {}가 시즌 {}의 슬롯 정보를 조회", userId, seasonId);
         return SeasonSlotsResponse.from(season, slots, hasApplied, applicantCount);
     }
 
@@ -103,6 +107,7 @@ public class SeasonService {
             throw new CustomException(ErrorCode.ALREADY_APPLIED);
         }
 
+        log.info("유저 {}가 시즌 {}에 지원 자격을 확인함", userId, seasonId);
         return new SeasonEligibilityResponse(true, "지원 가능합니다.");
     }
 }
