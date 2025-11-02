@@ -7,8 +7,6 @@
         </encoder>
     </appender>
 
-    <!-- FileBeat 출력 -->
-
     <!-- 파일 출력 -->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/application.log</file>
@@ -17,7 +15,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>7</maxHistory>
+            <maxHistory>365</maxHistory>
         </rollingPolicy>
     </appender>
 
