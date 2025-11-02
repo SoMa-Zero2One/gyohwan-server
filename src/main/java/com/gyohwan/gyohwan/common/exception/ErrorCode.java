@@ -24,6 +24,11 @@ public enum ErrorCode {
     EMAIL_CONFIRM_REQUEST_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었거나 요청된 적 없는 이메일입니다."),
     EMAIL_CONFIRM_CODE_DIFFERENT(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
 
+    // Password Reset
+    PASSWORD_RESET_CODE_EXPIRED(HttpStatus.BAD_REQUEST, "비밀번호 재설정 인증 코드가 만료되었거나 존재하지 않습니다."),
+    PASSWORD_RESET_CODE_INVALID(HttpStatus.BAD_REQUEST, "비밀번호 재설정 인증 코드가 일치하지 않습니다."),
+    SOCIAL_LOGIN_PASSWORD_RESET_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "소셜 로그인 계정은 비밀번호 재설정이 불가능합니다."),
+
 
     // Kakao
     KAKAO_REDIRECT_URI_MISMATCH(HttpStatus.BAD_REQUEST, "리다이렉트 uri가 잘못되었습니다."),

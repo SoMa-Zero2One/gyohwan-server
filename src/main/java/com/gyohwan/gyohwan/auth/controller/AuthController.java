@@ -4,6 +4,7 @@ import com.gyohwan.gyohwan.auth.dto.*;
 import com.gyohwan.gyohwan.auth.service.EmailAuthService;
 import com.gyohwan.gyohwan.auth.service.GoogleOAuthService;
 import com.gyohwan.gyohwan.auth.service.KakaoOAuthService;
+import com.gyohwan.gyohwan.auth.service.PasswordResetService;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.security.CookieUtil;
@@ -11,6 +12,7 @@ import com.gyohwan.gyohwan.security.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +24,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
 @RestController
+@Slf4j
 public class AuthController {
 
     private final KakaoOAuthService kakaoOAuthService;
     private final GoogleOAuthService googleOAuthService;
     private final EmailAuthService emailAuthService;
+    private final PasswordResetService passwordResetService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
@@ -124,5 +128,23 @@ public class AuthController {
         // SecurityContext 클리어
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok(new LogoutResponse("로그아웃되었습니다."));
+    }
+
+    @PostMapping("/password-reset/request")
+    public ResponseEntity<PasswordResetResponse> requestPasswordReset(
+            @Valid @RequestBody PasswordResetRequestDto request
+    ) {
+        log.info("비밀번호 재설정 요청 API 호출. Email: {}", request.email());
+        String email = passwordResetService.requestPasswordReset(request.email());
+        return ResponseEntity.ok(new PasswordResetResponse(email, "비밀번호 재설정 인증 코드가 이메일로 발송되었습니다."));
+    }
+
+    @PostMapping("/password-reset/confirm")
+    public ResponseEntity<PasswordResetConfirmResponse> confirmPasswordReset(
+            @Valid @RequestBody PasswordResetConfirmRequest request
+    ) {
+        log.info("비밀번호 재설정 확인 API 호출. Email: {}", request.email());
+        passwordResetService.confirmPasswordReset(request.email(), request.code(), request.newPassword());
+        return ResponseEntity.ok(new PasswordResetConfirmResponse("비밀번호가 성공적으로 변경되었습니다."));
     }
 }
