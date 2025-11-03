@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +45,11 @@ public class Post extends BaseEntity {
     private Long outgoingUnivId;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
     private List<Comment> comments = new ArrayList<>();
-    
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
     private List<PostLike> postLikes = new ArrayList<>();
 
     public Post(String title, String content, User user, boolean isAnonymous,
@@ -63,9 +66,12 @@ public class Post extends BaseEntity {
     }
 
 
-    public void update(String title, String content) {
+    public void update(String title, String content, Boolean isAnonymous) {
         this.title = title;
         this.content = content;
+        if (isAnonymous != null) {
+            this.isAnonymous = isAnonymous;
+        }
     }
 }
 

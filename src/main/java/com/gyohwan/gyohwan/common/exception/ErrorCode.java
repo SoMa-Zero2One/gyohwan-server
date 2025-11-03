@@ -66,7 +66,15 @@ public enum ErrorCode {
     CHOICES_REQUIRED(HttpStatus.BAD_REQUEST, "지원 선택 항목은 필수입니다."),
     SEASON_DATA_INCOMPLETE(HttpStatus.BAD_REQUEST, "시즌의 학교 정보가 누락되었습니다."),
     MODIFY_COUNT_EXCEEDED(HttpStatus.BAD_REQUEST, "지원서 수정 가능 횟수를 초과했습니다."),
-    SEASON_SCHOOL_MISMATCH(HttpStatus.FORBIDDEN, "해당 시즌은 귀하의 학교에서 지원할 수 없습니다.");
+    SEASON_SCHOOL_MISMATCH(HttpStatus.FORBIDDEN, "해당 시즌은 귀하의 학교에서 지원할 수 없습니다."),
+
+    // Community
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+    UNAUTHORIZED_POST_ACCESS(HttpStatus.FORBIDDEN, "게시글을 수정/삭제할 권한이 없습니다."),
+    UNAUTHORIZED_COMMENT_ACCESS(HttpStatus.FORBIDDEN, "댓글을 삭제할 권한이 없습니다."),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다.");
 
 
     private final HttpStatus httpStatus;

@@ -11,7 +11,9 @@ public record PostListDto(
         LocalDateTime createdAt,
         String countryCode,
         Long outgoingUnivId,
-        int commentCount // 댓글 개수
+        int commentCount,
+        int likeCount,
+        boolean isLiked
 ) {
 
     public static PostListDto from(Post post) {
@@ -39,7 +41,9 @@ public record PostListDto(
                 post.getCreatedAt(),
                 post.getCountryCode(),
                 post.getOutgoingUnivId(),
-                count
+                count,
+                0, // likeCount는 서비스에서 설정
+                false // isLiked는 서비스에서 설정
         );
     }
 }

@@ -7,6 +7,7 @@ public record PostUpdateRequest(
         String title,
         @NotBlank(message = "내용은 비어 있을 수 없습니다.")
         String content,
+        Boolean isAnonymous,
         String guestPassword
 ) {
 }

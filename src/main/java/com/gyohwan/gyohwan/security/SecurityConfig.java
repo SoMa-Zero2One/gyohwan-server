@@ -52,6 +52,8 @@ public class SecurityConfig {
                                 .requestMatchers("/v1/applications/**").authenticated()
                                 // user
                                 .requestMatchers("/v1/users/me/**").authenticated()
+                                // community
+                                .requestMatchers("/v1/community/**").permitAll()
                                 // 그 외
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()

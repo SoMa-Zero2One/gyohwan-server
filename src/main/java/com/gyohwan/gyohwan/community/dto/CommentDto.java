@@ -16,10 +16,15 @@ public record CommentDto(
 
     public static CommentDto from(Comment comment) {
         String nickname;
-        if (comment.isAnonymous()) {
+        if (comment.getUser() == null) {
+            // 비회원 댓글
+            nickname = comment.getGuestNickname();
+        } else if (comment.isAnonymous()) {
+            // 회원 + 익명
             nickname = "익명";
         } else {
-            nickname = comment.getUser() != null ? comment.getUser().getNickname() : "익명"; // 탈퇴한 회원
+            // 회원 + 실명
+            nickname = comment.getUser().getNickname();
         }
 
         return new CommentDto(
