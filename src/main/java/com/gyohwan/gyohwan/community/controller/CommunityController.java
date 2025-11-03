@@ -119,4 +119,3 @@ public class CommunityController {
         return ResponseEntity.noContent().build();
     }
 }
-

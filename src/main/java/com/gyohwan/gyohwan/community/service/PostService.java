@@ -41,7 +41,7 @@ public class PostService {
         } else if (outgoingUnivId != null) {
             postPage = postRepository.findByOutgoingUnivId(outgoingUnivId, pageable);
         } else {
-            postPage = postRepository.findAll(pageable);
+            throw new CustomException(ErrorCode.BAD_BOARD_REQUEST);
         }
 
         List<PostListDto> posts = postPage.getContent().stream()
@@ -50,17 +50,7 @@ public class PostService {
                     int likeCount = (int) postLikeRepository.countByPostId(post.getId());
                     boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, post.getId());
 
-                    return new PostListDto(
-                            post.getId(),
-                            post.getTitle(),
-                            getNickname(post),
-                            post.getCreatedAt(),
-                            post.getCountryCode(),
-                            post.getOutgoingUnivId(),
-                            post.getComments() != null ? post.getComments().size() : 0,
-                            likeCount,
-                            isLiked
-                    );
+                    return PostListDto.from(post, likeCount, isLiked);
                 })
                 .collect(Collectors.toList());
 
@@ -81,21 +71,7 @@ public class PostService {
 
         boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, postId);
 
-        List<CommentDto> comments = post.getComments().stream()
-                .map(CommentDto::from)
-                .collect(Collectors.toList());
-
-        return new PostDetailResponse(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                getNickname(post),
-                post.isAnonymous(),
-                post.getCreatedAt(),
-                post.getPostLikes() != null ? post.getPostLikes().size() : 0,
-                isLiked,
-                comments
-        );
+        return PostDetailResponse.from(post, isLiked);
     }
 
     @Transactional
@@ -117,9 +93,9 @@ public class PostService {
         }
 
         Post savedPost = postRepository.save(post);
-        log.info("게시글 생성: postId={}, userId={}", savedPost.getId(), userId);
+        log.info("Post created: postId={}, userId={}", savedPost.getId(), userId);
 
-        return PostDetailResponse.from(savedPost);
+        return PostDetailResponse.from(savedPost, false);
     }
 
     @Transactional
@@ -136,7 +112,8 @@ public class PostService {
 
         log.info("게시글 수정: postId={}, userId={}", postId, userId);
 
-        return PostDetailResponse.from(post);
+        boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, postId);
+        return PostDetailResponse.from(post, isLiked);
     }
 
     @Transactional
@@ -165,14 +142,5 @@ public class PostService {
         }
     }
 
-    private String getNickname(Post post) {
-        if (post.getUser() == null) {
-            return post.getGuestNickname();
-        } else if (post.isAnonymous()) {
-            return "익명";
-        } else {
-            return post.getUser().getNickname();
-        }
-    }
 }
 

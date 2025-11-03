@@ -9,15 +9,18 @@ public record CommentCreateRequest(
         @NotBlank(message = "댓글 내용은 비어 있을 수 없습니다.")
         String content,
         Boolean isAnonymous,
-        String guestNickname,
         String guestPassword
 ) {
 
     public Comment toEntity(User user, Post post) {
+        boolean isAnonymous = false;
+        if (this.isAnonymous != null && this.isAnonymous) {
+            isAnonymous = true;
+        }
         return new Comment(
                 this.content,
                 user,
-                this.isAnonymous != null && this.isAnonymous,
+                isAnonymous,
                 null,
                 null,
                 post
