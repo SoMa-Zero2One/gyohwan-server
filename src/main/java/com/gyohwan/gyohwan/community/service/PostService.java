@@ -1,8 +1,10 @@
 package com.gyohwan.gyohwan.community.service;
 
+import com.gyohwan.gyohwan.common.domain.Country;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.common.repository.CountryRepository;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.community.domain.Post;
 import com.gyohwan.gyohwan.community.dto.*;
@@ -29,6 +31,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CountryRepository countryRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -37,11 +40,13 @@ public class PostService {
         Page<Post> postPage;
 
         if (countryCode != null) {
-            postPage = postRepository.findByCountryCode(countryCode, pageable);
+            Country country = countryRepository.findByCode(countryCode)
+                    .orElseThrow(() -> new CustomException(ErrorCode.COUNTRY_NOT_FOUND));
+            postPage = postRepository.findByCountry(country, pageable);
         } else if (outgoingUnivId != null) {
             postPage = postRepository.findByOutgoingUnivId(outgoingUnivId, pageable);
         } else {
-            throw new CustomException(ErrorCode.BAD_BOARD_REQUEST);
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE, "countryCode 또는 outgoingUnivId를 입력해주세요.");
         }
 
         List<PostListDto> posts = postPage.getContent().stream()
@@ -78,18 +83,25 @@ public class PostService {
     public PostDetailResponse createPost(PostCreateRequest request, Long userId) {
         Post post;
 
+        // Country 조회 (countryCode가 있는 경우)
+        Country country = null;
+        if (request.countryCode() != null) {
+            country = countryRepository.findByCode(request.countryCode())
+                    .orElseThrow(() -> new CustomException(ErrorCode.COUNTRY_NOT_FOUND));
+        }
+
         if (userId != null) {
             // 회원 게시글
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            post = request.toEntity(user);
+            post = request.toEntity(user, country);
         } else {
             // 비회원 게시글
             if (request.guestPassword() == null || request.guestPassword().isBlank()) {
                 throw new CustomException(ErrorCode.INVALID_INPUT_VALUE, "비회원은 비밀번호를 입력해야 합니다.");
             }
             String encodedPassword = passwordEncoder.encode(request.guestPassword());
-            post = request.toEntity(encodedPassword);
+            post = request.toEntity(encodedPassword, country);
         }
 
         Post savedPost = postRepository.save(post);

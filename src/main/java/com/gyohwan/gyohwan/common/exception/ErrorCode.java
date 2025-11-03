@@ -69,9 +69,9 @@ public enum ErrorCode {
     SEASON_SCHOOL_MISMATCH(HttpStatus.FORBIDDEN, "해당 시즌은 귀하의 학교에서 지원할 수 없습니다."),
 
     // Community
-    BAD_BOARD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 게시판 요청입니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+    COUNTRY_NOT_FOUND(HttpStatus.NOT_FOUND, "국가를 찾을 수 없습니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     UNAUTHORIZED_POST_ACCESS(HttpStatus.FORBIDDEN, "게시글을 수정/삭제할 권한이 없습니다."),
     UNAUTHORIZED_COMMENT_ACCESS(HttpStatus.FORBIDDEN, "댓글을 삭제할 권한이 없습니다."),

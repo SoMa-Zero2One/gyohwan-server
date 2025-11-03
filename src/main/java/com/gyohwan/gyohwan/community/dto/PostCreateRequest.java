@@ -1,5 +1,6 @@
 package com.gyohwan.gyohwan.community.dto;
 
+import com.gyohwan.gyohwan.common.domain.Country;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.community.domain.Post;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ public record PostCreateRequest(
         Long outgoingUnivId
 ) {
 
-    public Post toEntity(User user) {
+    public Post toEntity(User user, Country country) {
         boolean isAnonymous = false;
         if (this.isAnonymous != null && this.isAnonymous) {
             isAnonymous = true;
@@ -28,12 +29,12 @@ public record PostCreateRequest(
                 isAnonymous,
                 null,
                 null,
-                this.countryCode,
+                country,
                 this.outgoingUnivId
         );
     }
 
-    public Post toEntity(String encodedPassword) {
+    public Post toEntity(String encodedPassword, Country country) {
         return new Post(
                 this.title,
                 this.content,
@@ -41,7 +42,7 @@ public record PostCreateRequest(
                 false,
                 "익명",
                 encodedPassword,
-                this.countryCode,
+                country,
                 this.outgoingUnivId
         );
     }

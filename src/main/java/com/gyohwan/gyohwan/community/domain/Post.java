@@ -1,6 +1,7 @@
 package com.gyohwan.gyohwan.community.domain;
 
 import com.gyohwan.gyohwan.common.domain.BaseEntity;
+import com.gyohwan.gyohwan.common.domain.Country;
 import com.gyohwan.gyohwan.common.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,8 +39,9 @@ public class Post extends BaseEntity {
     private String guestNickname;
     private String guestPassword;
 
-    @Column(nullable = true)
-    private String countryCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_code", referencedColumnName = "country_code", nullable = true)
+    private Country country;
 
     @Column(nullable = true)
     private Long outgoingUnivId;
@@ -54,14 +56,14 @@ public class Post extends BaseEntity {
 
     public Post(String title, String content, User user, boolean isAnonymous,
                 String guestNickname, String guestPassword,
-                String countryCode, Long outgoingUnivId) {
+                Country country, Long outgoingUnivId) {
         this.title = title;
         this.content = content;
         this.user = user;
         this.isAnonymous = isAnonymous;
         this.guestNickname = guestNickname;
         this.guestPassword = guestPassword;
-        this.countryCode = countryCode;
+        this.country = country;
         this.outgoingUnivId = outgoingUnivId;
     }
 
