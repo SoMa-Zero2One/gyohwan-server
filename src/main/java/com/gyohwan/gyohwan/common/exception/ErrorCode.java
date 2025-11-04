@@ -75,7 +75,12 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     UNAUTHORIZED_POST_ACCESS(HttpStatus.FORBIDDEN, "게시글을 수정/삭제할 권한이 없습니다."),
     UNAUTHORIZED_COMMENT_ACCESS(HttpStatus.FORBIDDEN, "댓글을 삭제할 권한이 없습니다."),
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다.");
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다."),
+
+    // Window
+    UNIV_NOT_FOUND(HttpStatus.NOT_FOUND, "대학을 찾을 수 없습니다."),
+    ALREADY_FAVORITED(HttpStatus.CONFLICT, "이미 즐겨찾기에 추가되었습니다."),
+    FAVORITE_NOT_FOUND(HttpStatus.NOT_FOUND, "즐겨찾기를 찾을 수 없습니다.");
 
 
     private final HttpStatus httpStatus;
