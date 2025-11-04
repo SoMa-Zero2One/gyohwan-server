@@ -22,11 +22,16 @@ public record SlotDetailResponse(
         List<ChoiceInfo> choices
 ) {
     public static SlotDetailResponse from(Slot slot, boolean hasApplied) {
+        String countryName = null;
+        if (slot.getOutgoingUniv().getCountry() != null) {
+            countryName = slot.getOutgoingUniv().getCountry().getNameKo();
+        }
+        
         return new SlotDetailResponse(
                 slot.getId(),
                 slot.getSeason().getId(),
                 slot.getName(),
-                slot.getOutgoingUniv().getCountry().getNameKo(),
+                countryName,
                 slot.getOutgoingUniv().getLogoUrl(),
                 slot.getOutgoingUniv().getHomepageUrl(),
                 (long) slot.getChoices().size(),

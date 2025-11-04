@@ -46,10 +46,15 @@ public record ApplicationResponse(
             String duration
     ) {
         public static SlotInfo from(Slot slot) {
+            String countryName = null;
+            if (slot.getOutgoingUniv().getCountry() != null) {
+                countryName = slot.getOutgoingUniv().getCountry().getNameKo();
+            }
+            
             return new SlotInfo(
                     slot.getId(),
                     slot.getName(),
-                    slot.getOutgoingUniv().getCountry().getNameKo(),
+                    countryName,
                     slot.getOutgoingUniv().getLogoUrl(),
                     (long) slot.getChoices().size(),
                     slot.getSlotCount(),
