@@ -26,7 +26,7 @@ public record SlotDetailResponse(
                 slot.getId(),
                 slot.getSeason().getId(),
                 slot.getName(),
-                slot.getOutgoingUniv().getCountry(),
+                slot.getOutgoingUniv().getCountry().getNameKo(),
                 slot.getOutgoingUniv().getLogoUrl(),
                 slot.getOutgoingUniv().getHomepageUrl(),
                 (long) slot.getChoices().size(),

@@ -1,6 +1,7 @@
 package com.gyohwan.gyohwan.compare.domain;
 
 import com.gyohwan.gyohwan.common.domain.BaseEntity;
+import com.gyohwan.gyohwan.common.domain.Country;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +21,9 @@ public class OutgoingUniv extends BaseEntity {
 
     private String nameKo;
 
-    private String country;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_code", nullable = true)
+    private Country country;
 
     private String logoUrl;
 

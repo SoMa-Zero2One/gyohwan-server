@@ -49,7 +49,7 @@ public record ApplicationResponse(
             return new SlotInfo(
                     slot.getId(),
                     slot.getName(),
-                    slot.getOutgoingUniv().getCountry(),
+                    slot.getOutgoingUniv().getCountry().getNameKo(),
                     slot.getOutgoingUniv().getLogoUrl(),
                     (long) slot.getChoices().size(),
                     slot.getSlotCount(),
