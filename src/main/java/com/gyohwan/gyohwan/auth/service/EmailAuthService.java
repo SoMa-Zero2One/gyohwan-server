@@ -54,7 +54,7 @@ public class EmailAuthService {
         );
 
         emailService.sendVerificationEmail(email, verificationCode);
-        log.info("인증 코드 발송 완료. Email: {}, Code: {}", email, verificationCode);
+        log.info("Verification code sent. Email: {}, Code: {}", email, verificationCode);
 
         return email;
     }
@@ -110,11 +110,11 @@ public class EmailAuthService {
             domesticUnivRepository.findByEmailDomain(emailDomain)
                     .ifPresent(domesticUniv -> {
                         user.verifySchool(email, domesticUniv);
-                        log.info("학교 이메일 자동 인증 완료. Email: {}, University: {}", email, domesticUniv.getName());
+                        log.info("School email auto-verification completed. Email: {}, University: {}", email, domesticUniv.getName());
                     });
         } catch (Exception e) {
             // 학교 이메일이 아니거나 오류가 발생한 경우 무시 (일반 이메일로 처리)
-            log.debug("학교 이메일 자동 인증 불가. Email: {}", email);
+            log.debug("School email auto-verification unavailable. Email: {}", email);
         }
     }
 

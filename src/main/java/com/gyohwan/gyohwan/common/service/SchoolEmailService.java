@@ -67,7 +67,7 @@ public class SchoolEmailService {
 
         // 이메일 발송
         emailService.sendVerificationEmail(schoolEmail, verificationCode);
-        log.info("학교 이메일 인증 코드 발송 완료. UserId: {}, Email: {}, Code: {}", userId, schoolEmail, verificationCode);
+        log.info("School email verification code sent. UserId: {}, Email: {}, Code: {}", userId, schoolEmail, verificationCode);
 
         return schoolEmail;
     }
@@ -126,7 +126,7 @@ public class SchoolEmailService {
         // Redis에서 삭제
         redisTemplate.delete(SCHOOL_EMAIL_PREFIX + userId);
 
-        log.info("학교 이메일 인증 완료. UserId: {}, SchoolEmail: {}, University: {}", userId, schoolEmail, domesticUniv.getName());
+        log.info("School email verification completed. UserId: {}, SchoolEmail: {}, University: {}", userId, schoolEmail, domesticUniv.getName());
 
         return schoolEmail;
     }

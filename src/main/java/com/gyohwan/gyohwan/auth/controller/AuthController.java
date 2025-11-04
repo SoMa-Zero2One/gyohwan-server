@@ -134,7 +134,7 @@ public class AuthController {
     public ResponseEntity<PasswordResetResponse> requestPasswordReset(
             @Valid @RequestBody PasswordResetRequestDto request
     ) {
-        log.info("비밀번호 재설정 요청 API 호출. Email: {}", request.email());
+        log.info("Password reset request API called. Email: {}", request.email());
         String email = passwordResetService.requestPasswordReset(request.email());
         return ResponseEntity.ok(new PasswordResetResponse(email, "비밀번호 재설정 인증 코드가 이메일로 발송되었습니다."));
     }
@@ -143,7 +143,7 @@ public class AuthController {
     public ResponseEntity<PasswordResetConfirmResponse> confirmPasswordReset(
             @Valid @RequestBody PasswordResetConfirmRequest request
     ) {
-        log.info("비밀번호 재설정 확인 API 호출. Email: {}", request.email());
+        log.info("Password reset verification API called. Email: {}", request.email());
         passwordResetService.confirmPasswordReset(request.email(), request.code(), request.newPassword());
         return ResponseEntity.ok(new PasswordResetConfirmResponse("비밀번호가 성공적으로 변경되었습니다."));
     }

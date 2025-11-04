@@ -48,7 +48,7 @@ public class CommentService {
         }
 
         Comment savedComment = commentRepository.save(comment);
-        log.info("댓글 생성: commentId={}, postId={}, userId={}", savedComment.getId(), postId, userId);
+        log.info("Comment created: commentId={}, postId={}, userId={}", savedComment.getId(), postId, userId);
 
         return CommentDto.from(savedComment);
     }
@@ -62,7 +62,7 @@ public class CommentService {
         validateCommentOwnership(comment, userId, password);
 
         commentRepository.delete(comment);
-        log.info("댓글 삭제: commentId={}, userId={}", commentId, userId);
+        log.info("Comment deleted: commentId={}, userId={}", commentId, userId);
     }
 
     private void validateCommentOwnership(Comment comment, Long userId, String password) {

@@ -52,7 +52,7 @@ public class SeasonService {
 
         long applicationCount = applicationRepository.countBySeasonId(seasonId);
 
-        log.info("유저 {}가 시즌 {}에 지원했는지 체크", userId, seasonId);
+        log.info("Checked if user {} applied to season {}", userId, seasonId);
         return new SeasonDetailResponse(
                 season.getId(),
                 season.getDomesticUniv().getName(),
@@ -78,7 +78,7 @@ public class SeasonService {
 
         long applicantCount = applicationRepository.countBySeasonId(seasonId);
 
-        log.info("유저 {}가 시즌 {}의 슬롯 정보를 조회", userId, seasonId);
+        log.info("User {} retrieved slot information for season {}", userId, seasonId);
         return SeasonSlotsResponse.from(season, slots, hasApplied, applicantCount);
     }
 
@@ -107,7 +107,7 @@ public class SeasonService {
             throw new CustomException(ErrorCode.ALREADY_APPLIED);
         }
 
-        log.info("유저 {}가 시즌 {}에 지원 자격을 확인함", userId, seasonId);
+        log.info("User {} checked eligibility for season {}", userId, seasonId);
         return new SeasonEligibilityResponse(true, "지원 가능합니다.");
     }
 }

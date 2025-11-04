@@ -84,7 +84,7 @@ public class ApplicationService {
             application.addChoice(choice);
         }
 
-        log.info("유저 {}가 시즌 {}에 지원함. application id: {}", user.getId(), seasonId, application.getId());
+        log.info("User {} applied to season {}. Application id: {}", user.getId(), seasonId, application.getId());
 
         return ApplicationResponse.from(application);
     }
@@ -94,7 +94,7 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
 
-        log.info("application id {} 지원 정보 조회", applicationId);
+        log.info("Retrieved application information. Application id: {}", applicationId);
         return ApplicationDetailResponse.from(application);
     }
 
@@ -111,7 +111,7 @@ public class ApplicationService {
         Application application = applicationRepository.findByUserIdAndSeasonIdWithDetails(userId, seasonId)
                 .orElseThrow(() -> new CustomException(ErrorCode.APPLICATION_NOT_FOUND));
 
-        log.info("유저 {}의 시즌 {} 지원 정보 조회", userId, seasonId);
+        log.info("Retrieved user {}'s application for season {}", userId, seasonId);
         return ApplicationDetailResponse.from(application);
     }
 
@@ -186,7 +186,7 @@ public class ApplicationService {
         applicationRepository.save(application);
         applicationRepository.flush(); // 변경사항 즉시 DB에 반영
 
-        log.info("유저 {}가 시즌 {} 지원서 수정함. application id: {}", userId, seasonId, application.getId());
+        log.info("User {} updated application for season {}. Application id: {}", userId, seasonId, application.getId());
         return ApplicationResponse.from(application);
     }
 }

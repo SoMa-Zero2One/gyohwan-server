@@ -29,7 +29,7 @@ public class UserService {
     public MyUserResponse findUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        log.info("유저 {}가 본인 정보를 조회", user.getId());
+        log.info("User {} retrieved own information", user.getId());
         return MyUserResponse.from(user);
     }
 
@@ -105,7 +105,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        log.info("유저 {}가 탈퇴를 진행", user.getId());
+        log.info("User {} withdrew from service", user.getId());
         userRepository.delete(user);
     }
 

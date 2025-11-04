@@ -38,6 +38,6 @@ public class EmailService {
         message.setText(text);
 
         javaMailSender.send(message);
-        log.info("비밀번호 재설정 이메일 발송 완료. Email: {}", to);
+        log.info("Password reset email sent. Email: {}", to);
     }
 }

@@ -18,7 +18,7 @@ public class LoginService {
     @Transactional
     public TokenResponse login(User user) {
         String accessToken = jwtTokenProvider.createToken(user.getId());
-        log.info("유저 {}가 로그인하여 토큰 발급", user.getId());
+        log.info("User {} logged in and token issued", user.getId());
         return new TokenResponse(accessToken);
     }
 

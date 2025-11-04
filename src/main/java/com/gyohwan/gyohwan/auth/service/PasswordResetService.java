@@ -33,18 +33,18 @@ public class PasswordResetService {
 
     @Transactional
     public String requestPasswordReset(String email) {
-        log.info("비밀번호 재설정 요청. Email: {}", email);
+        log.info("Password reset requested. Email: {}", email);
 
         // 사용자 존재 여부 확인
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.warn("존재하지 않는 이메일로 비밀번호 재설정 시도. Email: {}", email);
+                    log.warn("Password reset attempt with non-existent email. Email: {}", email);
                     return new CustomException(ErrorCode.USER_NOT_FOUND);
                 });
 
         // 소셜 로그인 사용자는 비밀번호 재설정 불가
         if (user.getLoginType() != LoginType.BASIC) {
-            log.warn("소셜 로그인 사용자가 비밀번호 재설정 시도. Email: {}, LoginType: {}", email, user.getLoginType());
+            log.warn("Social login user attempted password reset. Email: {}, LoginType: {}", email, user.getLoginType());
             throw new CustomException(ErrorCode.SOCIAL_LOGIN_PASSWORD_RESET_NOT_ALLOWED);
         }
 
@@ -65,13 +65,13 @@ public class PasswordResetService {
                 TimeUnit.SECONDS
         );
 
-        log.info("비밀번호 재설정 인증 코드 Redis 저장 완료. Email: {}, RedisKey: {}, Code: {}, 유효시간: {}초",
+        log.info("Password reset verification code saved to Redis. Email: {}, RedisKey: {}, Code: {}, TTL: {}s",
                 email, redisKey, verificationCode, PASSWORD_RESET_CODE_EXPIRATION_SECONDS);
 
         // 이메일 발송
         emailService.sendPasswordResetEmail(email, verificationCode);
 
-        log.info("비밀번호 재설정 요청 처리 완료. Email: {}", email);
+        log.info("Password reset request completed. Email: {}", email);
         return email;
     }
 
@@ -80,20 +80,20 @@ public class PasswordResetService {
      */
     @Transactional
     public void confirmPasswordReset(String email, String code, String newPassword) {
-        log.info("비밀번호 재설정 확인 요청. Email: {}, Code: {}", email, code);
+        log.info("Password reset verification requested. Email: {}, Code: {}", email, code);
 
         // Redis에서 인증 정보 조회
         String redisKey = PASSWORD_RESET_PREFIX + email;
         PasswordResetVerificationInfo storedInfo = (PasswordResetVerificationInfo) redisTemplate.opsForValue().get(redisKey);
 
         if (storedInfo == null) {
-            log.warn("비밀번호 재설정 인증 정보가 만료되었거나 존재하지 않음. Email: {}, RedisKey: {}", email, redisKey);
+            log.warn("Password reset verification expired or not found. Email: {}, RedisKey: {}", email, redisKey);
             throw new CustomException(ErrorCode.PASSWORD_RESET_CODE_EXPIRED);
         }
 
         // 인증 코드 검증
         if (!storedInfo.verificationCode().equals(code)) {
-            log.warn("비밀번호 재설정 인증 코드 불일치. Email: {}, 입력 코드: {}, 저장된 코드: {}",
+            log.warn("Password reset verification code mismatch. Email: {}, Input code: {}, Stored code: {}",
                     email, code, storedInfo.verificationCode());
             throw new CustomException(ErrorCode.PASSWORD_RESET_CODE_INVALID);
         }
@@ -101,7 +101,7 @@ public class PasswordResetService {
         // 사용자 조회
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.error("비밀번호 재설정 중 사용자를 찾을 수 없음. Email: {}", email);
+                    log.error("User not found during password reset. Email: {}", email);
                     return new CustomException(ErrorCode.USER_NOT_FOUND);
                 });
 
@@ -116,7 +116,7 @@ public class PasswordResetService {
         // Redis에서 인증 정보 삭제
         redisTemplate.delete(redisKey);
 
-        log.info("비밀번호 재설정 완료. Email: {}, UserId: {}", email, user.getId());
+        log.info("Password reset completed. Email: {}, UserId: {}", email, user.getId());
     }
 
     /**
@@ -131,7 +131,7 @@ public class PasswordResetService {
      */
     private void validatePassword(String password) {
         if (password.length() < 12) {
-            log.warn("비밀번호가 너무 짧음. 길이: {}", password.length());
+            log.warn("Password too short. Length: {}", password.length());
             throw new CustomException(ErrorCode.PASSWORD_TOO_SHORT);
         }
     }

@@ -122,7 +122,7 @@ public class PostService {
         Boolean isAnonymous = post.getUser() != null ? request.isAnonymous() : null;
         post.update(request.title(), request.content(), isAnonymous);
 
-        log.info("게시글 수정: postId={}, userId={}", postId, userId);
+        log.info("Post updated: postId={}, userId={}", postId, userId);
 
         boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, postId);
         return PostDetailResponse.from(post, isLiked);
@@ -137,7 +137,7 @@ public class PostService {
         validatePostOwnership(post, userId, password);
 
         postRepository.delete(post);
-        log.info("게시글 삭제: postId={}, userId={}", postId, userId);
+        log.info("Post deleted: postId={}, userId={}", postId, userId);
     }
 
     private void validatePostOwnership(Post post, Long userId, String password) {
