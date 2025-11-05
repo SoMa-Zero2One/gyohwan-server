@@ -15,7 +15,7 @@ public record DataFieldDto(
                 dataValue.getField().getId(),
                 dataValue.getField().getFieldName(),
                 dataValue.getValue(),
-                dataValue.getValueType().name()
+                dataValue.getField().getValueType().name()
         );
     }
 
@@ -24,7 +24,7 @@ public record DataFieldDto(
                 field.getId(),
                 field.getFieldName(),
                 null,
-                null
+                field.getValueType().name()
         );
     }
 
@@ -33,7 +33,7 @@ public record DataFieldDto(
                 field.getId(),
                 field.getFieldName(),
                 dataValue != null ? dataValue.getValue() : null,
-                dataValue != null ? dataValue.getValueType().name() : null
+                field.getValueType().name()
         );
     }
 }

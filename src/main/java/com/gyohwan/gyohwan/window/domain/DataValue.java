@@ -32,26 +32,16 @@ public class DataValue extends BaseEntity {
     @Column(nullable = false, length = 2048)
     private String value;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ValueType valueType;
-
-    public enum ValueType {
-        STRING, NUMBER
-    }
-
-    public DataValue(DataField field, Country country, String value, ValueType valueType) {
+    public DataValue(DataField field, Country country, String value) {
         this.field = field;
         this.country = country;
         this.value = value;
-        this.valueType = valueType;
     }
 
-    public DataValue(DataField field, OutgoingUniv outgoingUniv, String value, ValueType valueType) {
+    public DataValue(DataField field, OutgoingUniv outgoingUniv, String value) {
         this.field = field;
         this.outgoingUniv = outgoingUniv;
         this.value = value;
-        this.valueType = valueType;
     }
 }
 
