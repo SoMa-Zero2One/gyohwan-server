@@ -1,5 +1,6 @@
 package com.gyohwan.gyohwan.window.dto;
 
+import com.gyohwan.gyohwan.window.domain.DataField;
 import com.gyohwan.gyohwan.window.domain.DataValue;
 
 public record DataFieldDto(
@@ -15,6 +16,24 @@ public record DataFieldDto(
                 dataValue.getField().getFieldName(),
                 dataValue.getValue(),
                 dataValue.getValueType().name()
+        );
+    }
+
+    public static DataFieldDto fromField(DataField field) {
+        return new DataFieldDto(
+                field.getId(),
+                field.getFieldName(),
+                null,
+                null
+        );
+    }
+
+    public static DataFieldDto fromFieldWithValue(DataField field, DataValue dataValue) {
+        return new DataFieldDto(
+                field.getId(),
+                field.getFieldName(),
+                dataValue != null ? dataValue.getValue() : null,
+                dataValue != null ? dataValue.getValueType().name() : null
         );
     }
 }

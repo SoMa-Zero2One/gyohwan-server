@@ -6,8 +6,10 @@ import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.common.repository.CountryRepository;
 import com.gyohwan.gyohwan.compare.domain.OutgoingUniv;
 import com.gyohwan.gyohwan.compare.repository.OutgoingUnivRepository;
+import com.gyohwan.gyohwan.window.domain.DataField;
 import com.gyohwan.gyohwan.window.domain.DataValue;
 import com.gyohwan.gyohwan.window.dto.*;
+import com.gyohwan.gyohwan.window.repository.DataFieldRepository;
 import com.gyohwan.gyohwan.window.repository.DataValueRepository;
 import com.gyohwan.gyohwan.window.repository.UnivFavoriteRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,19 +28,25 @@ public class WindowService {
 
     private final CountryRepository countryRepository;
     private final OutgoingUnivRepository outgoingUnivRepository;
+    private final DataFieldRepository dataFieldRepository;
     private final DataValueRepository dataValueRepository;
     private final UnivFavoriteRepository univFavoriteRepository;
 
     @Transactional(readOnly = true)
     public List<CountryListResponse> findAllCountries() {
         List<Country> countries = countryRepository.findAll();
+        List<DataField> countryFields = dataFieldRepository.findByEntityType(DataField.EntityType.COUNTRY);
 
         return countries.stream()
                 .map(country -> {
                     List<DataValue> dataValues = dataValueRepository.findByCountry(country);
-                    List<DataFieldDto> data = dataValues.stream()
-                            .map(DataFieldDto::from)
+                    Map<Long, DataValue> valueMap = dataValues.stream()
+                            .collect(Collectors.toMap(dv -> dv.getField().getId(), dv -> dv));
+
+                    List<DataFieldDto> data = countryFields.stream()
+                            .map(field -> DataFieldDto.fromFieldWithValue(field, valueMap.get(field.getId())))
                             .collect(Collectors.toList());
+
                     return CountryListResponse.from(country, data);
                 })
                 .collect(Collectors.toList());
@@ -48,10 +57,14 @@ public class WindowService {
         Country country = countryRepository.findByCode(countryCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.COUNTRY_NOT_FOUND));
 
-        // Country의 DataValue 조회
+        // Country의 DataField 및 DataValue 조회
+        List<DataField> countryFields = dataFieldRepository.findByEntityType(DataField.EntityType.COUNTRY);
         List<DataValue> dataValues = dataValueRepository.findByCountry(country);
-        List<DataFieldDto> data = dataValues.stream()
-                .map(DataFieldDto::from)
+        Map<Long, DataValue> valueMap = dataValues.stream()
+                .collect(Collectors.toMap(dv -> dv.getField().getId(), dv -> dv));
+
+        List<DataFieldDto> data = countryFields.stream()
+                .map(field -> DataFieldDto.fromFieldWithValue(field, valueMap.get(field.getId())))
                 .collect(Collectors.toList());
 
         // 해당 국가의 대학 조회
@@ -67,12 +80,16 @@ public class WindowService {
     @Transactional(readOnly = true)
     public List<UnivListResponse> findAllUniversities(Long userId) {
         List<OutgoingUniv> universities = outgoingUnivRepository.findAll();
+        List<DataField> univFields = dataFieldRepository.findByEntityType(DataField.EntityType.UNIV);
 
         return universities.stream()
                 .map(univ -> {
                     List<DataValue> dataValues = dataValueRepository.findByOutgoingUniv(univ);
-                    List<DataFieldDto> data = dataValues.stream()
-                            .map(DataFieldDto::from)
+                    Map<Long, DataValue> valueMap = dataValues.stream()
+                            .collect(Collectors.toMap(dv -> dv.getField().getId(), dv -> dv));
+
+                    List<DataFieldDto> data = univFields.stream()
+                            .map(field -> DataFieldDto.fromFieldWithValue(field, valueMap.get(field.getId())))
                             .collect(Collectors.toList());
 
                     boolean isFavorite = userId != null &&
@@ -86,12 +103,16 @@ public class WindowService {
     @Transactional(readOnly = true)
     public List<UnivListResponse> findUniversitiesBySeason(Long seasonId, Long userId) {
         List<OutgoingUniv> universities = outgoingUnivRepository.findBySeasonId(seasonId);
+        List<DataField> univFields = dataFieldRepository.findByEntityType(DataField.EntityType.UNIV);
 
         return universities.stream()
                 .map(univ -> {
                     List<DataValue> dataValues = dataValueRepository.findByOutgoingUniv(univ);
-                    List<DataFieldDto> data = dataValues.stream()
-                            .map(DataFieldDto::from)
+                    Map<Long, DataValue> valueMap = dataValues.stream()
+                            .collect(Collectors.toMap(dv -> dv.getField().getId(), dv -> dv));
+
+                    List<DataFieldDto> data = univFields.stream()
+                            .map(field -> DataFieldDto.fromFieldWithValue(field, valueMap.get(field.getId())))
                             .collect(Collectors.toList());
 
                     boolean isFavorite = userId != null &&
@@ -107,9 +128,13 @@ public class WindowService {
         OutgoingUniv univ = outgoingUnivRepository.findById(universityId)
                 .orElseThrow(() -> new CustomException(ErrorCode.UNIV_NOT_FOUND));
 
+        List<DataField> univFields = dataFieldRepository.findByEntityType(DataField.EntityType.UNIV);
         List<DataValue> dataValues = dataValueRepository.findByOutgoingUniv(univ);
-        List<DataFieldDto> data = dataValues.stream()
-                .map(DataFieldDto::from)
+        Map<Long, DataValue> valueMap = dataValues.stream()
+                .collect(Collectors.toMap(dv -> dv.getField().getId(), dv -> dv));
+
+        List<DataFieldDto> data = univFields.stream()
+                .map(field -> DataFieldDto.fromFieldWithValue(field, valueMap.get(field.getId())))
                 .collect(Collectors.toList());
 
         log.info("University retrieved: univId={}", universityId);
