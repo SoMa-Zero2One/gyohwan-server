@@ -7,6 +7,7 @@ import java.util.List;
 public record UnivDetailResponse(
         Long univId,
         String name,
+        String logoUrl,
         String countryCode,
         String countryName,
         List<DataFieldDto> data
@@ -16,6 +17,7 @@ public record UnivDetailResponse(
         return new UnivDetailResponse(
                 univ.getId(),
                 univ.getNameKo(),
+                univ.getLogoUrl(),
                 univ.getCountry() != null ? univ.getCountry().getCode() : null,
                 univ.getCountry() != null ? univ.getCountry().getNameKo() : null,
                 data
