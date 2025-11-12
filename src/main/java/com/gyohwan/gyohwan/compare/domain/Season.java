@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +25,9 @@ public class Season extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications;
 
     private LocalDateTime startDate;
 

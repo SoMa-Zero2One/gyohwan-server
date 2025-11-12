@@ -14,6 +14,7 @@ public record SeasonListResponse(
             String domesticUniversity,
             String domesticUniversityLogoUri,
             String name,
+            int applicationCount,
             LocalDateTime startDate,
             LocalDateTime endDate,
             boolean isApplied
@@ -24,6 +25,7 @@ public record SeasonListResponse(
                     season.getDomesticUniv().getName(),
                     season.getDomesticUniv().getLogoUrl(),
                     season.getName(),
+                    season.getApplications().size(),
                     season.getStartDate(),
                     season.getEndDate(),
                     false);
