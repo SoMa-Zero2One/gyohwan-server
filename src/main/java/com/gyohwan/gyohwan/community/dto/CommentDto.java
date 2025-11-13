@@ -11,8 +11,8 @@ public record CommentDto(
         AuthorDto author
 ) {
 
-    public static CommentDto from(Comment comment) {
-        AuthorDto author = AuthorDto.from(comment.getUser(), comment.isAnonymous(), comment.getGuestNickname());
+    public static CommentDto from(Comment comment, Long userId) {
+        AuthorDto author = AuthorDto.from(comment.getUser(), comment.isAnonymous(), comment.getGuestNickname(), userId);
 
         return new CommentDto(
                 comment.getId(),

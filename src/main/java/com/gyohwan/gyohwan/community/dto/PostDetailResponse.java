@@ -19,13 +19,13 @@ public record PostDetailResponse(
         List<CommentDto> comments
 ) {
 
-    public static PostDetailResponse from(Post post, boolean isLiked) {
-        AuthorDto author = AuthorDto.from(post.getUser(), post.isAnonymous(), post.getGuestNickname());
+    public static PostDetailResponse from(Post post, boolean isLiked, Long userId) {
+        AuthorDto author = AuthorDto.from(post.getUser(), post.isAnonymous(), post.getGuestNickname(), userId);
 
         // 댓글 목록 DTO 변환
         List<CommentDto> commentDtos = post.getComments() != null ?
                 post.getComments().stream()
-                        .map(CommentDto::from)
+                        .map(comment -> CommentDto.from(comment, userId))
                         .collect(Collectors.toList()) :
                 Collections.emptyList();
 

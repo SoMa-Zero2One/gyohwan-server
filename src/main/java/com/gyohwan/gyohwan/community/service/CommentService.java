@@ -32,7 +32,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         Comment comment;
-        
+
         if (userId != null) {
             // 회원 댓글
             User user = userRepository.findById(userId)
@@ -50,7 +50,7 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
         log.info("Comment created: commentId={}, postId={}, userId={}", savedComment.getId(), postId, userId);
 
-        return CommentDto.from(savedComment);
+        return CommentDto.from(savedComment, userId);
     }
 
     @Transactional

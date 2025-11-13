@@ -15,8 +15,8 @@ public record PostListDto(
         boolean isLiked
 ) {
 
-    public static PostListDto from(Post post, int likeCount, boolean isLiked) {
-        AuthorDto author = AuthorDto.from(post.getUser(), post.isAnonymous(), post.getGuestNickname());
+    public static PostListDto from(Post post, int likeCount, boolean isLiked, Long userId) {
+        AuthorDto author = AuthorDto.from(post.getUser(), post.isAnonymous(), post.getGuestNickname(), userId);
         int commentsCount = (post.getComments() == null) ? 0 : post.getComments().size();
 
         return new PostListDto(

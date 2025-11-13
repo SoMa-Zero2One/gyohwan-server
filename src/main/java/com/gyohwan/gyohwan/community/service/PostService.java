@@ -55,7 +55,7 @@ public class PostService {
                     int likeCount = (int) postLikeRepository.countByPostId(post.getId());
                     boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, post.getId());
 
-                    return PostListDto.from(post, likeCount, isLiked);
+                    return PostListDto.from(post, likeCount, isLiked, userId);
                 })
                 .collect(Collectors.toList());
 
@@ -76,7 +76,7 @@ public class PostService {
 
         boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, postId);
 
-        return PostDetailResponse.from(post, isLiked);
+        return PostDetailResponse.from(post, isLiked, userId);
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class PostService {
         Post savedPost = postRepository.save(post);
         log.info("Post created: postId={}, userId={}", savedPost.getId(), userId);
 
-        return PostDetailResponse.from(savedPost, false);
+        return PostDetailResponse.from(savedPost, false, userId);
     }
 
     @Transactional
@@ -125,7 +125,7 @@ public class PostService {
         log.info("Post updated: postId={}, userId={}", postId, userId);
 
         boolean isLiked = userId != null && postLikeRepository.existsByUserIdAndPostId(userId, postId);
-        return PostDetailResponse.from(post, isLiked);
+        return PostDetailResponse.from(post, isLiked, userId);
     }
 
     @Transactional
