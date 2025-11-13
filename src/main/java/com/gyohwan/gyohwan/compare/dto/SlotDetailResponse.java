@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public record SlotDetailResponse(
         Long slotId,
         Long seasonId,
+        Long universityId,
         String name,
         String country,
         String logoUrl,
@@ -26,10 +27,11 @@ public record SlotDetailResponse(
         if (slot.getOutgoingUniv().getCountry() != null) {
             countryName = slot.getOutgoingUniv().getCountry().getNameKo();
         }
-        
+
         return new SlotDetailResponse(
                 slot.getId(),
                 slot.getSeason().getId(),
+                slot.getOutgoingUniv().getId(),
                 slot.getName(),
                 countryName,
                 slot.getOutgoingUniv().getLogoUrl(),
