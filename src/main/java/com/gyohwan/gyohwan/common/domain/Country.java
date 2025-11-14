@@ -21,7 +21,7 @@ public class Country extends BaseEntity {
     private String nameEn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "continent_id")
+    @JoinColumn(name = "continent_code")
     private Continent continent;
 
     public Country(String code, String nameKo, String nameEn) {
