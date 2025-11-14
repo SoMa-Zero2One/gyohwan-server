@@ -1,8 +1,6 @@
 package com.gyohwan.gyohwan.common.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +20,25 @@ public class Country extends BaseEntity {
     @Column(nullable = false)
     private String nameEn;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "continent_id")
+    private Continent continent;
+
     public Country(String code, String nameKo, String nameEn) {
         this.code = code;
         this.nameKo = nameKo;
         this.nameEn = nameEn;
+    }
+
+    public Country(String code, String nameKo, String nameEn, Continent continent) {
+        this.code = code;
+        this.nameKo = nameKo;
+        this.nameEn = nameEn;
+        this.continent = continent;
+    }
+
+    public void setContinent(Continent continent) {
+        this.continent = continent;
     }
 }
 
