@@ -10,16 +10,32 @@ public record UnivDetailResponse(
         String logoUrl,
         String countryCode,
         String countryName,
+        String continentCode,
+        String continentName,
         List<DataFieldDto> data
 ) {
 
     public static UnivDetailResponse from(OutgoingUniv univ, List<DataFieldDto> data) {
+        if (univ.getCountry() == null) {
+            return new UnivDetailResponse(
+                    univ.getId(),
+                    univ.getNameKo(),
+                    univ.getLogoUrl(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    data
+            );
+        }
         return new UnivDetailResponse(
                 univ.getId(),
                 univ.getNameKo(),
                 univ.getLogoUrl(),
-                univ.getCountry() != null ? univ.getCountry().getCode() : null,
-                univ.getCountry() != null ? univ.getCountry().getNameKo() : null,
+                univ.getCountry().getCode(),
+                univ.getCountry().getNameKo(),
+                univ.getCountry().getContinent() != null ? univ.getCountry().getContinent().getCode() : null,
+                univ.getCountry().getContinent() != null ? univ.getCountry().getContinent().getNameKo() : null,
                 data
         );
     }

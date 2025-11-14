@@ -7,6 +7,8 @@ import java.util.List;
 public record CountryListResponse(
         String countryCode,
         String name,
+        String continentCode,
+        String continentName,
         List<DataFieldDto> data
 ) {
 
@@ -14,6 +16,8 @@ public record CountryListResponse(
         return new CountryListResponse(
                 country.getCode(),
                 country.getNameKo(),
+                country.getContinent() != null ? country.getContinent().getCode() : null,
+                country.getContinent() != null ? country.getContinent().getNameKo() : null,
                 data
         );
     }

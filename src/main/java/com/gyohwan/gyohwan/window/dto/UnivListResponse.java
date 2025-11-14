@@ -9,16 +9,32 @@ public record UnivListResponse(
         String name,
         String countryCode,
         String countryName,
+        String continentCode,
+        String continentName,
         boolean isFavorite,
         List<DataFieldDto> data
 ) {
 
     public static UnivListResponse from(OutgoingUniv univ, boolean isFavorite, List<DataFieldDto> data) {
+        if (univ.getCountry() == null) {
+            return new UnivListResponse(
+                    univ.getId(),
+                    univ.getNameKo(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    isFavorite,
+                    data
+            );
+        }
         return new UnivListResponse(
                 univ.getId(),
                 univ.getNameKo(),
-                univ.getCountry() != null ? univ.getCountry().getCode() : null,
-                univ.getCountry() != null ? univ.getCountry().getNameKo() : null,
+                univ.getCountry().getCode(),
+                univ.getCountry().getNameKo(),
+                univ.getCountry().getContinent() == null ? null : univ.getCountry().getContinent().getCode(),
+                univ.getCountry().getContinent() == null ? null : univ.getCountry().getContinent().getNameKo(),
                 isFavorite,
                 data
         );
