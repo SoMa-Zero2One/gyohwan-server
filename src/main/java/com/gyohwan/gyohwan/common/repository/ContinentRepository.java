@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContinentRepository extends JpaRepository<Continent, String> {
-    
+
     boolean existsByCode(String code);
 }
 

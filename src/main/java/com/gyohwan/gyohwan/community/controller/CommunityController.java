@@ -36,6 +36,21 @@ public class CommunityController {
     }
 
     /**
+     * 국가별 게시글 목록 조회
+     */
+    @GetMapping("/posts/country/{countryCode}")
+    public ResponseEntity<PostListResponse> findPostsByCountry(
+            @PathVariable String countryCode,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int limit,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        PostListResponse response = postService.findUnivPostsByCountry(countryCode, page, limit, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * 게시글 상세 조회
      */
     @GetMapping("/posts/{postId}")

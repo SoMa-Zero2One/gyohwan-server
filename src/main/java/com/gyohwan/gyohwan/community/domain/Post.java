@@ -3,6 +3,7 @@ package com.gyohwan.gyohwan.community.domain;
 import com.gyohwan.gyohwan.common.domain.BaseEntity;
 import com.gyohwan.gyohwan.common.domain.Country;
 import com.gyohwan.gyohwan.common.domain.User;
+import com.gyohwan.gyohwan.compare.domain.OutgoingUniv;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,8 +44,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "country_code", referencedColumnName = "country_code", nullable = true)
     private Country country;
 
-    @Column(nullable = true)
-    private Long outgoingUnivId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "outgoing_univ_id", referencedColumnName = "id", nullable = true)
+    private OutgoingUniv outgoingUniv;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 100)
@@ -56,7 +58,7 @@ public class Post extends BaseEntity {
 
     public Post(String title, String content, User user, boolean isAnonymous,
                 String guestNickname, String guestPassword,
-                Country country, Long outgoingUnivId) {
+                Country country, OutgoingUniv outgoingUniv) {
         this.title = title;
         this.content = content;
         this.user = user;
@@ -64,7 +66,7 @@ public class Post extends BaseEntity {
         this.guestNickname = guestNickname;
         this.guestPassword = guestPassword;
         this.country = country;
-        this.outgoingUnivId = outgoingUnivId;
+        this.outgoingUniv = outgoingUniv;
     }
 
 
