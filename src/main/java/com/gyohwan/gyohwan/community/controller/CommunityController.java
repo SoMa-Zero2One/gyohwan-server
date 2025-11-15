@@ -133,4 +133,36 @@ public class CommunityController {
         commentService.deleteComment(commentId, userId, password);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * 게시글 좋아요 추가
+     */
+    @PostMapping("/posts/{postId}/like")
+    public ResponseEntity<PostLikeResponse> addPostLike(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long userId = Long.parseLong(userDetails.getUsername());
+        PostLikeResponse response = postService.addPostLike(postId, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 게시글 좋아요 취소
+     */
+    @DeleteMapping("/posts/{postId}/like")
+    public ResponseEntity<PostLikeResponse> removePostLike(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Long userId = Long.parseLong(userDetails.getUsername());
+        PostLikeResponse response = postService.removePostLike(postId, userId);
+        return ResponseEntity.ok(response);
+    }
 }

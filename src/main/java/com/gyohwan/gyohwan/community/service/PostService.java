@@ -203,6 +203,49 @@ public class PostService {
         }
     }
 
+    @Transactional
+    public PostLikeResponse addPostLike(Long postId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        // 이미 좋아요를 눌렀는지 확인
+        if (postLikeRepository.existsByUserIdAndPostId(userId, postId)) {
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE, "이미 좋아요를 누른 게시글입니다.");
+        }
+
+        // 좋아요 추가
+        com.gyohwan.gyohwan.community.domain.PostLike postLike =
+                new com.gyohwan.gyohwan.community.domain.PostLike(user, post);
+        postLikeRepository.save(postLike);
+
+        int likeCount = (int) postLikeRepository.countByPostId(postId);
+        log.info("Post like added: postId={}, userId={}, likeCount={}", postId, userId, likeCount);
+
+        return PostLikeResponse.of(postId, true, likeCount);
+    }
+
+    @Transactional
+    public PostLikeResponse removePostLike(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        // 좋아요 찾기
+        com.gyohwan.gyohwan.community.domain.PostLike postLike =
+                postLikeRepository.findByUserIdAndPostId(userId, postId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.INVALID_INPUT_VALUE, "좋아요를 누르지 않은 게시글입니다."));
+
+        // 좋아요 취소
+        postLikeRepository.delete(postLike);
+
+        int likeCount = (int) postLikeRepository.countByPostId(postId);
+        log.info("Post like removed: postId={}, userId={}, likeCount={}", postId, userId, likeCount);
+
+        return PostLikeResponse.of(postId, false, likeCount);
+    }
+
     private void validatePostOwnership(Post post, Long userId, String password) {
         if (post.getUser() != null) {
             // 회원 게시글

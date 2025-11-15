@@ -53,6 +53,8 @@ public class SecurityConfig {
                                 // user
                                 .requestMatchers("/v1/users/me/**").authenticated()
                                 // community
+                                .requestMatchers(HttpMethod.POST, "/v1/community/posts/*/like").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/v1/community/posts/*/like").authenticated()
                                 .requestMatchers("/v1/community/**").permitAll()
                                 // window
                                 .requestMatchers("/v1/windows/**").permitAll()
