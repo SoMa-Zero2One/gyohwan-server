@@ -27,8 +27,8 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Lob // 긴 텍스트
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -12,7 +12,8 @@ public record UnivDetailResponse(
         String countryName,
         String continentCode,
         String continentName,
-        List<DataFieldDto> data
+        List<DataFieldDto> data,
+        String information
 ) {
 
     public static UnivDetailResponse from(OutgoingUniv univ, List<DataFieldDto> data) {
@@ -25,7 +26,8 @@ public record UnivDetailResponse(
                     null,
                     null,
                     null,
-                    data
+                    data,
+                    univ.getInformation()
             );
         }
         return new UnivDetailResponse(
@@ -36,7 +38,8 @@ public record UnivDetailResponse(
                 univ.getCountry().getNameKo(),
                 univ.getCountry().getContinent() != null ? univ.getCountry().getContinent().getCode() : null,
                 univ.getCountry().getContinent() != null ? univ.getCountry().getContinent().getNameKo() : null,
-                data
+                data,
+                univ.getInformation()
         );
     }
 }

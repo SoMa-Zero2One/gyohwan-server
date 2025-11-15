@@ -28,4 +28,8 @@ public class OutgoingUniv extends BaseEntity {
     private String logoUrl;
 
     private String homepageUrl;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String information;
 }
