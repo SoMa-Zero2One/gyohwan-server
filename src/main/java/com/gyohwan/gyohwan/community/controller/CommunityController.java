@@ -5,12 +5,14 @@ import com.gyohwan.gyohwan.community.service.CommentService;
 import com.gyohwan.gyohwan.community.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/v1/community")
 @RestController
@@ -31,7 +33,12 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] GET /posts - countryCode={}, outgoingUnivId={}, page={}, limit={}, userId={}", 
+                countryCode, outgoingUnivId, page, limit, userId);
+        
         PostListResponse response = postService.findPosts(countryCode, outgoingUnivId, page, limit, userId);
+        
+        log.info("[Community] GET /posts - Response: totalPosts={}", response.pagination().totalElements());
         return ResponseEntity.ok(response);
     }
 
@@ -46,7 +53,11 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] GET /posts/country/{} - page={}, limit={}, userId={}", countryCode, page, limit, userId);
+        
         PostListResponse response = postService.findUnivPostsByCountry(countryCode, page, limit, userId);
+        
+        log.info("[Community] GET /posts/country/{} - Response: totalPosts={}", countryCode, response.pagination().totalElements());
         return ResponseEntity.ok(response);
     }
 
@@ -59,7 +70,12 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] GET /posts/{} - userId={}", postId, userId);
+        
         PostDetailResponse response = postService.findPost(postId, userId);
+        
+        log.info("[Community] GET /posts/{} - Response: title={}, likeCount={}, commentsCount={}", 
+                postId, response.title(), response.likeCount(), response.comments().size());
         return ResponseEntity.ok(response);
     }
 
@@ -72,7 +88,12 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] POST /posts - userId={}, title={}, isGuest={}", 
+                userId, request.title(), userId == null);
+        
         PostDetailResponse response = postService.createPost(request, userId);
+        
+        log.info("[Community] POST /posts - Response: postId={}", response.postId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -86,7 +107,11 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] PUT /posts/{} - userId={}, title={}", postId, userId, request.title());
+        
         PostDetailResponse response = postService.updatePost(postId, request, userId);
+        
+        log.info("[Community] PUT /posts/{} - Updated successfully", postId);
         return ResponseEntity.ok(response);
     }
 
@@ -101,7 +126,11 @@ public class CommunityController {
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
         String password = request != null ? request.password() : null;
+        log.info("[Community] DELETE /posts/{} - userId={}", postId, userId);
+        
         postService.deletePost(postId, userId, password);
+        
+        log.info("[Community] DELETE /posts/{} - Deleted successfully", postId);
         return ResponseEntity.noContent().build();
     }
 
@@ -115,7 +144,11 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
+        log.info("[Community] POST /posts/{}/comments - userId={}, isGuest={}", postId, userId, userId == null);
+        
         CommentDto response = commentService.createComment(postId, request, userId);
+        
+        log.info("[Community] POST /posts/{}/comments - Response: commentId={}", postId, response.commentId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -130,7 +163,11 @@ public class CommunityController {
     ) {
         Long userId = userDetails != null ? Long.parseLong(userDetails.getUsername()) : null;
         String password = request != null ? request.password() : null;
+        log.info("[Community] DELETE /comments/{} - userId={}", commentId, userId);
+        
         commentService.deleteComment(commentId, userId, password);
+        
+        log.info("[Community] DELETE /comments/{} - Deleted successfully", commentId);
         return ResponseEntity.noContent().build();
     }
 
@@ -143,10 +180,15 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         if (userDetails == null) {
+            log.warn("[Community] POST /posts/{}/like - Unauthorized access attempt", postId);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long userId = Long.parseLong(userDetails.getUsername());
+        log.info("[Community] POST /posts/{}/like - userId={}", postId, userId);
+        
         PostLikeResponse response = postService.addPostLike(postId, userId);
+        
+        log.info("[Community] POST /posts/{}/like - Response: likeCount={}", postId, response.likeCount());
         return ResponseEntity.ok(response);
     }
 
@@ -159,10 +201,15 @@ public class CommunityController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         if (userDetails == null) {
+            log.warn("[Community] DELETE /posts/{}/like - Unauthorized access attempt", postId);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Long userId = Long.parseLong(userDetails.getUsername());
+        log.info("[Community] DELETE /posts/{}/like - userId={}", postId, userId);
+        
         PostLikeResponse response = postService.removePostLike(postId, userId);
+        
+        log.info("[Community] DELETE /posts/{}/like - Response: likeCount={}", postId, response.likeCount());
         return ResponseEntity.ok(response);
     }
 }

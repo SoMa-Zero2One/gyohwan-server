@@ -37,7 +37,7 @@ public class Language extends BaseEntity {
     private String statusReason;
 
     public enum TestType {
-        TOEFL_IBT, TOEFL_ITP, IELTS, TOEIC, HSK, JLPT
+        TOEFL_IBT, TOEFL_ITP, IELTS, TOEIC, HSK, JLPT, OTHER
     }
 
     // 생성자 (언어 정보를 문자열로 임시 저장)
