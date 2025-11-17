@@ -4,11 +4,13 @@ import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
-import com.gyohwan.gyohwan.security.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,7 +26,15 @@ public class AdminAspect {
 
     @Before("@annotation(com.gyohwan.gyohwan.admin.annotation.AdminOnly)")
     public void checkAdminPermission() {
-        Long userId = AuthenticationUtil.getCurrentUserId();
+        // SecurityContext에서 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new CustomException(ErrorCode.AUTHENTICATION_FAILED);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
         
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
