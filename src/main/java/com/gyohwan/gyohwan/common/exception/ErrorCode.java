@@ -11,6 +11,7 @@ public enum ErrorCode {
     // Auth
     AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, "인증에 실패하였습니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+    ADMIN_ACCESS_DENIED(HttpStatus.FORBIDDEN, "관리자 권한이 필요합니다."),
 
     // SignIn, SignUp
     EMAIL_LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "이메일 로그인에 실패하였습니다. 이메일 또는 비밀번호를 확인해주세요."),

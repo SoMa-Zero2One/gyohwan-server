@@ -32,4 +32,8 @@ public class OutgoingUniv extends BaseEntity {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String information;
+
+    public void updateInformation(String information) {
+        this.information = information;
+    }
 }

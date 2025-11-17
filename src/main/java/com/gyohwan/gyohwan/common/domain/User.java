@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,10 @@ public class User extends BaseEntity {
     private Boolean schoolVerified;
 
     private String schoolEmail;
+
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean isAdmin = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
