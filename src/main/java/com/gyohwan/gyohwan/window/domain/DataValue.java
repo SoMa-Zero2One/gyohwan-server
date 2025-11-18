@@ -43,5 +43,9 @@ public class DataValue extends BaseEntity {
         this.outgoingUniv = outgoingUniv;
         this.value = value;
     }
+
+    public void updateValue(String value) {
+        this.value = value;
+    }
 }
 

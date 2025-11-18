@@ -82,7 +82,9 @@ public enum ErrorCode {
     // Window
     UNIV_NOT_FOUND(HttpStatus.NOT_FOUND, "대학을 찾을 수 없습니다."),
     ALREADY_FAVORITED(HttpStatus.CONFLICT, "이미 즐겨찾기에 추가되었습니다."),
-    FAVORITE_NOT_FOUND(HttpStatus.NOT_FOUND, "즐겨찾기를 찾을 수 없습니다.");
+    FAVORITE_NOT_FOUND(HttpStatus.NOT_FOUND, "즐겨찾기를 찾을 수 없습니다."),
+    DATA_FIELD_NOT_FOUND(HttpStatus.NOT_FOUND, "데이터 필드를 찾을 수 없습니다."),
+    DATA_FIELD_ENTITY_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "데이터 필드의 엔티티 타입이 일치하지 않습니다.");
 
 
     private final HttpStatus httpStatus;
