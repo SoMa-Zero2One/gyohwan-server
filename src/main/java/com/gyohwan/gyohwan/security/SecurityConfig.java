@@ -88,8 +88,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:8080",
-                "https://yu.gyohwan.com",
-                "https://inu.gyohwan.com",
+                "https://admin.gyohwan.com",
                 "https://gyohwan.com",
                 "https://www.gyohwan.com",
                 "https://test.gyohwan.com"
