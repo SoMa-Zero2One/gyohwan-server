@@ -87,6 +87,7 @@ public class SecurityConfig {
         // 허용할 Origin 설정 (개발환경과 프로덕션 환경에 맞게 수정 필요)
         configuration.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:3000",
+                "http://localhost:5174",
                 "http://localhost:8080",
                 "https://admin.gyohwan.com",
                 "https://gyohwan.com",
