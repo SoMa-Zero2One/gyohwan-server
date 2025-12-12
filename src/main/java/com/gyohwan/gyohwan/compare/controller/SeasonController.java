@@ -19,9 +19,15 @@ public class SeasonController {
     private final SeasonService seasonService;
     private final ApplicationService applicationService;
 
+    /**
+     * 시즌 목록 조회
+     * @param expired 선택적 파라미터. null=전체, true=종료된 시즌만, false=진행중/예정 시즌만
+     */
     @GetMapping("")
-    public ResponseEntity<SeasonListResponse> findSeasons() {
-        SeasonListResponse seasonListResponse = seasonService.findSeasons();
+    public ResponseEntity<SeasonListResponse> findSeasons(
+            @RequestParam(required = false) Boolean expired
+    ) {
+        SeasonListResponse seasonListResponse = seasonService.findSeasons(expired);
         return ResponseEntity.ok(seasonListResponse);
     }
 

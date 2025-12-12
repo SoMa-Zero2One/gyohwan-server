@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,8 +32,25 @@ public class SeasonService {
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
 
-    public SeasonListResponse findSeasons() {
-        List<Season> seasons = seasonRepository.findAll();
+    /**
+     * 시즌 목록 조회
+     * @param expired null이면 전체, true면 종료된 시즌만, false면 진행중/예정 시즌만
+     */
+    public SeasonListResponse findSeasons(Boolean expired) {
+        List<Season> seasons;
+        
+        if (expired == null) {
+            // 전체 조회
+            seasons = seasonRepository.findAll();
+        } else if (expired) {
+            // 종료된 시즌만 조회
+            seasons = seasonRepository.findExpiredSeasons(LocalDateTime.now());
+        } else {
+            // 진행중 또는 예정된 시즌만 조회
+            seasons = seasonRepository.findActiveSeasons(LocalDateTime.now());
+        }
+        
+        log.info("Retrieved seasons. Expired filter: {}, Count: {}", expired, seasons.size());
         return SeasonListResponse.from(seasons);
     }
 
