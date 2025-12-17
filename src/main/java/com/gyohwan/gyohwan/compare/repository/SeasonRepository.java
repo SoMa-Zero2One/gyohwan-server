@@ -11,14 +11,14 @@ import java.util.List;
 public interface SeasonRepository extends JpaRepository<Season, Long> {
     
     /**
-     * endDate가 현재 시간 이후인 시즌들 조회 (진행중 또는 예정)
+     * expiredDate가 현재 시간 이후인 시즌들 조회 (진행중 또는 예정)
      */
-    @Query("SELECT s FROM Season s WHERE s.endDate > :currentTime")
+    @Query("SELECT s FROM Season s WHERE s.expiredDate > :currentTime")
     List<Season> findActiveSeasons(@Param("currentTime") LocalDateTime currentTime);
     
     /**
-     * endDate가 현재 시간 이전인 시즌들 조회 (종료됨)
+     * expiredDate가 현재 시간 이전인 시즌들 조회 (종료됨)
      */
-    @Query("SELECT s FROM Season s WHERE s.endDate <= :currentTime")
+    @Query("SELECT s FROM Season s WHERE s.expiredDate <= :currentTime")
     List<Season> findExpiredSeasons(@Param("currentTime") LocalDateTime currentTime);
 }

@@ -33,6 +33,8 @@ public class Season extends BaseEntity {
 
     private LocalDateTime endDate;
 
+    private LocalDateTime expiredDate;
+
     private Double maxScore;
 
     @Column(columnDefinition = "integer default 4")
