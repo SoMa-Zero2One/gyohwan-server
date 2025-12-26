@@ -39,4 +39,6 @@ public class Season extends BaseEntity {
 
     @Column(columnDefinition = "integer default 4")
     private Integer defaultModifyCount;
+
+    private String openchatUrl;
 }

@@ -79,7 +79,8 @@ public class SeasonService {
                 season.getStartDate(),
                 season.getEndDate(),
                 hasApplied,
-                applicationCount
+                applicationCount,
+                season.getOpenchatUrl()
         );
     }
 

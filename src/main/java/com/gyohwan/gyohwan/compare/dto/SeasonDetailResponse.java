@@ -10,6 +10,7 @@ public record SeasonDetailResponse(
         LocalDateTime startDate,
         LocalDateTime endDate,
         boolean hasApplied,
-        long applicantCount
+        long applicantCount,
+        String openchatUrl
 ) {
 }
