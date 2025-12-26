@@ -58,6 +58,10 @@ public class ApplicationService {
         Application application = new Application(user, season, nickname, request.getExtraScore(), season.getDefaultModifyCount());
         applicationRepository.save(application);
 
+        // 시즌 참여인원 증가
+        season.incrementParticipantCount();
+        seasonRepository.save(season);
+
         Gpa gpa = gpaRepository.findById(request.getGpaId())
                 .orElseThrow(() -> new CustomException(ErrorCode.GPA_NOT_FOUND));
 
