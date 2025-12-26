@@ -5,6 +5,7 @@ import com.gyohwan.gyohwan.common.domain.LoginType;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.common.repository.DomesticUnivEmailRepository;
 import com.gyohwan.gyohwan.common.repository.DomesticUnivRepository;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import com.gyohwan.gyohwan.common.service.EmailService;
@@ -31,6 +32,7 @@ public class EmailAuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
     private final DomesticUnivRepository domesticUnivRepository;
+    private final DomesticUnivEmailRepository domesticUnivEmailRepository;
 
     private static final long VERIFICATION_CODE_EXPIRATION_SECONDS = 300; // 5분
 
@@ -107,10 +109,11 @@ public class EmailAuthService {
     private void autoVerifySchoolEmailIfApplicable(User user, String email) {
         try {
             String emailDomain = extractEmailDomain(email);
-            domesticUnivRepository.findByEmailDomain(emailDomain)
-                    .ifPresent(domesticUniv -> {
-                        user.verifySchool(email, domesticUniv);
-                        log.info("School email auto-verification completed. Email: {}, University: {}", email, domesticUniv.getName());
+            domesticUnivEmailRepository.findByEmailDomainWithUniv(emailDomain)
+                    .ifPresent(univEmail -> {
+                        user.verifySchool(email, univEmail.getDomesticUniv());
+                        log.info("School email auto-verification completed. Email: {}, University: {}", 
+                                email, univEmail.getDomesticUniv().getName());
                     });
         } catch (Exception e) {
             // 학교 이메일이 아니거나 오류가 발생한 경우 무시 (일반 이메일로 처리)

@@ -1,10 +1,12 @@
 package com.gyohwan.gyohwan.common.service;
 
 import com.gyohwan.gyohwan.common.domain.DomesticUniv;
+import com.gyohwan.gyohwan.common.domain.DomesticUnivEmail;
 import com.gyohwan.gyohwan.common.domain.User;
 import com.gyohwan.gyohwan.common.dto.SchoolVerificationInfo;
 import com.gyohwan.gyohwan.common.exception.CustomException;
 import com.gyohwan.gyohwan.common.exception.ErrorCode;
+import com.gyohwan.gyohwan.common.repository.DomesticUnivEmailRepository;
 import com.gyohwan.gyohwan.common.repository.DomesticUnivRepository;
 import com.gyohwan.gyohwan.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class SchoolEmailService {
 
     private final UserRepository userRepository;
     private final DomesticUnivRepository domesticUnivRepository;
+    private final DomesticUnivEmailRepository domesticUnivEmailRepository;
     private final EmailService emailService;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -43,8 +46,10 @@ public class SchoolEmailService {
         String emailDomain = extractEmailDomain(schoolEmail);
 
         // 해당 도메인의 학교 찾기
-        DomesticUniv domesticUniv = domesticUnivRepository.findByEmailDomain(emailDomain)
+        DomesticUnivEmail univEmail = domesticUnivEmailRepository.findByEmailDomainWithUniv(emailDomain)
                 .orElseThrow(() -> new CustomException(ErrorCode.SCHOOL_EMAIL_DOMAIN_NOT_SUPPORTED));
+        
+        DomesticUniv domesticUniv = univEmail.getDomesticUniv();
 
         // 인증 코드 생성
         String verificationCode = generateVerificationCode();
