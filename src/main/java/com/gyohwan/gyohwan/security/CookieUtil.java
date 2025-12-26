@@ -13,11 +13,15 @@ public class CookieUtil {
     @Value("${jwt.cookie.secure:false}")
     private boolean secure;
 
+    @Value("${jwt.cookie.domain:.gyohwan.com}")
+    private String domain;
+
     public void addAccessTokenCookie(HttpServletResponse response, String accessToken) {
         Cookie cookie = new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(secure); // HTTPS에서만 전송 (production에서 true)
         cookie.setPath("/");
+        cookie.setDomain(domain); // 모든 서브도메인에서 쿠키 공유
         cookie.setMaxAge(-1); // 세션 쿠키 (브라우저 종료 시 삭제)
         cookie.setAttribute("SameSite", "Lax"); // CSRF 방지
         
@@ -29,6 +33,7 @@ public class CookieUtil {
         cookie.setHttpOnly(true);
         cookie.setSecure(secure);
         cookie.setPath("/");
+        cookie.setDomain(domain); // 동일한 도메인으로 삭제
         cookie.setMaxAge(0); // 즉시 삭제
         
         response.addCookie(cookie);
