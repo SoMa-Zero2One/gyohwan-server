@@ -11,6 +11,7 @@ public record SeasonSlotsResponse(
         String seasonName,
         boolean hasApplied,
         long applicantCount,
+        String openchatUrl,
         List<SlotInfo> slots
 ) {
     public static SeasonSlotsResponse from(Season season, List<Slot> slots, boolean hasApplied, long applicantCount) {
@@ -19,6 +20,7 @@ public record SeasonSlotsResponse(
                 season.getName(),
                 hasApplied,
                 applicantCount,
+                season.getOpenchatUrl(),
                 slots.stream()
                         .map(SlotInfo::from)
                         .collect(Collectors.toList())
