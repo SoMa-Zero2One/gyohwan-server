@@ -25,7 +25,7 @@ public record SeasonListResponse(
                     season.getDomesticUniv().getName(),
                     season.getDomesticUniv().getLogoUrl(),
                     season.getName(),
-                    season.getApplications().size(),
+                    season.getParticipantCount(),
                     season.getStartDate(),
                     season.getEndDate(),
                     false);
