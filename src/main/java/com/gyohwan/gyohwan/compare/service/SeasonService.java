@@ -68,9 +68,6 @@ public class SeasonService {
 
         boolean hasApplied = application != null;
 
-        // 참여인원: 과거 시즌은 저장된 값 사용, 진행중 시즌은 실시간 count 사용
-        long applicationCount = getApplicantCount(season);
-
         log.info("Checked if user {} applied to season {}", userId, seasonId);
         return new SeasonDetailResponse(
                 season.getId(),
@@ -80,7 +77,7 @@ public class SeasonService {
                 season.getStartDate(),
                 season.getEndDate(),
                 hasApplied,
-                applicationCount,
+                season.getParticipantCount() != null ? season.getParticipantCount() : 0,
                 season.getOpenchatUrl()
         );
     }
@@ -96,27 +93,8 @@ public class SeasonService {
 
         List<Slot> slots = slotRepository.findBySeasonIdWithOutgoingUnivAndChoices(seasonId);
 
-        // 참여인원: 과거 시즌은 저장된 값 사용, 진행중 시즌은 실시간 count 사용
-        long applicantCount = getApplicantCount(season);
-
         log.info("User {} retrieved slot information for season {}", userId, seasonId);
-        return SeasonSlotsResponse.from(season, slots, hasApplied, applicantCount);
-    }
-
-    /**
-     * 시즌의 참여인원을 조회
-     * 과거 시즌(만료된 시즌)은 저장된 participantCount 사용
-     * 진행중/예정 시즌은 실시간 count 사용
-     */
-    private long getApplicantCount(Season season) {
-        // expiredDate가 null이거나 현재 시간 이후면 진행중 시즌
-        if (season.getExpiredDate() == null || season.getExpiredDate().isAfter(LocalDateTime.now())) {
-            // 진행중 시즌: 실시간 count
-            return applicationRepository.countBySeasonId(season.getId());
-        } else {
-            // 과거 시즌: 저장된 participantCount 사용
-            return season.getParticipantCount() != null ? season.getParticipantCount() : 0;
-        }
+        return SeasonSlotsResponse.from(season, slots, hasApplied, season.getParticipantCount() != null ? season.getParticipantCount() : 0);
     }
 
     @Transactional(readOnly = true)

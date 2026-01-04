@@ -45,21 +45,8 @@ public class Season extends BaseEntity {
     @Column(columnDefinition = "integer default 0")
     private Integer participantCount = 0;
 
-    // 참여인원 증가
-    public void incrementParticipantCount() {
-        if (this.participantCount == null) {
-            this.participantCount = 0;
-        }
-        this.participantCount++;
-    }
-
-    // 참여인원 감소
-    public void decrementParticipantCount() {
-        if (this.participantCount == null) {
-            this.participantCount = 0;
-        }
-        if (this.participantCount > 0) {
-            this.participantCount--;
-        }
+    // participantCount 설정 (실시간 count 값 할당용)
+    public void setParticipantCount(Integer participantCount) {
+        this.participantCount = participantCount;
     }
 }

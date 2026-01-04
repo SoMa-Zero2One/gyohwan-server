@@ -58,8 +58,9 @@ public class ApplicationService {
         Application application = new Application(user, season, nickname, request.getExtraScore(), season.getDefaultModifyCount());
         applicationRepository.save(application);
 
-        // 시즌 참여인원 증가
-        season.incrementParticipantCount();
+        // 시즌 참여인원 업데이트 (실시간 count)
+        long count = applicationRepository.countBySeasonId(seasonId);
+        season.setParticipantCount((int) count);
         seasonRepository.save(season);
 
         Gpa gpa = gpaRepository.findById(request.getGpaId())
@@ -189,6 +190,12 @@ public class ApplicationService {
 
         applicationRepository.save(application);
         applicationRepository.flush(); // 변경사항 즉시 DB에 반영
+
+        // 시즌 참여인원 업데이트 (실시간 count)
+        Season season = application.getSeason();
+        long count = applicationRepository.countBySeasonId(seasonId);
+        season.setParticipantCount((int) count);
+        seasonRepository.save(season);
 
         log.info("User {} updated application for season {}. Application id: {}", userId, seasonId, application.getId());
         return ApplicationResponse.from(application);
